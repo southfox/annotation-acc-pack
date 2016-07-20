@@ -981,7 +981,7 @@ OTSolution.Annotations = function (options) {
     });
   }
 
-  var batchSignal = function (type, data, toConnection) {
+  var batchSignal = function (data, toConnection) {
     // We send data in small chunks so that they fit in a signal
     // Each packet is maximum ~250 chars, we can fit 8192/250 ~= 32 updates per signal
     var dataCopy = data.slice();
@@ -990,8 +990,19 @@ OTSolution.Annotations = function (options) {
         TB.error(err);
       }
     };
+
+    var type = 'otAnnotation_pen';
+    var updateType = function(chunk){
+      if (!chunk || !chunk[0] || !chunk[0].selectedItem || !chunk[0].selectedItem.id ){
+        return;
+      }
+      var id = chunk[0].selectedItem.id;
+      type = id === 'OT_text' ?  'otAnnotation_text' : 'otAnnotation_pen';
+    };
+
     while (dataCopy.length) {
       var dataChunk = dataCopy.splice(0, Math.min(dataCopy.length, 32));
+      updateType(dataChunk);
       var signal = {
         type: type,
         data: JSON.stringify(dataChunk)
@@ -1007,7 +1018,7 @@ OTSolution.Annotations = function (options) {
       batchUpdates.push(update);
       if (!updateTimeout) {
         updateTimeout = setTimeout(function () {
-          batchSignal('otAnnotation_pen', batchUpdates);
+          batchSignal(batchUpdates);
           batchUpdates = [];
           updateTimeout = null;
         }, 100);
