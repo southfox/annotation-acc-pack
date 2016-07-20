@@ -14,7 +14,7 @@
 
 @property (nonatomic) OTAnnotationView *annotationView;
 @property (nonatomic) OTAcceleratorSession *session;
-@property (nonatomic) OTAnnotationBlock handler;
+@property (strong, nonatomic) OTAnnotationBlock handler;
 
 @end
 

@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		A0E9FA9D1D403C7000460599 /* Distribution */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = A0E9FAA01D403C7000460599 /* Build configuration list for PBXAggregateTarget "Distribution" */;
+			buildPhases = (
+				A0E9FAA11D403CFF00460599 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = Distribution;
+			productName = Distribution;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		A0055E481D3D7FF300E45FE5 /* OTAnnotator.h in Headers */ = {isa = PBXBuildFile; fileRef = A0055E461D3D7FF300E45FE5 /* OTAnnotator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A0055E491D3D7FF300E45FE5 /* OTAnnotator.m in Sources */ = {isa = PBXBuildFile; fileRef = A0055E471D3D7FF300E45FE5 /* OTAnnotator.m */; };
@@ -69,6 +83,48 @@
 		A0AB58401D2C501800F8410B /* OTAnnotationScreenCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A0AB583D1D2C501800F8410B /* OTAnnotationScreenCaptureViewController.xib */; };
 		A0AB58411D2C505B00F8410B /* OTAnnotationKitBundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A0AB58351D2C4FDF00F8410B /* OTAnnotationKitBundle.bundle */; };
 		A0AB58431D2C511400F8410B /* mvc.png in Resources */ = {isa = PBXBuildFile; fileRef = A0AB58421D2C511400F8410B /* mvc.png */; };
+		A0E9FAA51D403DF900460599 /* OTAnnotationToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = A0AB57BF1D2C48E400F8410B /* OTAnnotationToolbarView.m */; };
+		A0E9FAA61D403DF900460599 /* OTAnnotationScreenCaptureView.m in Sources */ = {isa = PBXBuildFile; fileRef = A0AB57B51D2C48E400F8410B /* OTAnnotationScreenCaptureView.m */; };
+		A0E9FAA71D403DF900460599 /* OTAnnotationScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = A0AB57AF1D2C48E400F8410B /* OTAnnotationScrollView.m */; };
+		A0E9FAA81D403DF900460599 /* OTFullScreenAnnotationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0AB57B21D2C48E400F8410B /* OTFullScreenAnnotationViewController.m */; };
+		A0E9FAA91D403DF900460599 /* OTAnnotationToolbarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A0AB57BD1D2C48E400F8410B /* OTAnnotationToolbarButton.m */; };
+		A0E9FAAA1D403DF900460599 /* OTAnnotator.m in Sources */ = {isa = PBXBuildFile; fileRef = A0055E471D3D7FF300E45FE5 /* OTAnnotator.m */; };
+		A0E9FAAB1D403DF900460599 /* OTAnnotationToolbarView+Animation.m in Sources */ = {isa = PBXBuildFile; fileRef = A0AB57F31D2C49BF00F8410B /* OTAnnotationToolbarView+Animation.m */; };
+		A0E9FAAC1D403DF900460599 /* OTAnnotationKitBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = A05835071D2F395200E484FB /* OTAnnotationKitBundle.m */; };
+		A0E9FAAD1D403DF900460599 /* OTAnnotationPath.m in Sources */ = {isa = PBXBuildFile; fileRef = A0AB57A21D2C48E400F8410B /* OTAnnotationPath.m */; };
+		A0E9FAAE1D403DF900460599 /* OTAnnotationDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A0AB57A01D2C48E400F8410B /* OTAnnotationDataManager.m */; };
+		A0E9FAAF1D403DF900460599 /* UIButton+AutoLayoutHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A0AB57F51D2C49BF00F8410B /* UIButton+AutoLayoutHelper.m */; };
+		A0E9FAB01D403DF900460599 /* OTAnnotationScreenCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0AB57B71D2C48E400F8410B /* OTAnnotationScreenCaptureViewController.m */; };
+		A0E9FAB11D403DF900460599 /* OTAnnotationEditTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0AB57BA1D2C48E400F8410B /* OTAnnotationEditTextViewController.m */; };
+		A0E9FAB21D403DF900460599 /* OTAnnotationColorPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = A0AB57AD1D2C48E400F8410B /* OTAnnotationColorPickerView.m */; };
+		A0E9FAB31D403DF900460599 /* UIViewController+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = A0AB57F71D2C49BF00F8410B /* UIViewController+Helper.m */; };
+		A0E9FAB41D403DF900460599 /* JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = A0055E4F1D3D974700E45FE5 /* JSON.m */; };
+		A0E9FAB51D403DF900460599 /* OTAnnotationTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = A0AB57A71D2C48E400F8410B /* OTAnnotationTextView.m */; };
+		A0E9FAB61D403DF900460599 /* OTAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = A0AB57A91D2C48E400F8410B /* OTAnnotationView.m */; };
+		A0E9FABA1D403DF900460599 /* OTAnnotator.h in Headers */ = {isa = PBXBuildFile; fileRef = A0055E461D3D7FF300E45FE5 /* OTAnnotator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0E9FABB1D403DF900460599 /* OTAnnotationKit.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB57851D2C482300F8410B /* OTAnnotationKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0E9FABC1D403DF900460599 /* OTAnnotationDataManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB579F1D2C48E400F8410B /* OTAnnotationDataManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0E9FABD1D403DF900460599 /* OTAnnotationPath.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB57A11D2C48E400F8410B /* OTAnnotationPath.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0E9FABE1D403DF900460599 /* OTAnnotationTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB57A61D2C48E400F8410B /* OTAnnotationTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0E9FABF1D403DF900460599 /* OTAnnotationKitBundle.h in Headers */ = {isa = PBXBuildFile; fileRef = A05835061D2F395200E484FB /* OTAnnotationKitBundle.h */; };
+		A0E9FAC01D403DF900460599 /* OTAnnotationView.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB57A81D2C48E400F8410B /* OTAnnotationView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0E9FAC11D403DF900460599 /* OTAnnotatable.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB579E1D2C48E400F8410B /* OTAnnotatable.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0E9FAC21D403DF900460599 /* OTAnnotationScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB57AE1D2C48E400F8410B /* OTAnnotationScrollView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0E9FAC31D403DF900460599 /* OTAnnotationToolbarView.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB57BE1D2C48E400F8410B /* OTAnnotationToolbarView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0E9FAC41D403DF900460599 /* OTFullScreenAnnotationViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB57B11D2C48E400F8410B /* OTFullScreenAnnotationViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0E9FAC51D403DF900460599 /* UIButton+AutoLayoutHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB57F41D2C49BF00F8410B /* UIButton+AutoLayoutHelper.h */; };
+		A0E9FAC61D403DF900460599 /* OTAnnotationScreenCaptureViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB57B61D2C48E400F8410B /* OTAnnotationScreenCaptureViewController.h */; };
+		A0E9FAC71D403DF900460599 /* OTAnnotationToolbarView+Animation.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB57F21D2C49BF00F8410B /* OTAnnotationToolbarView+Animation.h */; };
+		A0E9FAC81D403DF900460599 /* OTAnnotationToolbarView_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB57C01D2C48E400F8410B /* OTAnnotationToolbarView_Private.h */; };
+		A0E9FAC91D403DF900460599 /* OTAnnotationScreenCaptureView.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB57B41D2C48E400F8410B /* OTAnnotationScreenCaptureView.h */; };
+		A0E9FACA1D403DF900460599 /* OTAnnotationColorPickerView.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB57AC1D2C48E400F8410B /* OTAnnotationColorPickerView.h */; };
+		A0E9FACB1D403DF900460599 /* UIViewController+Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB57F61D2C49BF00F8410B /* UIViewController+Helper.h */; };
+		A0E9FACC1D403DF900460599 /* Constants.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB582F1D2C4DBD00F8410B /* Constants.h */; };
+		A0E9FACD1D403DF900460599 /* OTAnnotationScrollView_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB57B01D2C48E400F8410B /* OTAnnotationScrollView_Private.h */; };
+		A0E9FACE1D403DF900460599 /* OTAnnotationToolbarButton.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB57BC1D2C48E400F8410B /* OTAnnotationToolbarButton.h */; };
+		A0E9FACF1D403DF900460599 /* JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = A0055E4E1D3D974700E45FE5 /* JSON.h */; };
+		A0E9FAD01D403DF900460599 /* OTAnnotationEditTextViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB57B91D2C48E400F8410B /* OTAnnotationEditTextViewController.h */; };
+		A0E9FAD11D403DF900460599 /* OTAnnotationToolbarView_UserInterfaces.h in Headers */ = {isa = PBXBuildFile; fileRef = A0AB57C11D2C48E400F8410B /* OTAnnotationToolbarView_UserInterfaces.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -181,6 +237,7 @@
 		A0AB583D1D2C501800F8410B /* OTAnnotationScreenCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OTAnnotationScreenCaptureViewController.xib; sourceTree = "<group>"; };
 		A0AB58421D2C511400F8410B /* mvc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mvc.png; sourceTree = "<group>"; };
 		A0DB6E481D230BC900E14C86 /* OTAnnotationAccPackKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OTAnnotationAccPackKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0E9FAD71D403DF900460599 /* OTAnnotationKitStatic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OTAnnotationKitStatic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -211,6 +268,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0AB57791D2C392D00F8410B /* OTAnnotationKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A0E9FAB71D403DF900460599 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,6 +450,7 @@
 				A0AB57641D2C392D00F8410B /* OTAnnotationKit.framework */,
 				A0AB576D1D2C392D00F8410B /* OTAnnotationKitTests.xctest */,
 				A0AB58351D2C4FDF00F8410B /* OTAnnotationKitBundle.bundle */,
+				A0E9FAD71D403DF900460599 /* OTAnnotationKitStatic.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -421,6 +486,37 @@
 				A0055E501D3D974700E45FE5 /* JSON.h in Headers */,
 				A0AB57D91D2C48E400F8410B /* OTAnnotationEditTextViewController.h in Headers */,
 				A0AB57E01D2C48E400F8410B /* OTAnnotationToolbarView_UserInterfaces.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A0E9FAB91D403DF900460599 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0E9FABA1D403DF900460599 /* OTAnnotator.h in Headers */,
+				A0E9FABB1D403DF900460599 /* OTAnnotationKit.h in Headers */,
+				A0E9FABC1D403DF900460599 /* OTAnnotationDataManager.h in Headers */,
+				A0E9FABD1D403DF900460599 /* OTAnnotationPath.h in Headers */,
+				A0E9FABE1D403DF900460599 /* OTAnnotationTextView.h in Headers */,
+				A0E9FABF1D403DF900460599 /* OTAnnotationKitBundle.h in Headers */,
+				A0E9FAC01D403DF900460599 /* OTAnnotationView.h in Headers */,
+				A0E9FAC11D403DF900460599 /* OTAnnotatable.h in Headers */,
+				A0E9FAC21D403DF900460599 /* OTAnnotationScrollView.h in Headers */,
+				A0E9FAC31D403DF900460599 /* OTAnnotationToolbarView.h in Headers */,
+				A0E9FAC41D403DF900460599 /* OTFullScreenAnnotationViewController.h in Headers */,
+				A0E9FAC51D403DF900460599 /* UIButton+AutoLayoutHelper.h in Headers */,
+				A0E9FAC61D403DF900460599 /* OTAnnotationScreenCaptureViewController.h in Headers */,
+				A0E9FAC71D403DF900460599 /* OTAnnotationToolbarView+Animation.h in Headers */,
+				A0E9FAC81D403DF900460599 /* OTAnnotationToolbarView_Private.h in Headers */,
+				A0E9FAC91D403DF900460599 /* OTAnnotationScreenCaptureView.h in Headers */,
+				A0E9FACA1D403DF900460599 /* OTAnnotationColorPickerView.h in Headers */,
+				A0E9FACB1D403DF900460599 /* UIViewController+Helper.h in Headers */,
+				A0E9FACC1D403DF900460599 /* Constants.h in Headers */,
+				A0E9FACD1D403DF900460599 /* OTAnnotationScrollView_Private.h in Headers */,
+				A0E9FACE1D403DF900460599 /* OTAnnotationToolbarButton.h in Headers */,
+				A0E9FACF1D403DF900460599 /* JSON.h in Headers */,
+				A0E9FAD01D403DF900460599 /* OTAnnotationEditTextViewController.h in Headers */,
+				A0E9FAD11D403DF900460599 /* OTAnnotationToolbarView_UserInterfaces.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -500,6 +596,24 @@
 			productReference = A0DB6E481D230BC900E14C86 /* OTAnnotationAccPackKit.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A0E9FAA21D403DF900460599 /* OTAnnotationKitStatic */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A0E9FAD41D403DF900460599 /* Build configuration list for PBXNativeTarget "OTAnnotationKitStatic" */;
+			buildPhases = (
+				A0E9FAA41D403DF900460599 /* Sources */,
+				A0E9FAB71D403DF900460599 /* Frameworks */,
+				A0E9FAB91D403DF900460599 /* Headers */,
+				A0E9FAD21D403DF900460599 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OTAnnotationKitStatic;
+			productName = OTAnnotationKit;
+			productReference = A0E9FAD71D403DF900460599 /* OTAnnotationKitStatic.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -522,6 +636,9 @@
 					A0DB6E471D230BC900E14C86 = {
 						CreatedOnToolsVersion = 7.3;
 					};
+					A0E9FA9D1D403C7000460599 = {
+						CreatedOnToolsVersion = 7.3;
+					};
 				};
 			};
 			buildConfigurationList = A0DB6E431D230BC900E14C86 /* Build configuration list for PBXProject "OTAnnotationAccPackKit" */;
@@ -541,6 +658,8 @@
 				A0AB57631D2C392D00F8410B /* OTAnnotationKit */,
 				A0AB576C1D2C392D00F8410B /* OTAnnotationKitTests */,
 				A0AB58341D2C4FDF00F8410B /* OTAnnotationKitBundle */,
+				A0E9FA9D1D403C7000460599 /* Distribution */,
+				A0E9FAA21D403DF900460599 /* OTAnnotationKitStatic */,
 			);
 		};
 /* End PBXProject section */
@@ -582,7 +701,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A0E9FAD21D403DF900460599 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A0E9FAA11D403CFF00460599 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Merge Script\n\n# 1\n# Set bash script to exit immediately if any commands fail.\nset -e\n\n# 2\n# Setup some constants for use later on.\nWORKSPACE_NAME=\"OTAnnotationAccPackKit.xcworkspace\"\nFRAMEWORK_NAME=\"OTAnnotationKitStatic\"\nBUNDLE_NAME=\"OTAnnotationKitBundle\"\nSCHEME_NAME=\"OTAnnotationKitStatic\"\n\n# Build fat framework\nxcodebuild -workspace \"${WORKSPACE_NAME}\" -scheme \"${SCHEME_NAME}\" -configuration Release -arch arm64 -arch armv7 -arch armv7s only_active_arch=no defines_module=yes -sdk \"iphoneos\" -derivedDataPath \"${SRCROOT}/build\"\nxcodebuild -workspace \"${WORKSPACE_NAME}\" -scheme \"${SCHEME_NAME}\" -configuration Release -arch x86_64 -arch i386 only_active_arch=no defines_module=yes -sdk \"iphonesimulator\" -derivedDataPath \"${SRCROOT}/build\"\ncp -r \"${SRCROOT}/build/Build/Products/Release-iphoneos/${FRAMEWORK_NAME}.framework\" \"./${FRAMEWORK_NAME}.framework\"\n\n# Replace the framework executable within the framework with a new version created by merging the device and simulator frameworks' executables with lipo.\nlipo -create -output \"./${FRAMEWORK_NAME}.framework/${FRAMEWORK_NAME}\" \"${SRCROOT}/build/Build/Products/Release-iphoneos/${FRAMEWORK_NAME}.framework/${FRAMEWORK_NAME}\" \"${SRCROOT}/build/Build/Products/Release-iphonesimulator/${FRAMEWORK_NAME}.framework/${FRAMEWORK_NAME}\"\n\n# 6\n# Copy the Swift module mappings for the simulator into the\n# framework.  The device mappings already exist from step 6.\n#cp -r \"${SRCROOT}/build/Release-iphonesimulator/${FRAMEWORK_NAME}.framework/Modules/${FRAMEWORK_NAME}.swiftmodule/\" \"${HOME}/Desktop/${FRAMEWORK_NAME}.framework/Modules/${FRAMEWORK_NAME}.swiftmodule\"\n\n# Build bundle\nxcodebuild -workspace \"${WORKSPACE_NAME}\" -scheme \"${BUNDLE_NAME}\" -configuration Release -arch x86_64 -arch i386 only_active_arch=no defines_module=yes -sdk \"iphoneos\" -derivedDataPath \"${SRCROOT}/build\"\ncp -r \"${SRCROOT}/build/Build/Products/Release-iphoneos/${BUNDLE_NAME}.bundle\" \"./${BUNDLE_NAME}.bundle\"\n\n# re-direct to the Documentation folder and build the Documentation\n# cd Documentation\n# xcodebuild -project \"Documentation.xcodeproj\" -scheme \"AppleDoc\"\n# cd ..\n\n# Create binary\nzip -r ./AnnotationKit.zip OTAnnotationKitStatic.framework OTAnnotationKitBundle.bundle\n\n# Delete the most recent build.\nif [ -d \"${SRCROOT}/${FRAMEWORK_NAME}.framework\" ]; then\nrm -rf \"${SRCROOT}/${FRAMEWORK_NAME}.framework\"\nfi\n\nif [ -d \"${SRCROOT}/${BUNDLE_NAME}.bundle\" ]; then\nrm -rf \"${SRCROOT}/${BUNDLE_NAME}.bundle\"\nfi\n\nif [ -d \"${SRCROOT}/build\" ]; then\nrm -rf \"${SRCROOT}/build\"\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A0AB575F1D2C392D00F8410B /* Sources */ = {
@@ -637,6 +779,31 @@
 				A0AB582D1D2C4AC100F8410B /* AnnotationImportedViewController.m in Sources */,
 				A0055E541D3D9AEC00E45FE5 /* RemoteAnnotationViewController.m in Sources */,
 				A0AB580A1D2C49E700F8410B /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A0E9FAA41D403DF900460599 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0E9FAA51D403DF900460599 /* OTAnnotationToolbarView.m in Sources */,
+				A0E9FAA61D403DF900460599 /* OTAnnotationScreenCaptureView.m in Sources */,
+				A0E9FAA71D403DF900460599 /* OTAnnotationScrollView.m in Sources */,
+				A0E9FAA81D403DF900460599 /* OTFullScreenAnnotationViewController.m in Sources */,
+				A0E9FAA91D403DF900460599 /* OTAnnotationToolbarButton.m in Sources */,
+				A0E9FAAA1D403DF900460599 /* OTAnnotator.m in Sources */,
+				A0E9FAAB1D403DF900460599 /* OTAnnotationToolbarView+Animation.m in Sources */,
+				A0E9FAAC1D403DF900460599 /* OTAnnotationKitBundle.m in Sources */,
+				A0E9FAAD1D403DF900460599 /* OTAnnotationPath.m in Sources */,
+				A0E9FAAE1D403DF900460599 /* OTAnnotationDataManager.m in Sources */,
+				A0E9FAAF1D403DF900460599 /* UIButton+AutoLayoutHelper.m in Sources */,
+				A0E9FAB01D403DF900460599 /* OTAnnotationScreenCaptureViewController.m in Sources */,
+				A0E9FAB11D403DF900460599 /* OTAnnotationEditTextViewController.m in Sources */,
+				A0E9FAB21D403DF900460599 /* OTAnnotationColorPickerView.m in Sources */,
+				A0E9FAB31D403DF900460599 /* UIViewController+Helper.m in Sources */,
+				A0E9FAB41D403DF900460599 /* JSON.m in Sources */,
+				A0E9FAB51D403DF900460599 /* OTAnnotationTextView.m in Sources */,
+				A0E9FAB61D403DF900460599 /* OTAnnotationView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -884,6 +1051,62 @@
 			};
 			name = Release;
 		};
+		A0E9FA9E1D403C7000460599 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A0E9FA9F1D403C7000460599 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		A0E9FAD51D403DF900460599 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = OTAnnotationKitStatic.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tokbox.OTAnnotationKit;
+				PRODUCT_NAME = OTAnnotationKitStatic;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		A0E9FAD61D403DF900460599 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = OTAnnotationKitStatic.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tokbox.OTAnnotationKit;
+				PRODUCT_NAME = OTAnnotationKitStatic;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -928,6 +1151,24 @@
 			buildConfigurations = (
 				A0DB6E601D230BC900E14C86 /* Debug */,
 				A0DB6E611D230BC900E14C86 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A0E9FAA01D403C7000460599 /* Build configuration list for PBXAggregateTarget "Distribution" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A0E9FA9E1D403C7000460599 /* Debug */,
+				A0E9FA9F1D403C7000460599 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A0E9FAD41D403DF900460599 /* Build configuration list for PBXNativeTarget "OTAnnotationKitStatic" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A0E9FAD51D403DF900460599 /* Debug */,
+				A0E9FAD61D403DF900460599 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
