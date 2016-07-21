@@ -535,7 +535,7 @@ OTSolution.Annotations = function (options) {
 
     event.preventDefault();
 
-    if (self.selectedItem && self.selectedItem.id !== 'OT_text' || ignoreClicks) {
+    if (!self.selectedItem || self.selectedItem.id !== 'OT_text' || ignoreClicks) {
       return;
     }
 
@@ -992,12 +992,12 @@ OTSolution.Annotations = function (options) {
     };
 
     var type = 'otAnnotation_pen';
-    var updateType = function(chunk){
-      if (!chunk || !chunk[0] || !chunk[0].selectedItem || !chunk[0].selectedItem.id ){
+    var updateType = function (chunk) {
+      if (!chunk || !chunk[0] || !chunk[0].selectedItem || !chunk[0].selectedItem.id) {
         return;
       }
       var id = chunk[0].selectedItem.id;
-      type = id === 'OT_text' ?  'otAnnotation_text' : 'otAnnotation_pen';
+      type = id === 'OT_text' ? 'otAnnotation_text' : 'otAnnotation_pen';
     };
 
     while (dataCopy.length) {
@@ -1670,4 +1670,3 @@ OTSolution.Annotations.Toolbar = function (options) {
     canvases = [];
   };
 };
-
