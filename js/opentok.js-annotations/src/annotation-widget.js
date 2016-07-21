@@ -339,7 +339,7 @@ OTSolution.Annotations = function (options) {
               canvasHeight: canvas.height,
               mirrored: mirrored,
               startPoint: self.isStartPoint, // Each segment is treated as a new set of points
-              endPoint: false,
+              endPoint: true,
               selectedItem: selectedItem
             };
             draw(update, true);
