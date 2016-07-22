@@ -1,9 +1,7 @@
 //
 //  ScreenShareTextView.m
-//  ScreenShareSample
 //
-//  Created by Xi Huang on 4/27/16.
-//  Copyright © 2016 Lucas Huang. All rights reserved.
+//  Copyright © 2016 Tokbox. All rights reserved.
 //
 
 #import "OTAnnotationTextView.h"
