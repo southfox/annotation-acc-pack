@@ -46,7 +46,6 @@
         _currentEditingTextView = (OTAnnotationTextView *)annotatable;
     }
     else {
-        
         [self commitCurrentAnnotatable];
     }
 }

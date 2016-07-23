@@ -9,7 +9,9 @@
 #import "JSON.h"
 
 @interface OTAnnotator() <OTSessionDelegate>
-
+{
+    NSMutableArray *tempPoints;
+}
 @property (nonatomic) OTAnnotationView *annotationView;
 @property (nonatomic) OTAcceleratorSession *session;
 @property (strong, nonatomic) OTAnnotationBlock handler;
@@ -95,7 +97,7 @@
                          error:nil];
 }
 
-- (void) session:(OTSession *)session streamCreated:(OTStream *)stream {}
+- (void)session:(OTSession *)session streamCreated:(OTStream *)stream {}
 
 - (void)session:(OTSession *)session streamDestroyed:(OTStream *)stream {}
 
@@ -109,36 +111,37 @@
 receivedSignalType:(NSString*)type
  fromConnection:(OTConnection*)connection
      withString:(NSString*)string {
+    
+    if (!tempPoints) {
+        tempPoints = [NSMutableArray array];
+    }
 
     // TODO: continue here
-//    if (self.receiveAnnotationEnabled &&
-//        self.session.sessionConnectionStatus == OTSessionConnectionStatusConnected &&
-//        ![self.session.connection.connectionId isEqualToString:connection.connectionId]) {
-//        
-//        
-//        if (!self.annotationView.currentAnnotatable) {
-//            OTAnnotationPath *path = [OTAnnotationPath pathWithStrokeColor:nil];
-//            [self.annotationView setCurrentAnnotatable:path];
-//            [self.annotationView.annotationDataManager addAnnotatable:path];
-//        }
-//        
-//        NSArray *jsonArray = [JSON parseJSON:string];
-//        for (NSDictionary *json in jsonArray) {
-//            if ([self.annotationView.currentAnnotatable isKindOfClass:[OTAnnotationPath class]]) {
-//                
-//                OTAnnotationPath *currentPath = (OTAnnotationPath *)self.annotationView.currentAnnotatable;
-//                CGFloat fromX = [json[@"fromX"] floatValue];
-//                CGFloat fromY = [json[@"fromY"] floatValue];
-//                CGFloat toX = [json[@"toX"] floatValue];
-//                CGFloat toY = [json[@"toY"] floatValue];
-//                OTAnnotationPoint *pt1 = [OTAnnotationPoint pointWithX:fromX andY:fromY];
-//                OTAnnotationPoint *pt2 = [OTAnnotationPoint pointWithX:toX andY:toY];
-//                [currentPath drawAtPoint:pt1];
-//                [currentPath drawToPoint:pt2];
-//                [self.annotationView setNeedsDisplay];
-//            }
-//        }
-//    }
+    if (self.receiveAnnotationEnabled &&
+        self.session.sessionConnectionStatus == OTSessionConnectionStatusConnected &&
+        ![self.session.connection.connectionId isEqualToString:connection.connectionId]) {
+        
+        NSArray *jsonArray = [JSON parseJSON:string];
+        for (NSDictionary *json in jsonArray) {
+            if ([self.annotationView.currentAnnotatable isKindOfClass:[OTAnnotationPath class]]) {
+                
+                CGFloat fromX = [json[@"fromX"] floatValue];
+                CGFloat fromY = [json[@"fromY"] floatValue];
+                CGFloat toX = [json[@"toX"] floatValue];
+                CGFloat toY = [json[@"toY"] floatValue];
+                OTAnnotationPoint *pt1 = [OTAnnotationPoint pointWithX:fromX andY:fromY];
+                OTAnnotationPoint *pt2 = [OTAnnotationPoint pointWithX:toX andY:toY];
+                
+                [tempPoints addObject:pt1];
+                [tempPoints addObject:pt2];
+                
+                if ([json[@"endPoint"] boolValue]) {
+                    [self.annotationView addAnnotatable:[OTAnnotationPath pathWithPoints:tempPoints strokeColor:nil]];
+                    [tempPoints removeAllObjects];
+                }
+            }
+        }
+    }
     
     //    OTAnnotationPoint *p1 = [[OTAnnotationPoint alloc] initWithX:119 andY:16];
     //    OTAnnotationPoint *p2 = [[OTAnnotationPoint alloc] initWithX:122 andY:16];
