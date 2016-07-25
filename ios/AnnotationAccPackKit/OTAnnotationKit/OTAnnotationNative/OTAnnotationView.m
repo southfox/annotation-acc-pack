@@ -40,10 +40,12 @@
     if ([annotatable isKindOfClass:[OTAnnotationPath class]]) {
         _currentAnnotatable = annotatable;
         _currentDrawPath = (OTAnnotationPath *)annotatable;
+        [self addAnnotatable:annotatable];
     }
     else if ([annotatable isKindOfClass:[OTAnnotationTextView class]]) {
         _currentAnnotatable = annotatable;
         _currentEditingTextView = (OTAnnotationTextView *)annotatable;
+        [self addAnnotatable:annotatable];
     }
     else {
         [self commitCurrentAnnotatable];
@@ -58,7 +60,9 @@
     
     if ([annotatable isMemberOfClass:[OTAnnotationPath class]]) {
         OTAnnotationPath *path = (OTAnnotationPath *)annotatable;
-        [path drawWholePath];
+        if (path.points.count != 0) {
+            [path drawWholePath];
+        }
         [self.annotationDataManager addAnnotatable:path];
         [self setNeedsDisplay];
     }
@@ -130,14 +134,15 @@
 #pragma mark - UIResponder
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
-    if (_currentDrawPath) {
-        [self.annotationDataManager addAnnotatable:_currentDrawPath];
-        UITouch *touch = [touches anyObject];
-        CGPoint touchPoint = [touch locationInView:touch.view];
-        OTAnnotationPoint *annotatinPoint = [OTAnnotationPoint pointWithX:touchPoint.x andY:touchPoint.y];
-        [_currentDrawPath startAtPoint:annotatinPoint];
-        [OTKLogger logEventAction:KLogActionStartDrawing variation:KLogVariationSuccess completion:nil];
+    if (!_currentDrawPath || _currentDrawPath.points.count != 0) {
+        self.currentAnnotatable = [OTAnnotationPath pathWithStrokeColor:_currentDrawPath.strokeColor];
     }
+    
+    UITouch *touch = [touches anyObject];
+    CGPoint touchPoint = [touch locationInView:touch.view];
+    OTAnnotationPoint *annotatinPoint = [OTAnnotationPoint pointWithX:touchPoint.x andY:touchPoint.y];
+    [_currentDrawPath startAtPoint:annotatinPoint];
+    [OTKLogger logEventAction:KLogActionStartDrawing variation:KLogVariationSuccess completion:nil];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -153,7 +158,7 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     if (_currentDrawPath) {
-        _currentDrawPath = [OTAnnotationPath pathWithStrokeColor:_currentDrawPath.strokeColor];
+        [self commitCurrentAnnotatable];
         [OTKLogger logEventAction:KLogActionEndDrawing variation:KLogVariationSuccess completion:nil];
     }
 }

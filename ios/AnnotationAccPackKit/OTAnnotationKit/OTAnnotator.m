@@ -121,9 +121,35 @@ receivedSignalType:(NSString*)type
         self.session.sessionConnectionStatus == OTSessionConnectionStatusConnected &&
         ![self.session.connection.connectionId isEqualToString:connection.connectionId]) {
         
+//        NSArray *jsonArray = [JSON parseJSON:string];
+//        for (NSDictionary *json in jsonArray) {
+//            if ([self.annotationView.currentAnnotatable isKindOfClass:[OTAnnotationPath class]]) {
+//                
+//                CGFloat fromX = [json[@"fromX"] floatValue];
+//                CGFloat fromY = [json[@"fromY"] floatValue];
+//                CGFloat toX = [json[@"toX"] floatValue];
+//                CGFloat toY = [json[@"toY"] floatValue];
+//                OTAnnotationPoint *pt1 = [OTAnnotationPoint pointWithX:fromX andY:fromY];
+//                OTAnnotationPoint *pt2 = [OTAnnotationPoint pointWithX:toX andY:toY];
+//                
+//                [tempPoints addObject:pt1];
+//                [tempPoints addObject:pt2];
+//                
+//                if ([json[@"endPoint"] boolValue]) {
+//                    [self.annotationView addAnnotatable:[OTAnnotationPath pathWithPoints:tempPoints strokeColor:nil]];
+//                    [tempPoints removeAllObjects];
+//                }
+//            }
+//        }
+        
+        
         NSArray *jsonArray = [JSON parseJSON:string];
         for (NSDictionary *json in jsonArray) {
             if ([self.annotationView.currentAnnotatable isKindOfClass:[OTAnnotationPath class]]) {
+                
+                if (!self.annotationView.currentAnnotatable) {
+                    self.annotationView.currentAnnotatable = [OTAnnotationPath pathWithStrokeColor:nil];
+                }
                 
                 CGFloat fromX = [json[@"fromX"] floatValue];
                 CGFloat fromY = [json[@"fromY"] floatValue];
@@ -132,12 +158,19 @@ receivedSignalType:(NSString*)type
                 OTAnnotationPoint *pt1 = [OTAnnotationPoint pointWithX:fromX andY:fromY];
                 OTAnnotationPoint *pt2 = [OTAnnotationPoint pointWithX:toX andY:toY];
                 
-                [tempPoints addObject:pt1];
-                [tempPoints addObject:pt2];
-                
+                OTAnnotationPath *path = (OTAnnotationPath *)self.annotationView.currentAnnotatable;
+                if (path.points.count == 0) {
+                    [path startAtPoint:pt1];
+                    [path drawToPoint:pt2];
+                }
+                else {
+                    [path drawToPoint:pt1];
+                    [path drawToPoint:pt2];
+                }
+            
                 if ([json[@"endPoint"] boolValue]) {
-                    [self.annotationView addAnnotatable:[OTAnnotationPath pathWithPoints:tempPoints strokeColor:nil]];
-                    [tempPoints removeAllObjects];
+                    [self.annotationView commitCurrentAnnotatable];
+                    self.annotationView.currentAnnotatable =[OTAnnotationPath pathWithStrokeColor:[UIColor blueColor]];
                 }
             }
         }
