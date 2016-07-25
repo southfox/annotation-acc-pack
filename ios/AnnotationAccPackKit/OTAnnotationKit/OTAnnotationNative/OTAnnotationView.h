@@ -51,6 +51,9 @@
  */
 - (void)commitCurrentAnnotatable;
 
+/**
+ *  Capture the current screen
+ */
 - (UIImage *)captureScreen;
 
 @end

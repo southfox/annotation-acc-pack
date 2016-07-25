@@ -134,10 +134,11 @@
 #pragma mark - UIResponder
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
+    if (_currentEditingTextView) return;
+    
     if (!_currentDrawPath || _currentDrawPath.points.count != 0) {
         self.currentAnnotatable = [OTAnnotationPath pathWithStrokeColor:_currentDrawPath.strokeColor];
     }
-    
     UITouch *touch = [touches anyObject];
     CGPoint touchPoint = [touch locationInView:touch.view];
     OTAnnotationPoint *annotatinPoint = [OTAnnotationPoint pointWithX:touchPoint.x andY:touchPoint.y];
