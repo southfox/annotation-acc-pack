@@ -21,6 +21,13 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		3F864ECA1D4136D100C51789 /* OTAnnotationViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F864EC91D4136D100C51789 /* OTAnnotationViewTests.m */; };
+		3F864ED01D41497F00C51789 /* OTAnnotationColorPickerViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F864ECF1D41497F00C51789 /* OTAnnotationColorPickerViewTests.m */; };
+		3F8F8FDA1D404E5900431EA1 /* OTAnnotationDataManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8F8FD71D404E5900431EA1 /* OTAnnotationDataManagerTests.m */; };
+		3F8F8FDB1D404E5900431EA1 /* OTAnnotationPathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8F8FD81D404E5900431EA1 /* OTAnnotationPathTests.m */; };
+		3F8F8FDC1D404E5900431EA1 /* OTAnnotationTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8F8FD91D404E5900431EA1 /* OTAnnotationTextView.m */; };
+		3FE867281D4154C1006D5218 /* OTAnnotationScreenCaptureViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE867271D4154C1006D5218 /* OTAnnotationScreenCaptureViewTests.m */; };
+		3FE8672D1D4159BC006D5218 /* OTAnnotationEditTextViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE8672C1D4159BC006D5218 /* OTAnnotationEditTextViewControllerTests.m */; };
 		A0055E481D3D7FF300E45FE5 /* OTAnnotator.h in Headers */ = {isa = PBXBuildFile; fileRef = A0055E461D3D7FF300E45FE5 /* OTAnnotator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A0055E491D3D7FF300E45FE5 /* OTAnnotator.m in Sources */ = {isa = PBXBuildFile; fileRef = A0055E471D3D7FF300E45FE5 /* OTAnnotator.m */; };
 		A0055E501D3D974700E45FE5 /* JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = A0055E4E1D3D974700E45FE5 /* JSON.h */; };
@@ -166,6 +173,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3F864EC91D4136D100C51789 /* OTAnnotationViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTAnnotationViewTests.m; sourceTree = "<group>"; };
+		3F864ECF1D41497F00C51789 /* OTAnnotationColorPickerViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTAnnotationColorPickerViewTests.m; sourceTree = "<group>"; };
+		3F8F8FD71D404E5900431EA1 /* OTAnnotationDataManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTAnnotationDataManagerTests.m; sourceTree = "<group>"; };
+		3F8F8FD81D404E5900431EA1 /* OTAnnotationPathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTAnnotationPathTests.m; sourceTree = "<group>"; };
+		3F8F8FD91D404E5900431EA1 /* OTAnnotationTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTAnnotationTextView.m; sourceTree = "<group>"; };
+		3FE867271D4154C1006D5218 /* OTAnnotationScreenCaptureViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTAnnotationScreenCaptureViewTests.m; sourceTree = "<group>"; };
+		3FE8672C1D4159BC006D5218 /* OTAnnotationEditTextViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTAnnotationEditTextViewControllerTests.m; sourceTree = "<group>"; };
 		A0055E461D3D7FF300E45FE5 /* OTAnnotator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTAnnotator.h; sourceTree = "<group>"; };
 		A0055E471D3D7FF300E45FE5 /* OTAnnotator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTAnnotator.m; sourceTree = "<group>"; };
 		A0055E4E1D3D974700E45FE5 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
@@ -301,8 +315,15 @@
 		A0AB57731D2C392D00F8410B /* OTAnnotationKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				3FE8672C1D4159BC006D5218 /* OTAnnotationEditTextViewControllerTests.m */,
+				3FE867271D4154C1006D5218 /* OTAnnotationScreenCaptureViewTests.m */,
+				3F864ECF1D41497F00C51789 /* OTAnnotationColorPickerViewTests.m */,
 				A0070D421D2C6724001C65EE /* OTAnnotationScrollViewTests.m */,
 				A0070D431D2C6724001C65EE /* OTFullScreenAnnotationViewControllerTests.m */,
+				3F8F8FD71D404E5900431EA1 /* OTAnnotationDataManagerTests.m */,
+				3F8F8FD81D404E5900431EA1 /* OTAnnotationPathTests.m */,
+				3F8F8FD91D404E5900431EA1 /* OTAnnotationTextView.m */,
+				3F864EC91D4136D100C51789 /* OTAnnotationViewTests.m */,
 				A0AB57741D2C392D00F8410B /* OTAnnotationKitTests.m */,
 				A0AB57761D2C392D00F8410B /* Info.plist */,
 			);
@@ -757,8 +778,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0AB57751D2C392D00F8410B /* OTAnnotationKitTests.m in Sources */,
+				3FE8672D1D4159BC006D5218 /* OTAnnotationEditTextViewControllerTests.m in Sources */,
 				A0070D441D2C6724001C65EE /* OTAnnotationScrollViewTests.m in Sources */,
 				A0070D451D2C6724001C65EE /* OTFullScreenAnnotationViewControllerTests.m in Sources */,
+				3FE867281D4154C1006D5218 /* OTAnnotationScreenCaptureViewTests.m in Sources */,
+				3F864ECA1D4136D100C51789 /* OTAnnotationViewTests.m in Sources */,
+				3F8F8FDA1D404E5900431EA1 /* OTAnnotationDataManagerTests.m in Sources */,
+				3F8F8FDB1D404E5900431EA1 /* OTAnnotationPathTests.m in Sources */,
+				3F864ED01D41497F00C51789 /* OTAnnotationColorPickerViewTests.m in Sources */,
+				3F8F8FDC1D404E5900431EA1 /* OTAnnotationTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1035,7 +1063,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "$(SRCROOT)/OTAnnotationAccPackKit/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.lucashuang.AnnotationAccPackKit;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tokbox.AnnotationAccPackKit;
 				PRODUCT_NAME = OTAnnotationAccPackKit;
 			};
 			name = Debug;
@@ -1046,7 +1074,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "$(SRCROOT)/OTAnnotationAccPackKit/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.lucashuang.AnnotationAccPackKit;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tokbox.AnnotationAccPackKit;
 				PRODUCT_NAME = OTAnnotationAccPackKit;
 			};
 			name = Release;

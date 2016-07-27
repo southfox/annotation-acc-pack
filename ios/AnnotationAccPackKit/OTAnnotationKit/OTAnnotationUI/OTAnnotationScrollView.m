@@ -201,7 +201,6 @@
                                           self.scrollView.contentOffset.y + annotationTextView.frame.origin.y,
                                           CGRectGetWidth(annotationTextView.bounds),
                                           CGRectGetHeight(annotationTextView.bounds));
-    [self.annotationView addAnnotatable:annotationTextView];
     [self.annotationView setCurrentAnnotatable:annotationTextView];
 }
 
