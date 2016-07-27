@@ -1673,6 +1673,20 @@ OTSolution.Annotations.Toolbar = function (options) {
 
 /* global OT OTSolution OTKAnalytics ScreenSharingAccPack define */
 (function () {
+  /** Include external dependencies */
+  var _require = function (dependency) {
+    var canRequire = typeof exports === 'object' && require !== undefined;
+    if (canRequire) {
+      return require(dependency);
+    }
+    throw new Error(['Please include', dependency, 'in your project'].join(' '));
+  };
+
+  var _ = this._ || _require('underscore');
+  var $ = this.$ || _require('jquery');
+  var OTKAnalytics = this.OTKAnalytics || _require('opentok-solutions-logging');
+
+  /** Private variables */
   var _this;
   var _accPack;
   var _session;
@@ -1950,11 +1964,7 @@ OTSolution.Annotations.Toolbar = function (options) {
       'menubar=no',
       'scrollbars=no',
       'resizable=no',
-      'copyhistory=no',
-      ['width=', width].join(''),
-      ['height=', height].join(''),
-      ['left=', ((screen.width / 2) - (width / 2))].join(''),
-      ['top=', ((screen.height / 2) - (height / 2))].join('')
+      'copyhistory=no', ['width=', width].join(''), ['height=', height].join(''), ['left=', ((screen.width / 2) - (width / 2))].join(''), ['top=', ((screen.height / 2) - (height / 2))].join('')
     ].join(',');
 
     var annotationWindow = window.open(url, '', windowFeatures);
