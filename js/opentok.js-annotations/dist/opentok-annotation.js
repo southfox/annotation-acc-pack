@@ -1770,7 +1770,11 @@ OTSolution.Annotations.Toolbar = function (options) {
   };
 
   var _setupUI = function () {
-    var toolbar = ['<div id="toolbar"></div>'].join('\n');
+    var toolbar = [
+      '<div class="annotation-toolbar-container">',
+      '<div id="toolbar"></div>',
+      '</div>'
+    ].join('\n');
     $('body').append(toolbar);
   };
 
