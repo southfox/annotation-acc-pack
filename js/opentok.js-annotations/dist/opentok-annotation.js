@@ -1674,7 +1674,6 @@ OTSolution.Annotations.Toolbar = function (options) {
 /* global OT OTSolution OTKAnalytics ScreenSharingAccPack define */
 (function () {
   /** Include external dependencies */
-    /** Include external dependencies */
   var _;
   var $;
   var OTKAnalytics;
@@ -1683,7 +1682,7 @@ OTSolution.Annotations.Toolbar = function (options) {
     /* eslint-disable import/no-unresolved */
     _ = require('underscore');
     $ = require('jquery');
-    OTKAnalytics = ('opentok-solutions-logging');
+    OTKAnalytics = require('opentok-solutions-logging');
     /* eslint-enable import/no-unresolved */
   } else {
     _ = this._;
