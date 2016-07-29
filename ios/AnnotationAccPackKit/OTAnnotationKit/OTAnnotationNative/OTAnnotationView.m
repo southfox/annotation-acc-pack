@@ -41,6 +41,7 @@
         _currentAnnotatable = annotatable;
         _currentDrawPath = (OTAnnotationPath *)annotatable;
         [self addAnnotatable:annotatable];
+        [OTKLogger logEventAction:KLogActionFreeHand variation:KLogVariationSuccess completion:nil];
     }
     else if ([annotatable isKindOfClass:[OTAnnotationTextView class]]) {
         _currentAnnotatable = annotatable;

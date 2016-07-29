@@ -148,6 +148,7 @@
         [self.toolbar removeContentViewAtIndex:0];
         [self moveSelectionShadowViewTo:nil];
         [self resetToolbarButtons];
+        [OTKLogger logEventAction:KLogActionDone variation:KLogVariationSuccess completion:nil];
     }
     else if (sender == self.annotateButton) {
         self.annotationScrollView.annotatable = YES;
