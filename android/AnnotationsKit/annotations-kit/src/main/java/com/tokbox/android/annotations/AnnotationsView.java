@@ -227,6 +227,7 @@ public class AnnotationsView extends ViewGroup implements AnnotationsToolbar.Act
     public void attachToolbar(AnnotationsToolbar toolbar) {
         mToolbar = toolbar;
         mToolbar.setActionListener(this);
+        addLogEvent(OpenTokConfig.LOG_ACTION_USE_TOOLBAR, OpenTokConfig.LOG_VARIATION_SUCCESS);
     }
 
     /*
@@ -342,8 +343,6 @@ public class AnnotationsView extends ViewGroup implements AnnotationsToolbar.Act
         }
         mAnalytics. setData(mAnalyticsData);
 
-        addLogEvent(OpenTokConfig.LOG_ACTION_INITIALIZE, OpenTokConfig.LOG_VARIATION_ATTEMPT);
-
         setWillNotDraw(false);
         mAnnotationsManager = new AnnotationsManager();
         mCurrentColor = getResources().getColor(R.color.picker_color_orange);
@@ -351,7 +350,6 @@ public class AnnotationsView extends ViewGroup implements AnnotationsToolbar.Act
         this.setVisibility(View.GONE);
 
         addLogEvent(OpenTokConfig.LOG_ACTION_INITIALIZE, OpenTokConfig.LOG_VARIATION_SUCCESS);
-
     }
 
 
@@ -390,6 +388,7 @@ public class AnnotationsView extends ViewGroup implements AnnotationsToolbar.Act
                         mCurrentPath.addPoint(new PointF(x,y));
                         sendAnnotation(mode.toString(), buildSignalFromPoint(x,y, true, false));
                         invalidate();
+                        addLogEvent(OpenTokConfig.LOG_ACTION_START_DRAWING, OpenTokConfig.LOG_VARIATION_SUCCESS);
                     }
                     break;
                     case MotionEvent.ACTION_MOVE: {
@@ -407,6 +406,7 @@ public class AnnotationsView extends ViewGroup implements AnnotationsToolbar.Act
                         mCurrentPath = null;
                         mAnnotationsActive = false;
                         invalidate();
+                        addLogEvent(OpenTokConfig.LOG_ACTION_END_DRAWING, OpenTokConfig.LOG_VARIATION_SUCCESS);
                     }
                     break;
                 }
@@ -681,8 +681,6 @@ public class AnnotationsView extends ViewGroup implements AnnotationsToolbar.Act
     public void onItemSelected(View v, boolean selected) {
 
         if (v.getId() == R.id.done) {
-            addLogEvent(OpenTokConfig.LOG_ACTION_DONE, OpenTokConfig.LOG_VARIATION_ATTEMPT);
-
             mode = Mode.Done;
             clearAll(false, mSession.getConnection().getConnectionId());
             this.setVisibility(GONE);
@@ -690,8 +688,6 @@ public class AnnotationsView extends ViewGroup implements AnnotationsToolbar.Act
             addLogEvent(OpenTokConfig.LOG_ACTION_DONE, OpenTokConfig.LOG_VARIATION_SUCCESS);
         }
         if (v.getId() == R.id.erase) {
-            addLogEvent(OpenTokConfig.LOG_ACTION_ERASE, OpenTokConfig.LOG_VARIATION_ATTEMPT);
-
             mode = Mode.Clear;
             clearCanvas(false, mSession.getConnection().getConnectionId());
 
@@ -699,7 +695,6 @@ public class AnnotationsView extends ViewGroup implements AnnotationsToolbar.Act
         }
         if (v.getId() == R.id.screenshot) {
             //screenshot capture
-            addLogEvent(OpenTokConfig.LOG_ACTION_SCREENCAPTURE, OpenTokConfig.LOG_VARIATION_ATTEMPT);
             mode = Mode.Capture;
             if (videoRenderer != null) {
                 Bitmap bmp = videoRenderer.captureScreenshot();
@@ -718,18 +713,15 @@ public class AnnotationsView extends ViewGroup implements AnnotationsToolbar.Act
             this.setVisibility(VISIBLE);
 
             if (v.getId() == R.id.picker_color ){
-                addLogEvent(OpenTokConfig.LOG_ACTION_PICKER_COLOR, OpenTokConfig.LOG_VARIATION_ATTEMPT);
                 mode = Mode.Color;
                 this.mToolbar.bringToFront();
             }
             else {
                 if (v.getId() == R.id.type_tool) {
-                    addLogEvent(OpenTokConfig.LOG_ACTION_TEXT, OpenTokConfig.LOG_VARIATION_ATTEMPT);
                     //type text
                     mode = Mode.Text;
                 }
                 if (v.getId() == R.id.draw_freehand) {
-                    addLogEvent(OpenTokConfig.LOG_ACTION_FREEHAND, OpenTokConfig.LOG_VARIATION_ATTEMPT);
                     //freehand lines
                     mode = Mode.Pen;
                 }
