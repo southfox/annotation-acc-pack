@@ -459,10 +459,10 @@
       throw new Error('OpenTok Annotation Accelerator Pack requires an OpenTok session');
     }
     _registerEvents();
-    _setupUI();
     // init analytics logs
     _logAnalytics();
     _log(_logEventData.actionInitialize, _logEventData.variationSuccess);
+    _setupUI();
   };
 
   AnnotationAccPack.prototype = {
