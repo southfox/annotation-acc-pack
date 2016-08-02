@@ -9,6 +9,7 @@
 
 /** Analytics */
 var _otkanalytics;
+var _session;
 
 // vars for the analytics logs. Internal use
 var _logEventData = {
@@ -62,10 +63,6 @@ OTSolution.Annotations = function (options) {
 
   options = options || {};
   this.widgetVersion = 'js-1.0.0-beta';
-  if (!_otkanalytics) {
-    _logAnalytics();
-  }
-
   this.parent = options.container;
   this.videoFeed = options.feed;
   var context = options.externalWindow ? options.externalWindow.document : window.document;
@@ -1091,6 +1088,12 @@ OTSolution.Annotations.Toolbar = function (options) {
   }
 
   options || (options = {});
+
+  if (!options.session) {
+      throw new Error('OpenTok Annotation Widget requires an OpenTok session');
+  } else {
+    _session = options.session;
+  }
 
   this.session = options.session;
   this.parent = options.container;
