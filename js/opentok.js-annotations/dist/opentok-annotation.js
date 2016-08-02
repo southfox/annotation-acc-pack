@@ -62,6 +62,9 @@ OTSolution.Annotations = function (options) {
 
   options = options || {};
   this.widgetVersion = 'js-1.0.0-beta';
+  if (!_otkanalytics) {
+    _logAnalytics();
+  }
 
   this.parent = options.container;
   this.videoFeed = options.feed;
@@ -1082,6 +1085,10 @@ OTSolution.Annotations = function (options) {
 OTSolution.Annotations.Toolbar = function (options) {
   var self = this;
   var _toolbar = this;
+
+  if (!_otkanalytics) {
+    _logAnalytics();
+  }
 
   options || (options = {});
 
