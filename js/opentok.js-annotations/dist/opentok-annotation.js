@@ -1083,16 +1083,16 @@ OTSolution.Annotations.Toolbar = function (options) {
   var self = this;
   var _toolbar = this;
 
-  if (!_otkanalytics) {
-    _logAnalytics();
-  }
-
   options || (options = {});
 
   if (!options.session) {
-      throw new Error('OpenTok Annotation Widget requires an OpenTok session');
+    throw new Error('OpenTok Annotation Widget requires an OpenTok session');
   } else {
     _session = options.session;
+  }
+
+  if (!_otkanalytics) {
+    _logAnalytics();
   }
 
   this.session = options.session;
