@@ -1830,7 +1830,7 @@ OTSolution.Annotations.Toolbar = function (options) {
 
   var _setupUI = function () {
     var toolbar = [
-      '<div class="annotation-toolbar-container">',
+      '<div id="annotationToolbarContainer" class="annotation-toolbar-container">',
       '<div id="toolbar"></div>',
       '</div>'
     ].join('\n');
@@ -2068,6 +2068,10 @@ OTSolution.Annotations.Toolbar = function (options) {
   var _removeToolbar = function () {
     $(_elements.resizeSubject).off('resize', _resizeCanvas);
     toolbar.remove();
+    if ( !_elements.externalWindow ) {
+      $('#annotationToolbarContainer').remove();
+    }
+
   };
 
   /**
