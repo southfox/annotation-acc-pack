@@ -7,6 +7,52 @@
 
 /* eslint-disable */
 
+/** Analytics */
+var _otkanalytics;
+
+// vars for the analytics logs. Internal use
+var _logEventData = {
+  clientVersion: 'js-vsol-1.0.0',
+  componentId: 'annotationsAccPack',
+  name: 'guidAnnotationsKit',
+  actionStartDrawing: 'Start Drawing',
+  actionEndDrawing: 'End Drawing',
+  variationSuccess: 'Success',
+};
+
+var _logAnalytics = function () {
+  // init the analytics logs
+  var _source = window.location.href;
+
+  var otkanalyticsData = {
+    clientVersion: _logEventData.clientVersion,
+    source: _source,
+    componentId: _logEventData.componentId,
+    name: _logEventData.name
+  };
+
+  _otkanalytics = new OTKAnalytics(otkanalyticsData);
+
+  var sessionInfo = {
+    sessionId: _session.id,
+    connectionId: _session.connection.connectionId,
+    partnerId: _session.apiKey
+  };
+
+  _otkanalytics.addSessionInfo(sessionInfo);
+};
+
+var _log = function (action, variation) {
+  var data = {
+    action: action,
+    variation: variation
+  };
+  _otkanalytics.logEvent(data);
+};
+
+/** End Analytics */
+
+
 //--------------------------------------
 //  OPENTOK ANNOTATION CANVAS/VIEW
 //--------------------------------------
@@ -292,6 +338,7 @@ OTSolution.Annotations = function (options) {
             client.lastX = x;
             client.lastY = y;
             self.isStartPoint = true;
+            _log(_logEventData.actionStartDrawing, _logEventData.variationSuccess);
             break;
           case 'mousemove':
           case 'touchmove':
@@ -347,6 +394,7 @@ OTSolution.Annotations = function (options) {
             client.lastY = y;
             !resizeEvent && sendUpdate(update);
             self.isStartPoint = false;
+            _log(_logEventData.actionEndDrawing, _logEventData.variationSuccess);
             break;
           case 'mouseout':
             client.dragging = false;
@@ -1703,16 +1751,17 @@ OTSolution.Annotations.Toolbar = function (options) {
   // vars for the analytics logs. Internal use
   var _logEventData = {
     clientVersion: 'js-vsol-1.0.0',
-    componentId: 'annotationsKit',
+    componentId: 'annotationsAccPack',
     name: 'guidAnnotationsKit',
     actionInitialize: 'Init',
     actionStart: 'Start',
-    actionEnd: 'Done',
-    actionFreeHand: 'FreeHand',
-    actionPickerColor: 'PickerColor',
+    actionEnd: 'End',
+    actionFreeHand: 'Free Hand',
+    actionPickerColor: 'Picker Color',
     actionText: 'Text',
-    actionScreenCapture: 'ScreenCapture',
+    actionScreenCapture: 'Screen Capture',
     actionErase: 'Erase',
+    actionUseToolbar: 'Use Toolbar',
     variationAttempt: 'Attempt',
     variationError: 'Failure',
     variationSuccess: 'Success',
@@ -1776,6 +1825,7 @@ OTSolution.Annotations.Toolbar = function (options) {
       '</div>'
     ].join('\n');
     $('body').append(toolbar);
+    _log(_logEventData.actionUseToolbar, _logEventData.variationSuccess);
   };
 
   // Toolbar items
@@ -1947,7 +1997,6 @@ OTSolution.Annotations.Toolbar = function (options) {
       var action = actions[id];
 
       if (!!action) {
-        _log(action, _logEventData.variationAttempt);
         _log(action, _logEventData.variationSuccess);
       }
     });
@@ -2024,7 +2073,6 @@ OTSolution.Annotations.Toolbar = function (options) {
    */
   var start = function (session, options) {
     var deferred = $.Deferred();
-    _log(_logEventData.actionStart, _logEventData.variationAttempt);
 
     if (_.property('screensharing')(options)) {
       _createExternalWindow()
@@ -2101,7 +2149,6 @@ OTSolution.Annotations.Toolbar = function (options) {
    * @param {Boolean} publisher Are we the publisher?
    */
   var end = function (publisher) {
-    _log(_logEventData.actionEnd, _logEventData.variationAttempt);
     _removeToolbar();
     _elements.canvas = null;
     if (!!publisher) {
@@ -2136,7 +2183,6 @@ OTSolution.Annotations.Toolbar = function (options) {
     _setupUI();
     // init analytics logs
     _logAnalytics();
-    _log(_logEventData.actionInitialize, _logEventData.variationAttempt);
     _log(_logEventData.actionInitialize, _logEventData.variationSuccess);
   };
 
