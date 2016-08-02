@@ -7,6 +7,52 @@
 
 /* eslint-disable */
 
+/** Analytics */
+var _otkanalytics;
+
+// vars for the analytics logs. Internal use
+var _logEventData = {
+  clientVersion: 'js-vsol-1.0.0',
+  componentId: 'annotationsAccPack',
+  name: 'guidAnnotationsKit',
+  actionStartDrawing: 'Start Drawing',
+  actionEndDrawing: 'End Drawing',
+  variationSuccess: 'Success',
+};
+
+var _logAnalytics = function () {
+  // init the analytics logs
+  var _source = window.location.href;
+
+  var otkanalyticsData = {
+    clientVersion: _logEventData.clientVersion,
+    source: _source,
+    componentId: _logEventData.componentId,
+    name: _logEventData.name
+  };
+
+  _otkanalytics = new OTKAnalytics(otkanalyticsData);
+
+  var sessionInfo = {
+    sessionId: _session.id,
+    connectionId: _session.connection.connectionId,
+    partnerId: _session.apiKey
+  };
+
+  _otkanalytics.addSessionInfo(sessionInfo);
+};
+
+var _log = function (action, variation) {
+  var data = {
+    action: action,
+    variation: variation
+  };
+  _otkanalytics.logEvent(data);
+};
+
+/** End Analytics */
+
+
 //--------------------------------------
 //  OPENTOK ANNOTATION CANVAS/VIEW
 //--------------------------------------
@@ -292,6 +338,7 @@ OTSolution.Annotations = function (options) {
             client.lastX = x;
             client.lastY = y;
             self.isStartPoint = true;
+            _log(_logEventData.actionStartDrawing, _logEventData.variationSuccess);
             break;
           case 'mousemove':
           case 'touchmove':
@@ -347,6 +394,7 @@ OTSolution.Annotations = function (options) {
             client.lastY = y;
             !resizeEvent && sendUpdate(update);
             self.isStartPoint = false;
+            _log(_logEventData.actionEndDrawing, _logEventData.variationSuccess);
             break;
           case 'mouseout':
             client.dragging = false;
