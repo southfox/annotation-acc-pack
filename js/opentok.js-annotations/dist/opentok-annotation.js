@@ -965,7 +965,7 @@ OTSolution.Annotations = function (options) {
   var drawUpdates = function (updates, resizeEvent) {
 
     updates.forEach(function (update, index) {
-      if (update.id === self.videoFeed.stream.connection.connectionId) {
+      if (self.videoFeed.stream && update.id === self.videoFeed.stream.connection.connectionId) {
         drawIncoming(update, resizeEvent, index);
       }
     });
