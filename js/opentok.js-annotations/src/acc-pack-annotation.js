@@ -444,7 +444,6 @@
     }
     _log(_logEventData.actionEnd, _logEventData.variationSuccess);
   };
-
   /**
    * @constructor
    * Represents an annotation component, used for annotation over video or a shared screen

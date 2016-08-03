@@ -83,6 +83,7 @@ OTSolution.Annotations = function (options) {
   var self = this,
     ctx,
     cbs = [],
+    isPublisher,
     mirrored,
     scaledToFill,
     batchUpdates = [],
@@ -98,7 +99,8 @@ OTSolution.Annotations = function (options) {
 
 
   // INFO Mirrored feeds contain the OT_mirrored class
-  mirrored = (' ' + self.videoFeed.element.className + ' ').indexOf(' ' + 'OT_mirrored' + ' ') > -1;
+  isPublisher = (' ' + self.videoFeed.element.className + ' ').indexOf(' ' + 'OT_publisher' + ' ') > -1;
+  mirrored = isPublisher ? (' ' + self.videoFeed.element.className + ' ').indexOf(' ' + 'OT_mirrored' + ' ') > -1 : false;
   scaledToFill = (' ' + self.videoFeed.element.className + ' ').indexOf(' ' + 'OT_fit-mode-cover' + ' ') > -1;
 
   this.canvas = function () {
@@ -2175,7 +2177,6 @@ OTSolution.Annotations.Toolbar = function (options) {
     }
     _log(_logEventData.actionEnd, _logEventData.variationSuccess);
   };
-
   /**
    * @constructor
    * Represents an annotation component, used for annotation over video or a shared screen
