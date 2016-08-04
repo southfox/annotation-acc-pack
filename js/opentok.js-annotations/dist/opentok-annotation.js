@@ -340,7 +340,7 @@ OTSolution.Annotations = function (options) {
             client.lastX = x;
             client.lastY = y;
             self.isStartPoint = true;
-            _log(_logEventData.actionStartDrawing, _logEventData.variationSuccess);
+            !resizeEvent && _log(_logEventData.actionStartDrawing, _logEventData.variationSuccess);
             break;
           case 'mousemove':
           case 'touchmove':
@@ -396,7 +396,7 @@ OTSolution.Annotations = function (options) {
             client.lastY = y;
             !resizeEvent && sendUpdate(update);
             self.isStartPoint = false;
-            _log(_logEventData.actionEndDrawing, _logEventData.variationSuccess);
+            !resizeEvent && _log(_logEventData.actionEndDrawing, _logEventData.variationSuccess);
             break;
           case 'mouseout':
             client.dragging = false;
@@ -1959,12 +1959,12 @@ OTSolution.Annotations.Toolbar = function (options) {
       height: height
     });
 
-    $(_elements.canvas).css({
+    $(_elements.canvasContainer).find('canvas').css({
       width: width,
       height: height
     });
 
-    $(_elements.canvas).attr({
+    $(_elements.canvasContainer).find('canvas').attr({
       width: width,
       height: height
     });
@@ -2070,10 +2070,9 @@ OTSolution.Annotations.Toolbar = function (options) {
   var _removeToolbar = function () {
     $(_elements.resizeSubject).off('resize', _resizeCanvas);
     toolbar.remove();
-    if ( !_elements.externalWindow ) {
+    if (!_elements.externalWindow) {
       $('#annotationToolbarContainer').remove();
     }
-
   };
 
   /**
