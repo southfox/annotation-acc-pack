@@ -340,7 +340,7 @@ OTSolution.Annotations = function (options) {
             client.lastX = x;
             client.lastY = y;
             self.isStartPoint = true;
-            _log(_logEventData.actionStartDrawing, _logEventData.variationSuccess);
+            !resizeEvent && _log(_logEventData.actionStartDrawing, _logEventData.variationSuccess);
             break;
           case 'mousemove':
           case 'touchmove':
@@ -396,7 +396,7 @@ OTSolution.Annotations = function (options) {
             client.lastY = y;
             !resizeEvent && sendUpdate(update);
             self.isStartPoint = false;
-            _log(_logEventData.actionEndDrawing, _logEventData.variationSuccess);
+            !resizeEvent && _log(_logEventData.actionEndDrawing, _logEventData.variationSuccess);
             break;
           case 'mouseout':
             client.dragging = false;

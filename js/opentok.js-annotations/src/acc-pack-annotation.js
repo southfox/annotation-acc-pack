@@ -22,8 +22,6 @@
   var _accPack;
   var _session;
   var _canvas;
-  var _screensharing;
-  var _viewingSharedScreen;
   var _elements = {};
 
   /** Analytics */
@@ -228,27 +226,15 @@
       height: height
     });
 
-    if (_screensharing || _viewingSharedScreen) {
-      $(_elements.canvas).css({
-        width: width,
-        height: height
-      });
+    $(_elements.canvasContainer).find('canvas').css({
+      width: width,
+      height: height
+    });
 
-      $(_elements.canvas).attr({
-        width: width,
-        height: height
-      });
-    } else {
-      $(_elements.canvasContainer).css({
-        width: width,
-        height: height
-      });
-
-      $(_elements.canvasContainer).attr({
-        width: width,
-        height: height
-      });
-    }
+    $(_elements.canvasContainer).find('canvas').attr({
+      width: width,
+      height: height
+    });
 
     _refreshCanvas();
     _triggerEvent('resizeCanvas');
@@ -362,7 +348,6 @@
    * @param {object} session
    * @param {object} [options]
    * @param {boolean} [options.screensharing] - Using an external window
-   * @param {boolean} [options.viewingSharedScreen] - Annotating on shared screen
    * @param {string} [options.toolbarId] - If the container has an id other than 'toolbar'
    * @param {array} [options.items] - Custom set of tools
    * @param {array} [options.colors] - Custom color palette
@@ -371,10 +356,7 @@
   var start = function (session, options) {
     var deferred = $.Deferred();
 
-    _viewingSharedScreen = _.property('viewingSharedScreen')(options);
-
     if (_.property('screensharing')(options)) {
-      _screensharing = true;
       _createExternalWindow()
         .then(function (externalWindow) {
           _createToolbar(session, options, externalWindow);
