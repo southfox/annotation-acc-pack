@@ -226,12 +226,12 @@
       height: height
     });
 
-    $(_elements.canvas).css({
+    $(_elements.canvasContainer).find('canvas').css({
       width: width,
       height: height
     });
 
-    $(_elements.canvas).attr({
+    $(_elements.canvasContainer).find('canvas').attr({
       width: width,
       height: height
     });
@@ -337,10 +337,9 @@
   var _removeToolbar = function () {
     $(_elements.resizeSubject).off('resize', _resizeCanvas);
     toolbar.remove();
-    if ( !_elements.externalWindow ) {
+    if (!_elements.externalWindow) {
       $('#annotationToolbarContainer').remove();
     }
-
   };
 
   /**
