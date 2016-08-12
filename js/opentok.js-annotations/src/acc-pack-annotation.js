@@ -262,7 +262,8 @@
       container: container(),
       colors: colors,
       items: items,
-      externalWindow: externalWindow || null
+      externalWindow: externalWindow || null,
+      OTKAnalytics: OTKAnalytics
     });
 
     toolbar.itemClicked(function (id) {
