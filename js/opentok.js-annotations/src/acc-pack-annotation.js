@@ -108,41 +108,42 @@
   };
 
   // Toolbar items
+  var imageAssets = 'https://assets.tokbox.com/solutions/images/';
   var _defaultToolbarItems = [{
     id: 'OT_pen',
     title: 'Pen',
-    icon: '../images/annotation/freehand.png',
-    selectedIcon: '../images/annotation/freehand_selected.png'
+    icon: [imageAssets, 'freehand.png'].join(''),
+    selectedIcon: [imageAssets, 'freehand_selected.png'].join('')
   }, {
     id: 'OT_line',
     title: 'Line',
-    icon: '../images/annotation/line.png',
-    selectedIcon: '../images/annotation/line_selected.png'
+    icon: [imageAssets, 'line.png'].join(''),
+    selectedIcon: [imageAssets, 'line_selected.png'].join('')
   }, {
     id: 'OT_text',
     title: 'Text',
-    icon: '../images/annotation/text.png',
-    selectedIcon: '../images/annotation/text.png'
+    icon: [imageAssets, 'text.png'].join(''),
+    selectedIcon: [imageAssets, 'text.png'].join('')
   }, {
     id: 'OT_shapes',
     title: 'Shapes',
-    icon: '../images/annotation/shapes.png',
+    icon: [imageAssets, 'shapes.png'].join(''),
     items: [{
       id: 'OT_arrow',
       title: 'Arrow',
-      icon: '../images/annotation/arrow.png'
+      icon: [imageAssets, 'arrow.png'].join('')
     }, {
       id: 'OT_rect',
       title: 'Rectangle',
-      icon: '../images/annotation/rectangle.png'
+      icon: [imageAssets, 'rectangle.png'].join('')
     }, {
       id: 'OT_oval',
       title: 'Oval',
-      icon: '../images/annotation/oval.png'
+      icon: [imageAssets, 'oval.png'].join('')
     }, {
       id: 'OT_star',
       title: 'Star',
-      icon: '../images/annotation/star.png',
+      icon: [imageAssets, 'star.png'].join(''),
       points: [
         /* eslint-disable max-len */
         [0.5 + 0.5 * Math.cos(90 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(90 * (Math.PI / 180))],
@@ -167,12 +168,12 @@
   }, {
     id: 'OT_line_width',
     title: 'Line Width',
-    icon: '../images/annotation/line_width.png',
+    icon: [imageAssets, 'line_width.png'].join(''),
     items: { /* Built dynamically */ }
   }, {
     id: 'OT_clear',
     title: 'Clear',
-    icon: '../images/annotation/clear.png'
+    icon: [imageAssets, 'clear.png'].join('')
   }];
 
   var _palette = [
