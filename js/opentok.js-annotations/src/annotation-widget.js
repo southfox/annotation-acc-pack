@@ -169,7 +169,7 @@
           self.overlay.style.top = '0px';
           self.overlay.style.width = self.parent.clientWidth + 'px';
           self.overlay.style.height = self.parent.clientHeight + 'px';
-          self.overlay.style.background = 'rgba(0,0,0,0.4) url("https://assets.tokbox.com/solutions/images/camera.png") no-repeat center';
+          self.overlay.style.background = 'rgba(0,0,0,0.4) url("https://assets.tokbox.com/solutions/images/annotation-camera.png") no-repeat center';
           self.overlay.style.backgroundSize = '50px 50px';
           self.overlay.style.cursor = 'pointer';
           self.overlay.style.opacity = 0;
@@ -1134,13 +1134,13 @@
     var toolbarItems = [{
       id: 'OT_pen',
       title: 'Pen',
-      icon: [imageAssets, 'freehand.png'].join(''),
-      selectedIcon: [imageAssets, 'freehand_selected.png'].join('')
+      icon: [imageAssets, 'annotation-freehand.png'].join(''),
+      selectedIcon: [imageAssets, 'annotation-freehand_selected.png'].join('')
     }, {
       id: 'OT_line',
       title: 'Line',
-      icon: [imageAssets, 'line.png'].join(''),
-      selectedIcon: [imageAssets, 'line_selected.png'].join(''),
+      icon: [imageAssets, 'annotation-line.png'].join(''),
+      selectedIcon: [imageAssets, 'annotation-line_selected.png'].join(''),
       points: [
         [0, 0],
         [0, 1]
@@ -1148,11 +1148,11 @@
     }, {
       id: 'OT_shapes',
       title: 'Shapes',
-      icon: [imageAssets, 'shapes.png'].join(''),
+      icon: [imageAssets, 'annotation-shapes.png'].join(''),
       items: [{
         id: 'OT_arrow',
         title: 'Arrow',
-        icon: [imageAssets, 'arrow.png'].join(''),
+        icon: [imageAssets, 'annotation-arrow.png'].join(''),
         points: [
           [0, 1],
           [3, 1],
@@ -1166,7 +1166,7 @@
       }, {
         id: 'OT_rect',
         title: 'Rectangle',
-        icon: [imageAssets, 'rectangle.png'].join(''),
+        icon: [imageAssets, 'annotation-rectangle.png'].join(''),
         points: [
           [0, 0],
           [1, 0],
@@ -1177,7 +1177,7 @@
       }, {
         id: 'OT_oval',
         title: 'Oval',
-        icon: [imageAssets, 'oval.png'].join(''),
+        icon: [imageAssets, 'annotation-oval.png'].join(''),
         enableSmoothing: true,
         points: [
           [0, 0.5],
@@ -1195,8 +1195,8 @@
     }, {
       id: 'OT_text',
       title: 'Text',
-      icon: [imageAssets, 'text.png'].join(''),
-      selectedIcon: [imageAssets, 'text.png'].join('')
+      icon: [imageAssets, 'annotation-text.png'].join(''),
+      selectedIcon: [imageAssets, 'annotation-text.png'].join('')
     }, {
       id: 'OT_colors',
       title: 'Colors',
@@ -1205,17 +1205,17 @@
     }, {
       id: 'OT_line_width',
       title: 'Line Width',
-      icon: [imageAssets, 'line_width.png'].join(''),
+      icon: [imageAssets, 'annotation-line_width.png'].join(''),
       items: { /* Built dynamically */ }
     }, {
       id: 'OT_clear',
       title: 'Clear',
-      icon: [imageAssets, 'clear.png'].join('')
+      icon: [imageAssets, 'annotation-clear.png'].join('')
     }, {
       id: 'OT_capture',
       title: 'Capture',
-      icon: [imageAssets, 'camera.png'].join(''),
-      selectedIcon: [imageAssets, 'camera_selected.png'].join('')
+      icon: [imageAssets, 'annotation-camera.png'].join(''),
+      selectedIcon: [imageAssets, 'annotation-camera_selected.png'].join('')
     }];
 
     /**
