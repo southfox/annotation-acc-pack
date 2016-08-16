@@ -166,6 +166,7 @@
         if (!self.overlay) {
           self.overlay = document.createElement('div');
           self.overlay.style.position = 'absolute';
+          self.overlay.style.top = '0px';
           self.overlay.style.width = self.parent.clientWidth + 'px';
           self.overlay.style.height = self.parent.clientHeight + 'px';
           self.overlay.style.background = 'rgba(0,0,0,0.4) url("https://assets.tokbox.com/solutions/images/camera.png") no-repeat center';
@@ -177,6 +178,7 @@
 
           self.parent.onmouseover = function () {
             self.overlay.style.opacity = 1;
+            self.overlay.style.zIndex = 1010;
           };
 
           self.parent.onmouseout = function () {
@@ -1128,7 +1130,8 @@
     this.iconWidth = options.iconWidth || '30px';
     this.iconHeight = options.iconHeight || '30px';
     var imageAssets = 'https://assets.tokbox.com/solutions/images/';
-    this.items = options.items || [{
+
+    var toolbarItems = [{
       id: 'OT_pen',
       title: 'Pen',
       icon: [imageAssets, 'freehand.png'].join(''),
@@ -1214,6 +1217,31 @@
       icon: [imageAssets, 'camera.png'].join(''),
       selectedIcon: [imageAssets, 'camera_selected.png'].join('')
     }];
+
+    /**
+     * If we recieve items as part of the options hash, build the toolbar from the list of items.
+     * Otherwise, include all items.
+     */
+    var getItems = function () {
+      var itemNames = ['pen', 'line', 'shapes', 'text', 'colors', 'line-width', 'clear', 'capture'];
+      var addItem = function (acc, item) {
+        var index = itemNames.indexOf(item);
+        if (index !== -1) {
+          acc.push(toolbarItems[index]);
+        }
+        return acc;
+      }
+
+      if (!!options.items && !!options.items.length) {
+        return options.items.reduce(addItem, []);
+      } else {
+        return toolbarItems;
+      }
+    }
+
+    this.items = getItems();
+
+
     this.colors = options.colors || [
       '#1abc9c',
       '#2ecc71',
@@ -1754,6 +1782,7 @@
   };
 
 }.call(this));
+
 /* global OT OTSolution OTKAnalytics ScreenSharingAccPack define */
 (function () {
   /** Include external dependencies */
@@ -1863,75 +1892,6 @@
     _log(_logEventData.actionUseToolbar, _logEventData.variationSuccess);
   };
 
-  // Toolbar items
-  var imageAssets = 'https://assets.tokbox.com/solutions/images/';
-  var _defaultToolbarItems = [{
-    id: 'OT_pen',
-    title: 'Pen',
-    icon: [imageAssets, 'freehand.png'].join(''),
-    selectedIcon: [imageAssets, 'freehand_selected.png'].join('')
-  }, {
-    id: 'OT_line',
-    title: 'Line',
-    icon: [imageAssets, 'line.png'].join(''),
-    selectedIcon: [imageAssets, 'line_selected.png'].join('')
-  }, {
-    id: 'OT_text',
-    title: 'Text',
-    icon: [imageAssets, 'text.png'].join(''),
-    selectedIcon: [imageAssets, 'text.png'].join('')
-  }, {
-    id: 'OT_shapes',
-    title: 'Shapes',
-    icon: [imageAssets, 'shapes.png'].join(''),
-    items: [{
-      id: 'OT_arrow',
-      title: 'Arrow',
-      icon: [imageAssets, 'arrow.png'].join('')
-    }, {
-      id: 'OT_rect',
-      title: 'Rectangle',
-      icon: [imageAssets, 'rectangle.png'].join('')
-    }, {
-      id: 'OT_oval',
-      title: 'Oval',
-      icon: [imageAssets, 'oval.png'].join('')
-    }, {
-      id: 'OT_star',
-      title: 'Star',
-      icon: [imageAssets, 'star.png'].join(''),
-      points: [
-        /* eslint-disable max-len */
-        [0.5 + 0.5 * Math.cos(90 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(90 * (Math.PI / 180))],
-        [0.5 + 0.25 * Math.cos(126 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(126 * (Math.PI / 180))],
-        [0.5 + 0.5 * Math.cos(162 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(162 * (Math.PI / 180))],
-        [0.5 + 0.25 * Math.cos(198 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(198 * (Math.PI / 180))],
-        [0.5 + 0.5 * Math.cos(234 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(234 * (Math.PI / 180))],
-        [0.5 + 0.25 * Math.cos(270 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(270 * (Math.PI / 180))],
-        [0.5 + 0.5 * Math.cos(306 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(306 * (Math.PI / 180))],
-        [0.5 + 0.25 * Math.cos(342 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(342 * (Math.PI / 180))],
-        [0.5 + 0.5 * Math.cos(18 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(18 * (Math.PI / 180))],
-        [0.5 + 0.25 * Math.cos(54 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(54 * (Math.PI / 180))],
-        [0.5 + 0.5 * Math.cos(90 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(90 * (Math.PI / 180))]
-        /* eslint-enable max-len */
-      ]
-    }]
-  }, {
-    id: 'OT_colors',
-    title: 'Colors',
-    icon: '',
-    items: { /* Built dynamically */ }
-  }, {
-    id: 'OT_line_width',
-    title: 'Line Width',
-    icon: [imageAssets, 'line_width.png'].join(''),
-    items: { /* Built dynamically */ }
-  }, {
-    id: 'OT_clear',
-    title: 'Clear',
-    icon: [imageAssets, 'clear.png'].join('')
-  }];
-
   var _palette = [
     '#1abc9c',
     '#2ecc71',
@@ -2005,7 +1965,7 @@
 
   var _createToolbar = function (session, options, externalWindow) {
     var toolbarId = _.property('toolbarId')(options) || 'toolbar';
-    var items = _.property('toolbarItems')(options) || _defaultToolbarItems;
+    var items = _.property('toolbarItems')(options);
     var colors = _.property('colors')(options) || _palette;
 
     var container = function () {
@@ -2018,7 +1978,7 @@
       session: session,
       container: container(),
       colors: colors,
-      items: items,
+      items: !!items && !!items.length ? options.items : null,
       externalWindow: externalWindow || null,
       OTKAnalytics: OTKAnalytics
     });
@@ -2074,6 +2034,10 @@
     annotationWindow.$ = $;
 
     annotationWindow.triggerCloseEvent = function () {
+      _triggerEvent('annotationWindowClosed');
+    };
+
+    annotationWindow.onbeforeunload = function () {
       _triggerEvent('annotationWindowClosed');
     };
 
@@ -2193,14 +2157,14 @@
   var end = function (publisher) {
     _removeToolbar();
     _elements.canvas = null;
-    if (!!publisher) {
-      if (!!_elements.externalWindow) {
-        _elements.externalWindow.close();
-        _elements.externalWindow = null;
-        _elements.resizeSubject = null;
-      }
-      _triggerEvent('endAnnotation');
+
+    if (!!_elements.externalWindow) {
+      _elements.externalWindow.close();
+      _elements.externalWindow = null;
+      _elements.resizeSubject = null;
     }
+    _triggerEvent('endAnnotation');
+
     _log(_logEventData.actionEnd, _logEventData.variationSuccess);
   };
   /**

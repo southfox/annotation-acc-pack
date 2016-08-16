@@ -166,6 +166,7 @@
         if (!self.overlay) {
           self.overlay = document.createElement('div');
           self.overlay.style.position = 'absolute';
+          self.overlay.style.top = '0px';
           self.overlay.style.width = self.parent.clientWidth + 'px';
           self.overlay.style.height = self.parent.clientHeight + 'px';
           self.overlay.style.background = 'rgba(0,0,0,0.4) url("https://assets.tokbox.com/solutions/images/camera.png") no-repeat center';
@@ -177,6 +178,7 @@
 
           self.parent.onmouseover = function () {
             self.overlay.style.opacity = 1;
+            self.overlay.style.zIndex = 1010;
           };
 
           self.parent.onmouseout = function () {
@@ -1128,7 +1130,8 @@
     this.iconWidth = options.iconWidth || '30px';
     this.iconHeight = options.iconHeight || '30px';
     var imageAssets = 'https://assets.tokbox.com/solutions/images/';
-    this.items = options.items || [{
+
+    var toolbarItems = [{
       id: 'OT_pen',
       title: 'Pen',
       icon: [imageAssets, 'freehand.png'].join(''),
@@ -1214,6 +1217,31 @@
       icon: [imageAssets, 'camera.png'].join(''),
       selectedIcon: [imageAssets, 'camera_selected.png'].join('')
     }];
+
+    /**
+     * If we recieve items as part of the options hash, build the toolbar from the list of items.
+     * Otherwise, include all items.
+     */
+    var getItems = function () {
+      var itemNames = ['pen', 'line', 'shapes', 'text', 'colors', 'line-width', 'clear', 'capture'];
+      var addItem = function (acc, item) {
+        var index = itemNames.indexOf(item);
+        if (index !== -1) {
+          acc.push(toolbarItems[index]);
+        }
+        return acc;
+      }
+
+      if (!!options.items && !!options.items.length) {
+        return options.items.reduce(addItem, []);
+      } else {
+        return toolbarItems;
+      }
+    }
+
+    this.items = getItems();
+
+
     this.colors = options.colors || [
       '#1abc9c',
       '#2ecc71',
