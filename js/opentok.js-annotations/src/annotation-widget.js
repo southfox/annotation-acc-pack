@@ -292,6 +292,7 @@
       };
       image.src = 'data:image/png;base64,' + self.videoFeed.getImgData();
 
+
     };
 
     this.onScreenCapture = function (cb) {
@@ -1191,7 +1192,25 @@
           [0, 0.5],
           [0.5 + 0.5 * Math.cos(5 * Math.PI / 4), 0.5 + 0.5 * Math.sin(5 * Math.PI / 4)]
         ]
-      }]
+      }, {
+      id: 'OT_star',
+      title: 'Star',
+      icon: [imageAssets, 'star.png'].join(''),
+      points: [
+        /* eslint-disable max-len */
+        [0.5 + 0.5 * Math.cos(90 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(90 * (Math.PI / 180))],
+        [0.5 + 0.25 * Math.cos(126 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(126 * (Math.PI / 180))],
+        [0.5 + 0.5 * Math.cos(162 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(162 * (Math.PI / 180))],
+        [0.5 + 0.25 * Math.cos(198 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(198 * (Math.PI / 180))],
+        [0.5 + 0.5 * Math.cos(234 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(234 * (Math.PI / 180))],
+        [0.5 + 0.25 * Math.cos(270 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(270 * (Math.PI / 180))],
+        [0.5 + 0.5 * Math.cos(306 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(306 * (Math.PI / 180))],
+        [0.5 + 0.25 * Math.cos(342 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(342 * (Math.PI / 180))],
+        [0.5 + 0.5 * Math.cos(18 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(18 * (Math.PI / 180))],
+        [0.5 + 0.25 * Math.cos(54 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(54 * (Math.PI / 180))],
+        [0.5 + 0.5 * Math.cos(90 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(90 * (Math.PI / 180))]
+        /* eslint-enable max-len */
+      ]}]
     }, {
       id: 'OT_text',
       title: 'Text',
@@ -1217,6 +1236,8 @@
       icon: [imageAssets, 'annotation-camera.png'].join(''),
       selectedIcon: [imageAssets, 'annotation-camera_selected.png'].join('')
     }];
+
+
 
     /**
      * If we recieve items as part of the options hash, build the toolbar from the list of items.
