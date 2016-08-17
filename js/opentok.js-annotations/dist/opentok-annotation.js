@@ -187,6 +187,7 @@
 
           self.overlay.onclick = function () {
             self.captureScreenshot();
+            self.selectItem(null);
           };
         } else {
           self.overlay.style = 'inline';
