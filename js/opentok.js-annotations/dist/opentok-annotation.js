@@ -1905,7 +1905,7 @@
 
   var _setupUI = function () {
     var toolbar = [
-      '<div id="annotationToolbarContainer" class="annotation-toolbar-container">',
+      '<div id="annotationToolbarContainer" class="ots-annotation-toolbar-container">',
       '<div id="toolbar"></div>',
       '</div>'
     ].join('\n');
