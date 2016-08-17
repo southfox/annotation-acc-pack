@@ -1195,7 +1195,7 @@
       }, {
       id: 'OT_star',
       title: 'Star',
-      icon: [imageAssets, 'star.png'].join(''),
+      icon: [imageAssets, 'annotation-star.png'].join(''),
       points: [
         /* eslint-disable max-len */
         [0.5 + 0.5 * Math.cos(90 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(90 * (Math.PI / 180))],
