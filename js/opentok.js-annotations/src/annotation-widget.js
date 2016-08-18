@@ -20,8 +20,8 @@
     clientVersion: 'js-vsol-1.0.0',
     componentId: 'annotationsAccPack',
     name: 'guidAnnotationsKit',
-    actionStartDrawing: 'Start Drawing',
-    actionEndDrawing: 'End Drawing',
+    actionStartDrawing: 'StartDrawing',
+    actionEndDrawing: 'EndDrawing',
     variationSuccess: 'Success',
   };
 
