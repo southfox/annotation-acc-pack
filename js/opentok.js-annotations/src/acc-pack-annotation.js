@@ -246,6 +246,7 @@
     // External window needs access to certain globals
     annotationWindow.toolbar = toolbar;
     annotationWindow.OT = OT;
+    annotationWindow.session = _session;
     annotationWindow.$ = $;
 
     annotationWindow.triggerCloseEvent = function () {
