@@ -1898,15 +1898,17 @@
   };
 
   var _registerEvents = function () {
-    var events = [
-      'startAnnotation',
-      'linkAnnotation',
-      'resizeCanvas',
-      'annotationWindowClosed',
-      'endAnnotation'
-    ];
+    if (_accPack) {
+      var events = [
+        'startAnnotation',
+        'linkAnnotation',
+        'resizeCanvas',
+        'annotationWindowClosed',
+        'endAnnotation'
+      ];
 
-    _accPack.registerEvents(events);
+      _accPack.registerEvents(events);
+    }
   };
 
   var _setupUI = function () {
