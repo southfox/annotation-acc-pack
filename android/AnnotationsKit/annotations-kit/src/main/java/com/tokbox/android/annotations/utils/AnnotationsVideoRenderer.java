@@ -324,7 +324,6 @@ public class AnnotationsVideoRenderer extends BaseVideoRenderer {
         }
 
         public void displayFrame(Frame frame) {
-            Log.i("MARINAS", "Display FRAME");
             mFrameLock.lock();
             if (this.mCurrentFrame != null) {
                 this.mCurrentFrame.recycle();
@@ -390,24 +389,16 @@ public class AnnotationsVideoRenderer extends BaseVideoRenderer {
 
     public int getVideoWidth() {
         if ( mRenderer.mCurrentFrame != null ) {
-            Log.i("MARINAS", "VIDEO RENDERER GETWIDTH: ");
-
             return mRenderer.mCurrentFrame.getWidth();
         }
-
-        Log.i("MARINAS", "VIDEO RENDERER GETWIDTH 0 ");
 
         return 0;
     }
 
     public int getVideoHeight() {
         if ( mRenderer.mCurrentFrame != null ) {
-            Log.i("MARINAS", "VIDEO RENDERER getheight: ");
-
             return mRenderer.mCurrentFrame.getHeight();
         }
-        Log.i("MARINAS", "VIDEO RENDERER getheight 0");
-
         return 0;
     }
 

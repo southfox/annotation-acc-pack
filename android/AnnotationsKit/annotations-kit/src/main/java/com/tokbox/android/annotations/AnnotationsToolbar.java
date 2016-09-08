@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -20,7 +21,7 @@ public class AnnotationsToolbar extends LinearLayout {
     private ImageButton mTypeBtn;
     private ImageButton mScreenshotBtn;
     private ImageButton mPickerColorBtn;
-    private TextView mDoneBtn;
+    private ImageButton mDoneBtn;
 
     private Context mContext;
     private LinearLayout mMainToolbar;
@@ -95,7 +96,7 @@ public class AnnotationsToolbar extends LinearLayout {
         mTypeBtn = (ImageButton) mMainToolbar.findViewById(R.id.type_tool);
         mScreenshotBtn = (ImageButton) mMainToolbar.findViewById(R.id.screenshot);
         mEraseBtn = (ImageButton) mMainToolbar.findViewById(R.id.erase);
-        mDoneBtn = (TextView) mMainToolbar.findViewById(R.id.done);
+        mDoneBtn = (ImageButton) mMainToolbar.findViewById(R.id.done);
 
         final int mCount = mColorToolbar.getChildCount();
 
@@ -203,6 +204,13 @@ public class AnnotationsToolbar extends LinearLayout {
                         v.setSelected(false);
                     } else {
                         v.setSelected(true);
+                    }
+
+                    mDoneBtn.setVisibility(VISIBLE);
+                }
+                else {
+                    if (v.getId() == R.id.done){
+                        mDoneBtn.setVisibility(GONE);
                     }
                 }
                 mActionsListener.onItemSelected(v, v.isSelected());

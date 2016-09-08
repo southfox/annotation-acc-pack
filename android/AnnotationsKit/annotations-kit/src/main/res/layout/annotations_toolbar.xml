@@ -123,15 +123,15 @@
         android:background="@color/toolbar_bckg"
         android:gravity="center_horizontal">
 
-        <TextView
+        <ImageButton
             android:id="@+id/done"
             android:layout_width="@dimen/done_width"
             android:layout_height="@dimen/toolbar_height"
-            android:text="@string/done_btn"
             android:gravity="center"
-            android:textColor="@color/picker_color_white"
+            android:src="@drawable/ic_confirmation"
             android:background="@drawable/done_selector"
-            android:clickable="true"/>
+            android:clickable="true"
+            android:visibility="visible" />
 
         <ImageButton
             android:id="@+id/draw_freehand"
@@ -139,7 +139,8 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_pencil"
             android:layout_gravity="center_vertical"
-            android:background="@drawable/selector"/>
+            android:background="@drawable/selector"
+            android:layout_alignParentTop="true" />
 
         <ImageButton
             android:id="@+id/picker_color"
@@ -148,7 +149,8 @@
             android:layout_gravity="center_vertical"
             android:src="@drawable/color_picker"
             android:background="@drawable/selector"
-            android:tint="@color/picker_color_orange"/>
+            android:tint="@color/picker_color_orange"
+            android:layout_alignParentTop="true" />
 
         <ImageButton
             android:id="@+id/type_tool"
@@ -156,7 +158,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_type_tool"
-            android:background="@drawable/selector"/>
+            android:background="@drawable/selector"
+            android:layout_alignParentTop="true" />
 
         <ImageButton
             android:id="@+id/screenshot"
@@ -164,7 +167,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_screenshot"
-            android:background="@drawable/selector"/>
+            android:background="@drawable/selector"
+            android:layout_alignParentTop="true" />
 
         <ImageButton
             android:id="@+id/erase"
@@ -172,7 +176,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_erase"
-            android:background="@drawable/selector"/>
+            android:background="@drawable/selector"
+            android:layout_alignParentTop="true" />
 
     </LinearLayout>
 
