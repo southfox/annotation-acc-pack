@@ -113,6 +113,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="wav-WR-fza" kind="show" id="n0B-3u-GGC"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="BdC-5T-dW4" style="IBUITableViewCellStyleDefault" id="rkA-ec-Tf0">
                                         <rect key="frame" x="0.0" y="284" width="600" height="44"/>
@@ -130,6 +133,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="jNc-xy-E7H" kind="show" id="Y30-d6-WlD"/>
+                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -208,7 +214,7 @@
                     <view key="view" contentMode="scaleToFill" id="P6H-Mt-UT4">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.27450980390000002" green="0.61176470589999998" blue="0.69803921570000005" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9yL-6K-dVX" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -244,7 +250,7 @@
                     <view key="view" contentMode="scaleToFill" id="uUJ-hr-M9I">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.76862745099999996" green="0.1215686275" blue="0.29411764709999999" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yil-p5-WAN" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -337,6 +343,9 @@
                             <constraint firstItem="Mgl-T8-xkH" firstAttribute="top" secondItem="6t5-YC-WWH" secondAttribute="bottom" id="baM-Ke-KSJ"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="holderView" destination="Mgl-T8-xkH" id="VzI-EX-LZN"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dgx-ME-RnI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -371,7 +380,7 @@
                     <view key="view" contentMode="scaleToFill" id="wqV-cX-Yqe">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.27450980390000002" green="0.61176470589999998" blue="0.69803921570000005" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6cp-0U-JXd" userLabel="First Responder" sceneMemberID="firstResponder"/>
