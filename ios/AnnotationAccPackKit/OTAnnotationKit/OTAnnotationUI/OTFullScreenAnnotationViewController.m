@@ -8,7 +8,7 @@
 #import "OTAnnotationScrollView.h"
 #import "OTAnnotationScrollView_Private.h"
 
-@interface OTFullScreenAnnotationViewController ()
+@interface OTFullScreenAnnotationViewController () <OTAnnotationToolbarViewDataSource>
 @property (nonatomic) OTAnnotationScrollView *annotationView;
 @end
 
@@ -34,8 +34,14 @@
         self.providesPresentationContextTransitionStyle = YES;
         self.definesPresentationContext = YES;
         self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        self.annotationView.toolbarView.toolbarViewDataSource = self;
     }
     return self;
+}
+
+#pragma mark - OTAnnotationToolbarViewDataSource
+- (UIView *)annotationToolbarViewForRootViewForScreenShot:(OTAnnotationToolbarView *)toolbarView {
+    return [UIApplication sharedApplication].keyWindow.rootViewController.view;
 }
 
 @end

@@ -116,7 +116,7 @@
     _currentEditingTextView = nil;
 }
 
-- (UIImage *)captureScreen {
+- (UIImage *)captureFullScreen {
     [[AnnLoggingWrapper sharedInstance].logger logEventAction:KLogActionScreenCapture variation:KLogVariationSuccess completion:nil];
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     UIGraphicsBeginImageContext(screenRect.size);
@@ -127,6 +127,21 @@
     UIGraphicsEndImageContext();
     
     return newImage;
+}
+
+- (UIImage *)captureScreenWithView:(UIView *)view {
+    
+    [[AnnLoggingWrapper sharedInstance].logger logEventAction:KLogActionScreenCapture variation:KLogVariationSuccess completion:nil];
+    if (view == [UIApplication sharedApplication].keyWindow.rootViewController.view) {
+        return [self captureFullScreen];
+    }
+    else {
+        UIGraphicsBeginImageContext(view.frame.size);
+        [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+        UIImage *outputImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return outputImage;
+    }
 }
 
 - (void)drawRect:(CGRect)rect {

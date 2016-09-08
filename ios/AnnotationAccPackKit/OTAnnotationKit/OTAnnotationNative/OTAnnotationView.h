@@ -54,6 +54,6 @@
 /**
  *  Capture the current screen
  */
-- (UIImage *)captureScreen;
+- (UIImage *)captureScreenWithView:(UIView *)view;
 
 @end
