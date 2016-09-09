@@ -12,7 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
+/**
+ * Defines the layout for the annotations toolbar
+ */
 public class AnnotationsToolbar extends LinearLayout {
 
     private View rootView;
@@ -24,7 +26,7 @@ public class AnnotationsToolbar extends LinearLayout {
     private ImageButton mDoneBtn;
 
     private Context mContext;
-    private LinearLayout mMainToolbar;
+    private RelativeLayout mMainToolbar;
     private LinearLayout mColorToolbar;
     private HorizontalScrollView mColorScrollView;
 
@@ -87,7 +89,7 @@ public class AnnotationsToolbar extends LinearLayout {
 
     private void init() {
         rootView = inflate(mContext, R.layout.annotations_toolbar, this);
-        mMainToolbar = (LinearLayout) rootView.findViewById(R.id.main_toolbar);
+        mMainToolbar = (RelativeLayout) rootView.findViewById(R.id.main_toolbar);
 
         mColorToolbar = (LinearLayout) rootView.findViewById(R.id.color_toolbar);
         mColorScrollView = (HorizontalScrollView) rootView.findViewById(R.id.color_view);

@@ -51,8 +51,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-
-
+/**
+ * Defines the view to draw annotations
+ */
 public class AnnotationsView extends ViewGroup implements AnnotationsToolbar.ActionsListener, AccPackSession.SignalListener {
     private static final String LOG_TAG = AnnotationsView.class.getSimpleName();
     private static final String SIGNAL_TYPE = "otAnnotation";
@@ -150,6 +151,10 @@ public class AnnotationsView extends ViewGroup implements AnnotationsToolbar.Act
         }
     }
 
+    /**
+     * View type: annotations for the subscriber view or for the publisher view
+     *
+     **/
     public enum ViewType {
         SubscriberView,
         PublisherView
@@ -218,6 +223,7 @@ public class AnnotationsView extends ViewGroup implements AnnotationsToolbar.Act
         super.onConfigurationChanged(newConfig);
         resize();
     }
+
     private void resize(){
         int widthPixels = 0;
         int heightPixels = 0;
