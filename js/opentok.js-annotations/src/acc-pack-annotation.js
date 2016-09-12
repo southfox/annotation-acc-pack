@@ -151,8 +151,12 @@
       }
     } else {
       var el = _elements.absoluteParent || _elements.canvasContainer;
-      width = $(el).width();
-      height = $(el).height();
+      width = el.clientWidth;
+      height = width / (_aspectRatio);
+      if (el.clientHeight < (width/ _aspectRatio)) {
+        height = el.clientHeight;
+        width  = height * _aspectRatio;
+      }
     }
 
     $(_elements.canvasContainer).css({
