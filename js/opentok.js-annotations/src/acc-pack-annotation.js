@@ -348,10 +348,13 @@
 
     toolbar.addCanvas(_canvas);
 
-    _canvas.onScreenCapture(function (dataUrl) {
-      var win = window.open(dataUrl, '_blank');
-      win.focus();
-    });
+    var onScreenCapture = _this.options.onScreenCapture ? _this.options.onScreenCapture :
+      function (dataUrl) {
+        var win = window.open(dataUrl, '_blank');
+        win.focus();
+      };
+
+    _canvas.onScreenCapture(onScreenCapture);
 
 
     var context = _elements.externalWindow ? _elements.externalWindow : window;
@@ -407,6 +410,7 @@
    * @param {object} options.session - An OpenTok session
    * @param {object} options.canvasContainer - The id of the parent for the annotation canvas
    * @param {object} options.watchForResize - The DOM element to watch for resize
+   * @param {object} options.onScreenCapture- A callback function to be invoked on screen capture
    */
   var AnnotationAccPack = function (options) {
     _this = this;
