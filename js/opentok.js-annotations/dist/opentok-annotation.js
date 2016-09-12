@@ -256,9 +256,6 @@
           width = width * scale;
         }
 
-        // If stretched to fill, we need an offset to center the image
-        offsetX = (width - canvas.width) / 2;
-        offsetY = (height - canvas.height) / 2;
       } else {
         if (width > height) {
           scale = canvas.width / width;
@@ -270,6 +267,10 @@
           width = width * scale;
         }
       }
+
+      // If stretched to fill, we need an offset to center the image
+      offsetX = (width - canvas.width) / 2;
+      offsetY = (height - canvas.height) / 2;
 
       // Combine the video and annotation images
       var image = new Image();
