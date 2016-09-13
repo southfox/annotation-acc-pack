@@ -1,0 +1,12 @@
+name: Annotation Sample App
+author: TokBox, Inc.
+website: https://tokbox.com
+tags:
+ - feature
+ - tutorial
+description: The OpenTok Annotations Accelerator Pack provides functionality you can add to your OpenTok applications that enables users to use an annotation toolbar on both mobile and browser-based devices.
+image: https://static.opentok.com/img/styleguide/tokbox-logo-bug.png
+platforms:
+ - js
+ - iOS
+ - Android
