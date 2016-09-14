@@ -88,6 +88,7 @@ public class AnnotationsView extends ViewGroup implements AnnotationsToolbar.Act
     private boolean defaultLayout = false;
 
     private AccPackSession mSession;
+    private String mRemoteConnectionId;
     private String mPartnerId;
 
     private OTKAnalyticsData mAnalyticsData;
@@ -183,6 +184,23 @@ public class AnnotationsView extends ViewGroup implements AnnotationsToolbar.Act
      */
     public AnnotationsView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
+    }
+
+    /*
+     * Constructor
+     * @param context Application context
+     * @param session The OpenTok Accelerator Pack session instance.
+     * @param partnerId  The partner id - apiKey.
+     **/
+    public AnnotationsView(Context context, AccPackSession session, String partnerId, boolean isScreensharing, ViewType type, String remoteConnectionId) {
+        super(context);
+        this.mContext = context;
+        this.mSession = session;
+        this.mPartnerId = partnerId;
+        this.mSession.setSignalListener(this);
+        this.isScreensharing = isScreensharing;
+        this.mRemoteConnectionId = remoteConnectionId;
         init();
     }
 
@@ -841,7 +859,7 @@ public class AnnotationsView extends ViewGroup implements AnnotationsToolbar.Act
             videoHeight = videoRenderer.getVideoHeight();
         }
         try {
-            jsonObject.put("id", mSession.getConnection().getConnectionId());
+            jsonObject.put("id", mRemoteConnectionId);
             jsonObject.put("fromId", mSession.getConnection().getConnectionId());
             jsonObject.put("fromX", mCurrentPath.getEndPoint().x);
             jsonObject.put("fromY", mCurrentPath.getEndPoint().y);
