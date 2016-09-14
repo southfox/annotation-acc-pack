@@ -153,28 +153,31 @@
       if (_elements.imageId === null) {
         var el = _elements.absoluteParent || _elements.canvasContainer;
         width = el.clientWidth;
-        height = width / (_aspectRatio);
-        if (el.clientHeight < (width / _aspectRatio)) {
-          height = el.clientHeight;
-          width = height * _aspectRatio;
-        }
-      }  
+        height = el.clientHeight;
+      }
     }
 
-    $(_elements.canvasContainer).css({
-      width: width,
-      height: height
-    });
+    var videoDimensions = _canvas.videoFeed.stream.videoDimensions;
+    var origRatio = videoDimensions.width / videoDimensions.height;
+    var destRatio = width / height;
+    var calcDimensions = {
+      top: 0,
+      left: 0,
+      height: height,
+      width: width
+    };
+    if (origRatio < destRatio) {
+      // height is the limiting prop, we'll get vertical bars
+      calcDimensions.width = calcDimensions.height * origRatio;
+      calcDimensions.left = (width - calcDimensions.width) / 2;
+    } else {
+      calcDimensions.height = calcDimensions.width / origRatio;
+      calcDimensions.top = (height - calcDimensions.height) / 2;
+    }
 
-    $(_elements.canvasContainer).find('canvas').css({
-      width: width,
-      height: height
-    });
+    $(_elements.canvasContainer).find('canvas').css(calcDimensions);
 
-    $(_elements.canvasContainer).find('canvas').attr({
-      width: width,
-      height: height
-    });
+    $(_elements.canvasContainer).find('canvas').attr(calcDimensions);
 
     _refreshCanvas();
     _triggerEvent('resizeCanvas');

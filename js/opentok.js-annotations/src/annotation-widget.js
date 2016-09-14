@@ -336,13 +336,10 @@
     };
 
     this.onResize = function () {
-      drawHistory = [];
 
       drawUpdates(updateHistory, true);
 
-      eventHistory.forEach(function (history) {
-        updateCanvas(history, true);
-      });
+      draw(null, true);
     };
 
     /** Canvas Handling **/
@@ -365,13 +362,13 @@
         canvas.height = self.parent.getBoundingClientRect().height;
       }
 
-      var baseWidth = !!resizeEvent ? event.canvas.width : self.parent.clientWidth;
-      var baseHeight = !!resizeEvent ? event.canvas.height : self.parent.clientHeight;
       var offsetLeft = !!resizeEvent ? event.canvas.offsetLeft : canvas.offsetLeft;
       var offsetTop = !!resizeEvent ? event.canvas.offsetTop : canvas.offsetTop;
 
-      var scaleX = canvas.width / baseWidth;
-      var scaleY = canvas.height / baseHeight;
+      var videoDimensions = self.videoFeed.stream.videoDimensions;
+
+      var scaleX = videoDimensions.width / canvas.width;
+      var scaleY = videoDimensions.height / canvas.height;
 
       var offsetX = event.offsetX || event.pageX - offsetLeft ||
         (event.changedTouches && event.changedTouches[0].pageX - offsetLeft);
@@ -418,7 +415,7 @@
                   platform: 'web',
                   guid: event.guid
                 };
-                draw(update, true);
+                draw(new Update(update), true);
                 client.lastX = x;
                 client.lastY = y;
                 !resizeEvent && sendUpdate(update);
@@ -448,7 +445,7 @@
                 platform: 'web',
                 guid: event.guid
               };
-              draw(update, true);
+              draw(new Update(update), true);
               client.lastX = x;
               client.lastY = y;
               !resizeEvent && sendUpdate(update);
@@ -478,7 +475,7 @@
             guid: event.guid
           };
 
-          draw(update);
+          draw(new Update(update));
           !resizeEvent && sendUpdate(update);
         } else {
           // We have a shape or custom object
@@ -508,7 +505,7 @@
                       // INFO The points for scaling will get added when drawing is complete
                   };
 
-                  draw(update, true);
+                  draw(new Update(update), true);
                 }
                 break;
               case 'mouseup':
@@ -765,6 +762,38 @@
 
     addEventListeners(canvas, 'click', handleClick);
 
+    var _scale = {
+      get X() {
+        return self.videoFeed.stream.videoDimensions.width / canvas.width;
+      },
+      get Y() {
+        return self.videoFeed.stream.videoDimensions.height / canvas.height;
+      }
+    };
+
+    function Update(update) {
+      var returnedObj = {};
+
+      Object.keys(update).forEach(function(attr) {
+        returnedObj[attr] = update[attr];
+      });
+      ['X', 'Y'].forEach(function(coord) {
+        ['to', 'from'].forEach(function(verb) {
+          var attr = verb + coord;
+          returnedObj['_' + attr] = returnedObj[attr];
+          Object.defineProperty(returnedObj, attr, {
+            get: function() {
+              return returnedObj['_' + attr] / _scale[coord];
+            },
+            set: function(newVal) {
+              returnedObj['_' + attr] = newVal * _scale[coord];
+            }
+          });
+        });
+      });
+      return returnedObj;
+    }
+
     /**
      * End Handle text markup
      */
@@ -835,6 +864,10 @@
         }
 
       });
+
+      if (!!resizeEvent && !update) {
+        return;
+      }
 
       var selectedItem = !!resizeEvent ? update.selectedItem : self.selectedItem;
 
@@ -965,52 +998,20 @@
         height: isVideo ? self.videoFeed.videoElement().clientHeight : canvas.height
       };
 
-      var scale = 1;
-
-      var canvasRatio = canvas.width / canvas.height;
-      var videoRatio = video.width / video.height;
-      var iCanvasRatio = iCanvas.width / iCanvas.height;
-      var iVideoRatio = iVideo.width / iVideo.height;
-
-      /**
-       * This assumes that if the width is the greater value, video frames
-       * can be scaled so that they have equal widths, which can be used to
-       * find the offset in the y axis. Therefore, the offset on the x axis
-       * will be 0. If the height is the greater value, the offset on the y
-       * axis will be 0.
-       */
-      if (canvasRatio < 0) {
-        scale = canvas.width / iCanvas.width;
-      } else {
-        scale = canvas.height / iCanvas.height;
-      }
-
-      var centerX = canvas.width / 2;
-      var centerY = canvas.height / 2;
-
-      var iCenterX = iCanvas.width / 2;
-      var iCenterY = iCanvas.height / 2;
-
-      update.fromX = centerX - (scale * (iCenterX - update.fromX));
-      update.fromY = centerY - (scale * (iCenterY - update.fromY));
-
-      update.toX = centerX - (scale * (iCenterX - update.toX));
-      update.toY = centerY - (scale * (iCenterY - update.toY));
-
       // INFO iOS serializes bools as 0 or 1
       update.mirrored = !!update.mirrored;
 
       // Check if the incoming signal was mirrored
       if (update.mirrored) {
-        update.fromX = canvas.width - update.fromX;
-        update.toX = canvas.width - update.toX;
+        update.fromX = video.width - update.fromX;
+        update.toX = video.width - update.toX;
       }
 
       // Check to see if the active video feed is also mirrored (double negative)
       if (mirrored) {
         // Revert (Double negative)
-        update.fromX = canvas.width - update.fromX;
-        update.toX = canvas.width - update.toX;
+        update.fromX = video.width - update.fromX;
+        update.toX = video.width - update.toX;
       }
 
 
@@ -1025,10 +1026,9 @@
         updateHistory[index] = updateForHistory;
       } else {
         updateHistory.push(updateForHistory);
+        drawHistory.push(new Update(update));
       }
       /** ********************************** */
-
-      drawHistory.push(update);
 
       draw(null);
     };
