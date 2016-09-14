@@ -61,7 +61,7 @@
   //--------------------------------------
   //  OPENTOK ANNOTATION CANVAS/VIEW
   //--------------------------------------
-
+  const DEFAULT_ASSET_URL = 'https://assets.tokbox.com/solutions/images/';
 
   OTSolution = this.OTSolution || {};
 
@@ -71,10 +71,11 @@
     this.widgetVersion = 'js-1.0.0-beta';
     this.parent = options.container;
     this.videoFeed = options.feed;
+    this.imageAssets = options.imageAssets || DEFAULT_ASSET_URL;
 
     _OTKAnalytics = _OTKAnalytics || options.OTKAnalytics;
     if (!_otkanalytics) {
-      _logAnalytics()
+      _logAnalytics();
     }
 
 
@@ -169,7 +170,8 @@
           self.overlay.style.top = '0px';
           self.overlay.style.width = self.parent.clientWidth + 'px';
           self.overlay.style.height = self.parent.clientHeight + 'px';
-          self.overlay.style.background = 'rgba(0,0,0,0.4) url("https://assets.tokbox.com/solutions/images/annotation-camera.png") no-repeat center';
+          self.overlay.style.background = 'rgba(0,0,0,0.4) url("' +
+            self.imageAssets +'annotation-camera.png") no-repeat center';
           self.overlay.style.backgroundSize = '50px 50px';
           self.overlay.style.cursor = 'pointer';
           self.overlay.style.opacity = 0;
@@ -1135,7 +1137,7 @@
     this.buttonHeight = options.buttonHeight || '40px';
     this.iconWidth = options.iconWidth || '30px';
     this.iconHeight = options.iconHeight || '30px';
-    var imageAssets = 'https://assets.tokbox.com/solutions/images/';
+    var imageAssets = options.imageAssets || DEFAULT_ASSET_URL;
 
     var toolbarItems = [{
       id: 'OT_pen',
@@ -2000,6 +2002,7 @@
     var toolbarId = _.property('toolbarId')(options) || 'toolbar';
     var items = _.property('toolbarItems')(options);
     var colors = _.property('colors')(options) || _palette;
+    var imageAssets = _.property('imageAssets')(options) || null;
 
     var container = function () {
       var w = !!externalWindow ? externalWindow : window;
@@ -2013,6 +2016,7 @@
       colors: colors,
       items: !!items && !!items.length ? options.items : null,
       externalWindow: externalWindow || null,
+      imageAssets: imageAssets,
       OTKAnalytics: OTKAnalytics
     });
 

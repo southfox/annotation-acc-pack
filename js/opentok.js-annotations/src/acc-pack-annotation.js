@@ -188,6 +188,7 @@
     var toolbarId = _.property('toolbarId')(options) || 'toolbar';
     var items = _.property('toolbarItems')(options);
     var colors = _.property('colors')(options) || _palette;
+    var imageAssets = _.property('imageAssets')(options) || null;
 
     var container = function () {
       var w = !!externalWindow ? externalWindow : window;
@@ -201,6 +202,7 @@
       colors: colors,
       items: !!items && !!items.length ? options.items : null,
       externalWindow: externalWindow || null,
+      imageAssets: imageAssets,
       OTKAnalytics: OTKAnalytics
     });
 
