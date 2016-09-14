@@ -61,7 +61,7 @@
   //--------------------------------------
   //  OPENTOK ANNOTATION CANVAS/VIEW
   //--------------------------------------
-  const DEFAULT_ASSET_URL = 'https://assets.tokbox.com/solutions/images/';
+  var DEFAULT_ASSET_URL = 'https://assets.tokbox.com/solutions/images/';
 
   OTSolution = this.OTSolution || {};
 
