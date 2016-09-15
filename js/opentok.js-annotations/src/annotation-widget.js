@@ -97,6 +97,39 @@
       canvas.style.height = window.getComputedStyle(this.parent).height;
     }
 
+    var _scale = {
+      get X() {
+        return self.videoFeed.stream.videoDimensions.width / canvas.width;
+      },
+      get Y() {
+        return self.videoFeed.stream.videoDimensions.height / canvas.height;
+      }
+    };
+
+    function VideoRelativeCoordinateSet(update) {
+      var returnedObj = {};
+
+      Object.keys(update).forEach(function(attr) {
+        returnedObj[attr] = update[attr];
+      });
+      ['X', 'Y'].forEach(function(coord) {
+        ['to', 'from', 'last', 'm', 'start'].forEach(function(verb) {
+          var attr = verb + coord;
+          returnedObj['_' + attr] = returnedObj[attr];
+          Object.defineProperty(returnedObj, attr, {
+            get: function() {
+              return returnedObj['_' + attr] / _scale[coord];
+            },
+            set: function(newVal) {
+              returnedObj['_' + attr] = newVal;// * _scale[coord];
+            }
+          });
+        });
+      });
+      return returnedObj;
+    }
+
+
     var self = this,
       ctx,
       cbs = [],
@@ -110,9 +143,9 @@
       eventHistory = [],
       isStartPoint = false,
       isVideo = self.videoFeed && self.videoFeed.element ? true : false,
-      client = {
+      client = new VideoRelativeCoordinateSet({
         dragging: false
-      };
+      });
 
 
 
@@ -398,8 +431,8 @@
                 update = {
                   id: isVideo ? self.videoFeed.stream.connection.connectionId : self.session.connection.connectionId,
                   fromId: self.session.connection.connectionId,
-                  fromX: client.lastX,
-                  fromY: client.lastY,
+                  fromX: client._lastX,
+                  fromY: client._lastY,
                   toX: x,
                   toY: y,
                   color: resizeEvent ? event.userColor : self.userColor,
@@ -415,7 +448,7 @@
                   platform: 'web',
                   guid: event.guid
                 };
-                draw(new Update(update), true);
+                draw(new VideoRelativeCoordinateSet(update), true);
                 client.lastX = x;
                 client.lastY = y;
                 !resizeEvent && sendUpdate(update);
@@ -428,8 +461,8 @@
               update = {
                 id: isVideo ? self.videoFeed.stream.connection.connectionId : self.session.connection.connectionId,
                 fromId: self.session.connection.connectionId,
-                fromX: client.lastX,
-                fromY: client.lastY,
+                fromX: client._lastX,
+                fromY: client._lastY,
                 toX: x,
                 toY: y,
                 color: resizeEvent ? event.userColor : self.userColor,
@@ -445,7 +478,7 @@
                 platform: 'web',
                 guid: event.guid
               };
-              draw(new Update(update), true);
+              draw(new VideoRelativeCoordinateSet(update), true);
               client.lastX = x;
               client.lastY = y;
               !resizeEvent && sendUpdate(update);
@@ -475,7 +508,7 @@
             guid: event.guid
           };
 
-          draw(new Update(update));
+          draw(new VideoRelativeCoordinateSet(update));
           !resizeEvent && sendUpdate(update);
         } else {
           // We have a shape or custom object
@@ -505,7 +538,7 @@
                       // INFO The points for scaling will get added when drawing is complete
                   };
 
-                  draw(new Update(update), true);
+                  draw(new VideoRelativeCoordinateSet(update), true);
                 }
                 break;
               case 'mouseup':
@@ -518,10 +551,10 @@
                   update = {
                     id: isVideo ? self.videoFeed.stream.connection.connectionId : self.session.connection.connectionId,
                     fromId: self.session.connection.connectionId,
-                    fromX: client.startX,
-                    fromY: client.startY,
-                    toX: client.mX,
-                    toY: client.mY,
+                    fromX: client._startX,
+                    fromY: client._startY,
+                    toX: client._mX,
+                    toY: client._mY,
                     color: resizeEvent ? event.userColor : self.userColor,
                     lineWidth: resizeEvent ? event.lineWidth : shapeLineWidth,
                     videoWidth: isVideo ? self.videoFeed.videoElement().clientWidth : canvas.width,
@@ -536,7 +569,7 @@
                     guid: event.guid
                   };
 
-                  drawHistory.push(update);
+                  drawHistory.push(new VideoRelativeCoordinateSet(update));
 
                   !resizeEvent && sendUpdate(update);
                 } else {
@@ -551,7 +584,7 @@
                     var pointY = client.startY + (scale.y * points[i][1]);
 
                     if (i === 0) {
-                      client.lastX = pointX;
+                      client.lastX = pointX; // SCALE BACK!!!!
                       client.lastY = pointY;
                       firstPoint = true;
                     } else if (i === points.length - 1) {
@@ -581,11 +614,11 @@
 
                     };
 
-                    drawHistory.push(update);
+                    drawHistory.push(new VideoRelativeCoordinateSet(update));
 
                     !resizeEvent && sendUpdate(update);
 
-                    client.lastX = pointX;
+                    client.lastX = pointX; // SCALE BACK!
                     client.lastY = pointY;
                   }
 
@@ -762,38 +795,6 @@
 
     addEventListeners(canvas, 'click', handleClick);
 
-    var _scale = {
-      get X() {
-        return self.videoFeed.stream.videoDimensions.width / canvas.width;
-      },
-      get Y() {
-        return self.videoFeed.stream.videoDimensions.height / canvas.height;
-      }
-    };
-
-    function Update(update) {
-      var returnedObj = {};
-
-      Object.keys(update).forEach(function(attr) {
-        returnedObj[attr] = update[attr];
-      });
-      ['X', 'Y'].forEach(function(coord) {
-        ['to', 'from'].forEach(function(verb) {
-          var attr = verb + coord;
-          returnedObj['_' + attr] = returnedObj[attr];
-          Object.defineProperty(returnedObj, attr, {
-            get: function() {
-              return returnedObj['_' + attr] / _scale[coord];
-            },
-            set: function(newVal) {
-              returnedObj['_' + attr] = newVal * _scale[coord];
-            }
-          });
-        });
-      });
-      return returnedObj;
-    }
-
     /**
      * End Handle text markup
      */
@@ -941,7 +942,7 @@
             }
           }
 
-          client.lastX = pointX;
+          client.lastX = pointX; // SCALE BACK!
           client.lastY = pointY;
         }
       }
@@ -1026,7 +1027,7 @@
         updateHistory[index] = updateForHistory;
       } else {
         updateHistory.push(updateForHistory);
-        drawHistory.push(new Update(update));
+        drawHistory.push(new VideoRelativeCoordinateSet(update));
       }
       /** ********************************** */
 
