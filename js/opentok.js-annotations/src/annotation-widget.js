@@ -113,7 +113,7 @@
         returnedObj[attr] = update[attr];
       });
       ['X', 'Y'].forEach(function(coord) {
-        ['to', 'from', 'last', 'm', 'start'].forEach(function(verb) {
+        ['to', 'from', 'last', 'm', 'start', 'point'].forEach(function(verb) {
           var attr = verb + coord;
           returnedObj['_' + attr] = returnedObj[attr];
           Object.defineProperty(returnedObj, attr, {
@@ -580,11 +580,11 @@
                     var endPoint = false;
 
                     // Scale the points according to the difference between the start and end points
-                    var pointX = client.startX + (scale.x * points[i][0]);
-                    var pointY = client.startY + (scale.y * points[i][1]);
+                    var pointX = client._startX + (scale.x * points[i][0]);
+                    var pointY = client._startY + (scale.y * points[i][1]);
 
                     if (i === 0) {
-                      client.lastX = pointX; // SCALE BACK!!!!
+                      client.lastX = pointX;
                       client.lastY = pointY;
                       firstPoint = true;
                     } else if (i === points.length - 1) {
@@ -594,8 +594,8 @@
                     update = {
                       id: isVideo ? self.videoFeed.stream.connection.connectionId : self.session.connection.connectionId,
                       fromId: self.session.connection.connectionId,
-                      fromX: client.lastX,
-                      fromY: client.lastY,
+                      fromX: client._lastX,
+                      fromY: client._lastY,
                       toX: pointX,
                       toY: pointY,
                       color: resizeEvent ? event.userColor : self.userColor,
@@ -919,31 +919,33 @@
       } else {
         for (var i = 0; i < points.length; i++) {
           // Scale the points according to the difference between the start and end points
-          var pointX = client.startX + (scale.x * points[i][0]);
-          var pointY = client.startY + (scale.y * points[i][1]);
+          // Use device independent points here!
+          client.pointX = client._startX + (scale.x * points[i][0]);
+          client.pointY = client._startY + (scale.y * points[i][1]);
 
           if (self.selectedItem.enableSmoothing) {
             if (i === 0) {
               // Do nothing
             } else if (i === 1) {
-              ctx.moveTo((pointX + client.lastX) / 2, (pointY + client.lastY) / 2);
-              client.lastX = (pointX + client.lastX) / 2;
-              client.lastX = (pointY + client.lastY) / 2;
+              ctx.moveTo((client.pointX + client.lastX) / 2, (client.pointY + client.lastY) / 2);
+              client.lastX = (client._pointX + client._lastX) / 2;
+              client.lastX = (client._pointY + client._lastY) / 2;
             } else {
-              ctx.quadraticCurveTo(client.lastX, client.lastY, (pointX + client.lastX) / 2, (pointY + client.lastY) / 2);
-              client.lastX = (pointX + client.lastX) / 2;
-              client.lastY = (pointY + client.lastY) / 2;
+              ctx.quadraticCurveTo(client.lastX, client.lastY, (client.pointX + client.lastX) / 2,
+                                   (client.pointY + client.lastY) / 2);
+              client.lastX = (client._pointX + client._lastX) / 2;
+              client.lastY = (client._pointY + client._lastY) / 2;
             }
           } else {
             if (i === 0) {
-              ctx.moveTo(pointX, pointY);
+              ctx.moveTo(client.pointX, client.pointY);
             } else {
-              ctx.lineTo(pointX, pointY);
+              ctx.lineTo(client.pointX, client.pointY);
             }
           }
 
-          client.lastX = pointX; // SCALE BACK!
-          client.lastY = pointY;
+          client.lastX = client._pointX; // SCALE BACK!
+          client.lastY = client._pointY;
         }
       }
 
@@ -973,8 +975,8 @@
       var dx = Math.abs(maxX - minX);
       var dy = Math.abs(maxY - minY);
 
-      var scaleX = (client.mX - client.startX) / dx;
-      var scaleY = (client.mY - client.startY) / dy;
+      var scaleX = (client._mX - client._startX) / dx;
+      var scaleY = (client._mY - client._startY) / dy;
 
       return {
         x: scaleX,
