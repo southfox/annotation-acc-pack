@@ -139,16 +139,8 @@
         width: _elements.externalWindow.innerWidth,
         height: _elements.externalWindow.innerHeight
       };
-
-      var computedHeight = windowDimensions.width / _aspectRatio;
-
-      if (computedHeight <= windowDimensions.height) {
-        width = windowDimensions.width;
-        height = computedHeight;
-      } else {
-        height = windowDimensions.height;
-        width = height * _aspectRatio;
-      }
+      width = windowDimensions.width;
+      height = windowDimensions.height;
     } else {
       if (_elements.imageId === null) {
         var el = _elements.absoluteParent || _elements.canvasContainer;
