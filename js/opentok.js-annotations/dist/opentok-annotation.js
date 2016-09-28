@@ -171,7 +171,7 @@
           self.overlay.style.width = self.parent.clientWidth + 'px';
           self.overlay.style.height = self.parent.clientHeight + 'px';
           self.overlay.style.background = 'rgba(0,0,0,0.4) url("' +
-            self.imageAssets +'annotation-camera.png") no-repeat center';
+            self.imageAssets + 'annotation-camera.png") no-repeat center';
           self.overlay.style.backgroundSize = '50px 50px';
           self.overlay.style.cursor = 'pointer';
           self.overlay.style.opacity = 0;
@@ -227,6 +227,15 @@
         });
       }
     };
+
+    this.undo = function () {
+      undoLast(false, self.session.connection.connectionId);
+      if (self.session) {
+        self.session.signal({
+          type: 'otAnnotation_undo'
+        });
+      }
+    }
 
     // TODO Allow the user to choose the image type? (jpg, png) Also allow size?
     /**
@@ -384,7 +393,7 @@
                   canvasHeight: canvas.height,
                   mirrored: mirrored,
                   startPoint: self.isStartPoint, // Each segment is treated as a new set of points
-                  endPoint: false,
+                  // endPoint: false,
                   selectedItem: selectedItem
                 };
                 draw(update, true);
@@ -412,7 +421,7 @@
                 canvasHeight: canvas.height,
                 mirrored: mirrored,
                 startPoint: self.isStartPoint, // Each segment is treated as a new set of points
-                endPoint: true,
+
                 selectedItem: selectedItem
               };
               draw(update, true);
@@ -495,7 +504,7 @@
                     mirrored: mirrored,
                     smoothed: false,
                     startPoint: true,
-                    endPoint: true,
+
                     selectedItem: selectedItem
                   };
 
@@ -507,7 +516,7 @@
 
                   for (var i = 0; i < points.length; i++) {
                     var firstPoint = false;
-                    var endPoint = false;
+                    // var endPoint = false;
 
                     // Scale the points according to the difference between the start and end points
                     var pointX = client.startX + (scale.x * points[i][0]);
@@ -518,7 +527,7 @@
                       client.lastY = pointY;
                       firstPoint = true;
                     } else if (i === points.length - 1) {
-                      endPoint = true;
+                      // endPoint = true;
                     }
 
                     update = {
@@ -536,8 +545,8 @@
                       canvasHeight: canvas.height,
                       mirrored: mirrored,
                       smoothed: selectedItem.enableSmoothing,
-                      startPoint: firstPoint,
-                      endPoint: endPoint
+                      startPoint: firstPoint
+
                     };
 
                     drawHistory.push(update);
@@ -985,6 +994,8 @@
 
       drawHistory.push(update);
 
+      console.log(drawHistory);
+
       draw(null);
     };
 
@@ -997,9 +1008,10 @@
       });
     };
 
-    var clearCanvas = function (incoming, cid) {
+    var clearCanvas = function (incoming, cid, undo) {
       // console.log('cid: ' + cid);
       // Remove all elements from history that were drawn by the sender
+
       drawHistory = drawHistory.filter(function (history) {
         console.log(history.fromId);
         return history.fromId !== cid;
@@ -1016,19 +1028,45 @@
         updateHistory = [];
       }
 
+
+
       // Refresh the canvas
       draw();
     };
 
+    var undoLast = function (incoming, cid) {
+
+      var historyItem;
+      for (var i = drawHistory.length - 1; i >= 0; i--) {
+        historyItem = drawHistory[i];
+        if (historyItem.fromId === cid) {
+          drawHistory.splice(i, 1);
+          break;
+        }
+      }
+
+      if (!incoming) {
+        self.session.signal({
+          type: 'otAnnotation_undo'
+        });
+      }
+
+      draw();
+    }
+
+
+    var count = 0;
     /** Signal Handling **/
     if (self.videoFeed.session) {
       self.videoFeed.session.on({
         'signal:otAnnotation_pen': function (event) {
+          console.log('signal here', count++);
           if (event.from.connectionId !== self.session.connection.connectionId) {
             drawUpdates(JSON.parse(event.data));
           }
         },
         'signal:otAnnotation_text': function (event) {
+          console.log('signal here', count++);
           if (event.from.connectionId !== self.session.connection.connectionId) {
             drawUpdates(JSON.parse(event.data));
           }
@@ -1045,6 +1083,12 @@
           if (event.from.connectionId !== self.session.connection.connectionId) {
             // Only clear elements drawn by the sender's (from) Id
             clearCanvas(true, event.from.connectionId);
+          }
+        },
+        'signal:otAnnotation_undo': function (event) {
+          if (event.from.connectionId !== self.session.connection.connectionId) {
+            // Only clear elements drawn by the sender's (from) Id
+            undoLast(true, event.from.connectionId);
           }
         },
         connectionCreated: function (event) {
@@ -1082,6 +1126,7 @@
           data: JSON.stringify(dataChunk)
         };
         if (toConnection) signal.to = toConnection;
+        console.log('TO?', signal);
         self.session.signal(signal, signalError);
       }
     };
@@ -1132,118 +1177,125 @@
     this.parent = options.container;
     this.externalWindow = options.externalWindow;
     // TODO Allow 'style' objects to be passed in for buttons, menu toolbar, etc?
-    this.backgroundColor = options.backgroundColor || 'rgba(0, 0, 0, 0.7)';
-    this.buttonWidth = options.buttonWidth || '40px';
-    this.buttonHeight = options.buttonHeight || '40px';
-    this.iconWidth = options.iconWidth || '30px';
-    this.iconHeight = options.iconHeight || '30px';
+    this.backgroundColor = options.backgroundColor || 'rgba(102, 102, 102, 0.90)';
+    this.subpanelBackgroundColor = options.subpanelBackgroundColor || '#323232';
+    // this.buttonWidth = options.buttonWidth || '60px';
+    // this.buttonHeight = options.buttonHeight || '60px';
+    // this.iconWidth = options.iconWidth || '30px';
+    // this.iconHeight = options.iconHeight || 'auto';
     var imageAssets = options.imageAssets || DEFAULT_ASSET_URL;
 
     var toolbarItems = [{
-      id: 'OT_pen',
-      title: 'Pen',
-      icon: [imageAssets, 'annotation-freehand.png'].join(''),
-      selectedIcon: [imageAssets, 'annotation-freehand_selected.png'].join('')
-    }, {
-      id: 'OT_line',
-      title: 'Line',
-      icon: [imageAssets, 'annotation-line.png'].join(''),
-      selectedIcon: [imageAssets, 'annotation-line_selected.png'].join(''),
-      points: [
-        [0, 0],
-        [0, 1]
-      ]
-    }, {
-      id: 'OT_shapes',
-      title: 'Shapes',
-      icon: [imageAssets, 'annotation-shapes.png'].join(''),
-      items: [{
-        id: 'OT_arrow',
-        title: 'Arrow',
-        icon: [imageAssets, 'annotation-arrow.png'].join(''),
-        points: [
-          [0, 1],
-          [3, 1],
-          [3, 0],
-          [5, 2],
-          [3, 4],
-          [3, 3],
-          [0, 3],
-          [0, 1] // Reconnect point
-        ]
+        id: 'OT_pen',
+        title: 'Pen',
+        icon: [imageAssets, 'annotation-pencil.png'].join(''),
+        selectedIcon: [imageAssets, 'annotation-pencil.png'].join('')
       }, {
-        id: 'OT_rect',
-        title: 'Rectangle',
-        icon: [imageAssets, 'annotation-rectangle.png'].join(''),
-        points: [
-          [0, 0],
-          [1, 0],
-          [1, 1],
-          [0, 1],
-          [0, 0] // Reconnect point
-        ]
+        id: 'OT_colors',
+        title: 'Colors',
+        icon: '',
+        items: { /* Built dynamically */ }
       }, {
-        id: 'OT_oval',
-        title: 'Oval',
-        icon: [imageAssets, 'annotation-oval.png'].join(''),
-        enableSmoothing: true,
-        points: [
-          [0, 0.5],
-          [0.5 + 0.5 * Math.cos(5 * Math.PI / 4), 0.5 + 0.5 * Math.sin(5 * Math.PI / 4)],
-          [0.5, 0],
-          [0.5 + 0.5 * Math.cos(7 * Math.PI / 4), 0.5 + 0.5 * Math.sin(7 * Math.PI / 4)],
-          [1, 0.5],
-          [0.5 + 0.5 * Math.cos(Math.PI / 4), 0.5 + 0.5 * Math.sin(Math.PI / 4)],
-          [0.5, 1],
-          [0.5 + 0.5 * Math.cos(3 * Math.PI / 4), 0.5 + 0.5 * Math.sin(3 * Math.PI / 4)],
-          [0, 0.5],
-          [0.5 + 0.5 * Math.cos(5 * Math.PI / 4), 0.5 + 0.5 * Math.sin(5 * Math.PI / 4)]
-        ]
+        id: 'OT_shapes',
+        title: 'Shapes',
+        icon: [imageAssets, 'annotation-shapes.png'].join(''),
+        items: [{
+          id: 'OT_arrow',
+          title: 'Arrow',
+          icon: [imageAssets, 'annotation-arrow.png'].join(''),
+          points: [
+            [0, 1],
+            [3, 1],
+            [3, 0],
+            [5, 2],
+            [3, 4],
+            [3, 3],
+            [0, 3],
+            [0, 1] // Reconnect point
+          ]
+        }, {
+          id: 'OT_rect',
+          title: 'Rectangle',
+          icon: [imageAssets, 'annotation-rectangle.png'].join(''),
+          points: [
+            [0, 0],
+            [1, 0],
+            [1, 1],
+            [0, 1],
+            [0, 0] // Reconnect point
+          ]
+        }, {
+          id: 'OT_oval',
+          title: 'Oval',
+          icon: [imageAssets, 'annotation-oval.png'].join(''),
+          enableSmoothing: true,
+          points: [
+            [0, 0.5],
+            [0.5 + 0.5 * Math.cos(5 * Math.PI / 4), 0.5 + 0.5 * Math.sin(5 * Math.PI / 4)],
+            [0.5, 0],
+            [0.5 + 0.5 * Math.cos(7 * Math.PI / 4), 0.5 + 0.5 * Math.sin(7 * Math.PI / 4)],
+            [1, 0.5],
+            [0.5 + 0.5 * Math.cos(Math.PI / 4), 0.5 + 0.5 * Math.sin(Math.PI / 4)],
+            [0.5, 1],
+            [0.5 + 0.5 * Math.cos(3 * Math.PI / 4), 0.5 + 0.5 * Math.sin(3 * Math.PI / 4)],
+            [0, 0.5],
+            [0.5 + 0.5 * Math.cos(5 * Math.PI / 4), 0.5 + 0.5 * Math.sin(5 * Math.PI / 4)]
+          ]
+        }, {
+          id: 'OT_star',
+          title: 'Star',
+          icon: [imageAssets, 'annotation-star.png'].join(''),
+          points: [
+            /* eslint-disable max-len */
+            [0.5 + 0.5 * Math.cos(90 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(90 * (Math.PI / 180))],
+            [0.5 + 0.25 * Math.cos(126 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(126 * (Math.PI / 180))],
+            [0.5 + 0.5 * Math.cos(162 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(162 * (Math.PI / 180))],
+            [0.5 + 0.25 * Math.cos(198 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(198 * (Math.PI / 180))],
+            [0.5 + 0.5 * Math.cos(234 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(234 * (Math.PI / 180))],
+            [0.5 + 0.25 * Math.cos(270 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(270 * (Math.PI / 180))],
+            [0.5 + 0.5 * Math.cos(306 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(306 * (Math.PI / 180))],
+            [0.5 + 0.25 * Math.cos(342 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(342 * (Math.PI / 180))],
+            [0.5 + 0.5 * Math.cos(18 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(18 * (Math.PI / 180))],
+            [0.5 + 0.25 * Math.cos(54 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(54 * (Math.PI / 180))],
+            [0.5 + 0.5 * Math.cos(90 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(90 * (Math.PI / 180))]
+            /* eslint-enable max-len */
+          ]
+        }, {
+          id: 'OT_line',
+          title: 'Line',
+          icon: [imageAssets, 'annotation-line.png'].join(''),
+          selectedIcon: [imageAssets, 'annotation-line.png'].join(''),
+          points: [
+            [0, 0],
+            [0, 1]
+          ]
+        }]
       }, {
-        id: 'OT_star',
-        title: 'Star',
-        icon: [imageAssets, 'annotation-star.png'].join(''),
-        points: [
-          /* eslint-disable max-len */
-          [0.5 + 0.5 * Math.cos(90 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(90 * (Math.PI / 180))],
-          [0.5 + 0.25 * Math.cos(126 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(126 * (Math.PI / 180))],
-          [0.5 + 0.5 * Math.cos(162 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(162 * (Math.PI / 180))],
-          [0.5 + 0.25 * Math.cos(198 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(198 * (Math.PI / 180))],
-          [0.5 + 0.5 * Math.cos(234 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(234 * (Math.PI / 180))],
-          [0.5 + 0.25 * Math.cos(270 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(270 * (Math.PI / 180))],
-          [0.5 + 0.5 * Math.cos(306 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(306 * (Math.PI / 180))],
-          [0.5 + 0.25 * Math.cos(342 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(342 * (Math.PI / 180))],
-          [0.5 + 0.5 * Math.cos(18 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(18 * (Math.PI / 180))],
-          [0.5 + 0.25 * Math.cos(54 * (Math.PI / 180)), 0.5 + 0.25 * Math.sin(54 * (Math.PI / 180))],
-          [0.5 + 0.5 * Math.cos(90 * (Math.PI / 180)), 0.5 + 0.5 * Math.sin(90 * (Math.PI / 180))]
-          /* eslint-enable max-len */
-        ]
-      }]
-    }, {
-      id: 'OT_text',
-      title: 'Text',
-      icon: [imageAssets, 'annotation-text.png'].join(''),
-      selectedIcon: [imageAssets, 'annotation-text.png'].join('')
-    }, {
-      id: 'OT_colors',
-      title: 'Colors',
-      icon: '',
-      items: { /* Built dynamically */ }
-    }, {
-      id: 'OT_line_width',
-      title: 'Line Width',
-      icon: [imageAssets, 'annotation-line_width.png'].join(''),
-      items: { /* Built dynamically */ }
-    }, {
-      id: 'OT_clear',
-      title: 'Clear',
-      icon: [imageAssets, 'annotation-clear.png'].join('')
-    }, {
-      id: 'OT_capture',
-      title: 'Capture',
-      icon: [imageAssets, 'annotation-camera.png'].join(''),
-      selectedIcon: [imageAssets, 'annotation-camera_selected.png'].join('')
-    }];
+        id: 'OT_text',
+        title: 'Text',
+        icon: [imageAssets, 'annotation-text.png'].join(''),
+        selectedIcon: [imageAssets, 'annotation-text.png'].join('')
+      }, {
+        id: 'OT_line_width',
+        title: 'Line Width',
+        icon: [imageAssets, 'annotation-line_width.png'].join(''),
+        items: { /* Built dynamically */ }
+      }, {
+        id: 'OT_clear',
+        title: 'Clear',
+        icon: [imageAssets, 'annotation-clear.png'].join('')
+      },
+      {
+        id: 'OT_undo',
+        title: 'Undo',
+        icon: [imageAssets, 'annotation-undo.png'].join('')
+      }, {
+        id: 'OT_capture',
+        title: 'Capture',
+        icon: [imageAssets, 'annotation-camera.png'].join(''),
+        selectedIcon: [imageAssets, 'annotation-camera.png'].join('')
+      }
+    ];
 
 
 
@@ -1336,11 +1388,14 @@
       };
 
       this.close = function () {
-        this.elm.style.display = 'none';
+        // this.elm.style.display = 'none';
+        this.elm.classList.add('ots-hidden');
       };
 
       this.open = function () {
-        this.elm.style.display = this.options.style.display;
+        // this.elm.style.display = this.options.style.display;
+        this.elm.classList.remove('ots-hidden')
+
       };
 
       this.colorChosen = function (cb) {
@@ -1361,7 +1416,7 @@
       options = options || {};
       options.openEvent = options.openEvent || 'click';
       options.style = Object(options.style);
-      options.style.display = options.style.display || 'block';
+      // options.style.display = options.style.display || 'block';
       options.template = options.template || '<div class=\"color-choice\" data-col=\"{color}\" style=\"background-color: {color}\"></div>';
       self.elm = self.getElm(parent);
       self.cbs = [];
@@ -1375,6 +1430,11 @@
         if (!color) {
           return;
         }
+        var colors = Array.from(document.getElementsByClassName('color-choice'));
+        colors.forEach(function (el) {
+          el.classList.remove('active');
+        });
+        ev.target.classList.add('active');
         self.set(color);
         self.close();
       });
@@ -1393,7 +1453,10 @@
         panel.setAttribute('class', 'OT_panel');
         panel.style.width = '100%';
         panel.style.height = '100%';
-        panel.style.backgroundColor = this.backgroundColor;
+        // panel.style.backgroundColor = this.backgroundColor;
+        // panel.style.display = 'flex';
+        // panel.style.flexDirection = 'column';
+        // panel.style.alignItems = 'center';
         // panel.style.paddingLeft = '15px';
         this.parent.appendChild(panel);
         this.parent.style.position = 'relative';
@@ -1408,17 +1471,22 @@
           var button = context.createElement('input');
           button.setAttribute('type', 'button');
           button.setAttribute('id', item.id);
+          button.classList.add('annotation-btn');
+          button.classList.add(item.title.split(' ').join('-').toLowerCase());
 
-          button.style.position = 'relative';
-          button.style.top = '50%';
-          button.style.transform = 'translateY(-50%)';
+          // button.style.position = 'relative';
+          // button.style.top = '50%';
+          // button.style.transform = 'translateY(-50%)';
 
           if (item.id === 'OT_colors') {
-            button.style.webkitTransform = 'translateY(-85%)';
+            // button.style.webkitTransform = 'translateY(-85%)';
+            // button.style.width = '21px';
+            // button.style.height = '21px';
+            // button.style.border = '2px solid white';
 
             var colorPicker = context.createElement('div');
             colorPicker.setAttribute('class', 'color-picker');
-            colorPicker.style.backgroundColor = this.backgroundColor;
+            // colorPicker.style.backgroundColor = this.subpanelBackgroundColor;
             this.parent.appendChild(colorPicker);
 
             var pk = new ColorPicker('.color-picker', this.colors, {
@@ -1435,37 +1503,40 @@
             });
 
             var colorChoices = context.querySelectorAll('.color-choice');
+            colorChoices[0].classList.add('active');
 
             for (var j = 0; j < colorChoices.length; j++) {
-              colorChoices[j].style.display = 'inline-block';
-              colorChoices[j].style.width = '30px';
-              colorChoices[j].style.height = '30px';
-              colorChoices[j].style.margin = '5px';
-              colorChoices[j].style.cursor = 'pointer';
-              colorChoices[j].style.borderRadius = '100%';
-              colorChoices[j].style.opacity = 0.7;
-              colorChoices[j].onmouseover = function () {
-                this.style.opacity = 1;
-              };
-              colorChoices[j].onmouseout = function () {
-                this.style.opacity = 0.7;
-              };
+
+              // colorChoices[j].style.display = 'inline-block';
+              // colorChoices[j].style.width = '30px';
+              // colorChoices[j].style.height = '30px';
+              // colorChoices[j].style.margin = '5px';
+              // colorChoices[j].style.cursor = 'pointer';
+              // colorChoices[j].style.borderRadius = '100%';
+              // colorChoices[j].style.opacity = 0.7;
+              // colorChoices[j].onmouseover = function () {
+              //   this.style.opacity = 1;
+              // };
+              // colorChoices[j].onmouseout = function () {
+              //   this.style.opacity = 0.7;
+              // };
             }
 
-            button.setAttribute('class', 'OT_color');
-            button.style.marginLeft = '10px';
-            button.style.marginRight = '10px';
+            button.setAttribute('class', 'OT_color annotation-btn colors');
+            // button.classList.add(item.title.split(' ').join('-').toLowerCase());
+            // button.style.marginLeft = '10px';
+            // button.style.marginRight = '10px';
             button.style.borderRadius = '50%';
             button.style.backgroundColor = this.colors[0];
-            button.style.width = this.iconWidth;
-            button.style.height = this.iconHeight;
-            button.style.paddingTop = this.buttonHeight.replace('px', '') - this.iconHeight.replace('px', '') + 'px';
+            // button.style.width = this.iconWidth;
+            // button.style.height = this.iconHeight;
+            // button.style.paddingTop = this.buttonHeight.replace('px', '') - this.iconHeight.replace('px', '') + 'px';
           } else {
-            button.style.background = 'url("' + item.icon + '") no-repeat';
-            button.style.backgroundSize = this.iconWidth + ' ' + this.iconHeight;
-            button.style.backgroundPosition = 'center';
-            button.style.width = this.buttonWidth;
-            button.style.height = this.buttonHeight;
+            // button.style.background = 'url("' + item.icon + '") no-repeat';
+            // button.style.backgroundSize = this.iconWidth + ' ' + this.iconHeight;
+            // button.style.backgroundPosition = 'center';
+            // button.style.width = this.buttonWidth;
+            // button.style.height = this.buttonHeight;
           }
 
           // If we have an object as item.items, it was never set by the user
@@ -1508,8 +1579,8 @@
           }
 
           button.setAttribute('data-col', item.title);
-          button.style.border = 'none';
-          button.style.cursor = 'pointer';
+          // button.style.border = 'none';
+          // button.style.cursor = 'pointer';
 
           toolbarItems.push(button.outerHTML);
         }
@@ -1524,20 +1595,20 @@
           // Close the submenu if we are clicking on an item and not a group button
           if (!group) {
             self.items.forEach(function (item) {
-              if (item.title !== 'Clear' && item.title === itemName) {
+              if ((item.title !== 'Clear' || item.title !== 'Undo') && item.title === itemName) {
                 if (self.selectedItem) {
                   var lastBtn = context.getElementById(self.selectedItem.id);
                   if (lastBtn) {
-                    lastBtn.style.background = 'url("' + self.selectedItem.icon + '") no-repeat';
-                    lastBtn.style.backgroundSize = self.iconWidth + ' ' + self.iconHeight;
-                    lastBtn.style.backgroundPosition = 'center';
+                    // lastBtn.style.background = 'url("' + self.selectedItem.icon + '") no-repeat';
+                    // lastBtn.style.backgroundSize = self.iconWidth + ' ' + self.iconHeight;
+                    // lastBtn.style.backgroundPosition = 'center';
                   }
                 }
 
                 if (item.selectedIcon) {
                   var selBtn = context.getElementById(item.id);
                   if (selBtn) {
-                    selBtn.style.background = 'url("' + item.selectedIcon + '") no-repeat';
+                    // selBtn.style.background = 'url("' + item.selectedIcon + '") no-repeat';
                     selBtn.style.backgroundSize = self.iconWidth + ' ' + self.iconHeight;
                     selBtn.style.backgroundPosition = 'center';
                   }
@@ -1554,19 +1625,19 @@
                 return false;
               }
             });
-            subPanel.style.display = 'none';
+            subPanel.classList.add('ots-hidden')
           } else {
             self.items.forEach(function (item) {
               if (item.title === itemName) {
                 self.selectedGroup = item;
 
                 if (item.items) {
-                  subPanel.setAttribute('class', 'OT_subpanel');
-                  subPanel.style.backgroundColor = self.backgroundColor;
-                  subPanel.style.width = '100%';
-                  subPanel.style.height = '100%';
-                  subPanel.style.paddingLeft = '15px';
-                  subPanel.style.display = 'none';
+                  subPanel.setAttribute('class', ['OT_subpanel', 'ots-hidden', item.title.toLowerCase()].join(' '));
+                  // subPanel.style.backgroundColor = self.subpanelBackgroundColor;
+                  // subPanel.style.width = '100%';
+                  // subPanel.style.height = '100%';
+                  // subPanel.style.paddingLeft = '15px';
+                  // subPanel.style.display = 'none';
                   self.parent.appendChild(subPanel);
 
                   if (Array.isArray(item.items)) {
@@ -1585,7 +1656,7 @@
                         itemButton.style['float'] = 'left';
                         itemButton.style.width = self.buttonWidth;
                         itemButton.style.height = self.buttonHeight;
-                        itemButton.style.border = 'none';
+                        // itemButton.style.border = 'none';
                         itemButton.style.cursor = 'pointer';
 
                         var lineIcon = context.createElement('div');
@@ -1610,15 +1681,15 @@
                         itemButton.setAttribute('type', 'button');
                         itemButton.setAttribute('data-col', subItem.title);
                         itemButton.setAttribute('id', subItem.id);
-                        itemButton.style.background = 'url("' + subItem.icon + '") no-repeat';
-                        itemButton.style.position = 'relative';
-                        itemButton.style.top = '50%';
-                        itemButton.style.transform = 'translateY(-50%)';
-                        itemButton.style.backgroundSize = self.iconWidth + ' ' + self.iconHeight;
-                        itemButton.style.backgroundPosition = 'center';
-                        itemButton.style.width = self.buttonWidth;
-                        itemButton.style.height = self.buttonHeight;
-                        itemButton.style.border = 'none';
+                        itemButton.style.backgroundImage = 'url("' + subItem.icon + '")';
+                        // itemButton.style.position = 'relative';
+                        // itemButton.style.top = '50%';
+                        // itemButton.style.transform = 'translateY(-50%)';
+                        // itemButton.style.backgroundSize = self.iconWidth + ' ' + self.iconHeight;
+                        // itemButton.style.backgroundPosition = 'center';
+                        // itemButton.style.width = self.buttonWidth;
+                        // itemButton.style.height = self.buttonHeight;
+                        // itemButton.style.border = 'none';
                         itemButton.style.cursor = 'pointer';
 
                         submenuItems.push(itemButton.outerHTML);
@@ -1631,12 +1702,13 @@
 
                 if (id === 'OT_shapes' || id === 'OT_line_width') {
                   if (subPanel) {
-                    subPanel.style.display = 'block';
+                    subPanel.classList.remove('ots-hidden');
+
                   }
                   pk.close();
                 } else if (id === 'OT_colors') {
                   if (subPanel) {
-                    subPanel.style.display = 'none';
+                    subPanel.classList.add('ots-hidden');
                   }
                   pk.open();
                 }
@@ -1653,7 +1725,9 @@
           var group = ev.target.getAttribute('data-type') === 'group';
           var itemName = ev.target.getAttribute('data-col');
           var id = ev.target.getAttribute('id');
-          subPanel.style.display = 'none';
+          // subPanel.style.display = 'none';
+
+          subPanel.classList.add('ots-hidden');
 
           if (!group) {
             self.selectedGroup.items.forEach(function (item) {
@@ -1661,9 +1735,9 @@
                 if (self.selectedItem) {
                   var lastBtn = document.getElementById(self.selectedItem.id);
                   if (lastBtn) {
-                    lastBtn.style.background = 'url("' + self.selectedItem.icon + '") no-repeat';
-                    lastBtn.style.backgroundSize = self.iconWidth + ' ' + self.iconHeight;
-                    lastBtn.style.backgroundPosition = 'center';
+                    // lastBtn.style.background = 'url("' + self.selectedItem.icon + '") no-repeat';
+                    // lastBtn.style.backgroundSize = self.iconWidth + ' ' + self.iconHeight;
+                    // lastBtn.style.backgroundPosition = 'center';
                   }
                 }
 
@@ -1697,6 +1771,12 @@
         context.getElementById('OT_clear').onclick = function () {
           canvases.forEach(function (canvas) {
             canvas.clear();
+          });
+        };
+
+        context.getElementById('OT_undo').onclick = function () {
+          canvases.forEach(function (canvas) {
+            canvas.undo();
           });
         };
       }
@@ -1967,9 +2047,9 @@
       var el = _elements.absoluteParent || _elements.canvasContainer;
       width = el.clientWidth;
       height = width / (_aspectRatio);
-      if (el.clientHeight < (width/ _aspectRatio)) {
+      if (el.clientHeight < (width / _aspectRatio)) {
         height = el.clientHeight;
-        width  = height * _aspectRatio;
+        width = height * _aspectRatio;
       }
     }
 
