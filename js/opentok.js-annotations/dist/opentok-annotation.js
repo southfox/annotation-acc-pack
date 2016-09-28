@@ -229,6 +229,7 @@
     };
 
     this.undo = function () {
+      console.log('undo called');
       undoLast(false, self.session.connection.connectionId);
       if (self.session) {
         self.session.signal({
@@ -393,7 +394,7 @@
                   canvasHeight: canvas.height,
                   mirrored: mirrored,
                   startPoint: self.isStartPoint, // Each segment is treated as a new set of points
-                  // endPoint: false,
+                  endPoint: false,
                   selectedItem: selectedItem
                 };
                 draw(update, true);
@@ -421,7 +422,7 @@
                 canvasHeight: canvas.height,
                 mirrored: mirrored,
                 startPoint: self.isStartPoint, // Each segment is treated as a new set of points
-
+                endPoint: true,
                 selectedItem: selectedItem
               };
               draw(update, true);
@@ -516,7 +517,7 @@
 
                   for (var i = 0; i < points.length; i++) {
                     var firstPoint = false;
-                    // var endPoint = false;
+                    var endPoint = false;
 
                     // Scale the points according to the difference between the start and end points
                     var pointX = client.startX + (scale.x * points[i][0]);
@@ -527,7 +528,7 @@
                       client.lastY = pointY;
                       firstPoint = true;
                     } else if (i === points.length - 1) {
-                      // endPoint = true;
+                      endPoint = true;
                     }
 
                     update = {
@@ -1037,13 +1038,23 @@
     var undoLast = function (incoming, cid) {
 
       var historyItem;
+      var endPoint = false;
+      var removed = [];
+
+      console.log('draw history before', drawHistory, drawHistory.length);
+
       for (var i = drawHistory.length - 1; i >= 0; i--) {
         historyItem = drawHistory[i];
         if (historyItem.fromId === cid) {
-          drawHistory.splice(i, 1);
-          break;
+          endPoint = endPoint || historyItem.endPoint;
+          removed.push(drawHistory.splice(i, 1)[0]);
+          if (!endPoint || (endPoint && removed[removed.length - 1].startPoint === true)) {
+            break;
+          }
         }
       }
+
+      console.log('draw history AFTER', drawHistory, drawHistory.length);
 
       if (!incoming) {
         self.session.signal({
