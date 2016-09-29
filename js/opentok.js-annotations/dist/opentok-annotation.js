@@ -549,6 +549,7 @@
                       mirrored: mirrored,
                       smoothed: selectedItem.enableSmoothing,
                       startPoint: firstPoint,
+                      endPoint: endPoint,
                       guid: event.guid
 
                     };
@@ -1065,11 +1066,11 @@
       }
 
       if (incoming) {
-        updateHistory = updateHistory.filter(function(history) {
+        updateHistory = updateHistory.filter(function (history) {
           return !itemsToRemove.includes(history.guid);
         });
       } else {
-        eventHistory = eventHistory.filter(function(history) {
+        eventHistory = eventHistory.filter(function (history) {
           return !removedItems.includes(history.guid);
         });
 
