@@ -229,7 +229,6 @@
     };
 
     this.undo = function () {
-      console.log('undo called');
       undoLast(false, self.session.connection.connectionId);
       if (self.session) {
         self.session.signal({
@@ -395,7 +394,8 @@
                   mirrored: mirrored,
                   startPoint: self.isStartPoint, // Each segment is treated as a new set of points
                   endPoint: false,
-                  selectedItem: selectedItem
+                  selectedItem: selectedItem,
+                  guid: event.guid
                 };
                 draw(update, true);
                 client.lastX = x;
@@ -423,7 +423,8 @@
                 mirrored: mirrored,
                 startPoint: self.isStartPoint, // Each segment is treated as a new set of points
                 endPoint: true,
-                selectedItem: selectedItem
+                selectedItem: selectedItem,
+                guid: event.guid
               };
               draw(update, true);
               client.lastX = x;
@@ -450,7 +451,8 @@
             canvasWidth: canvas.width,
             canvasHeight: canvas.height,
             mirrored: mirrored,
-            selectedItem: selectedItem
+            selectedItem: selectedItem,
+            guid: event.guid
           };
 
           draw(update);
@@ -505,8 +507,8 @@
                     mirrored: mirrored,
                     smoothed: false,
                     startPoint: true,
-
-                    selectedItem: selectedItem
+                    selectedItem: selectedItem,
+                    guid: event.guid
                   };
 
                   drawHistory.push(update);
@@ -546,7 +548,8 @@
                       canvasHeight: canvas.height,
                       mirrored: mirrored,
                       smoothed: selectedItem.enableSmoothing,
-                      startPoint: firstPoint
+                      startPoint: firstPoint,
+                      guid: event.guid
 
                     };
 
@@ -566,6 +569,14 @@
           }
         }
       }
+    }
+
+    function guid() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0,
+          v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
     }
 
     addEventListeners(canvas, 'mousedown mousemove mouseup mouseout touchstart touchmove touchend', function (event) {
@@ -593,6 +604,7 @@
 
         event.userColor = self.userColor;
         event.lineWidth = self.lineWidth;
+        event.guid = guid();
         eventHistory.push(event);
       }
 
@@ -1009,12 +1021,11 @@
       });
     };
 
-    var clearCanvas = function (incoming, cid, undo) {
+    var clearCanvas = function (incoming, cid) {
       // console.log('cid: ' + cid);
       // Remove all elements from history that were drawn by the sender
 
       drawHistory = drawHistory.filter(function (history) {
-        console.log(history.fromId);
         return history.fromId !== cid;
       });
 
@@ -1035,30 +1046,36 @@
       draw();
     };
 
-    var undoLast = function (incoming, cid) {
+    var undoLast = function (incoming, cid, itemsToRemove) {
 
       var historyItem;
+      var removed;
       var endPoint = false;
-      var removed = [];
-
-      console.log('draw history before', drawHistory, drawHistory.length);
-
+      var removedItems = [];
       for (var i = drawHistory.length - 1; i >= 0; i--) {
         historyItem = drawHistory[i];
         if (historyItem.fromId === cid) {
           endPoint = endPoint || historyItem.endPoint;
-          removed.push(drawHistory.splice(i, 1)[0]);
-          if (!endPoint || (endPoint && removed[removed.length - 1].startPoint === true)) {
+          removed = drawHistory.splice(i, 1)[0];
+          removedItems.push(removed.guid);
+          if (!endPoint || (endPoint && removed.startPoint === true)) {
             break;
           }
         }
       }
 
-      console.log('draw history AFTER', drawHistory, drawHistory.length);
+      if (incoming) {
+        updateHistory = updateHistory.filter(function(history) {
+          return !itemsToRemove.includes(history.guid);
+        });
+      } else {
+        eventHistory = eventHistory.filter(function(history) {
+          return !removedItems.includes(history.guid);
+        });
 
-      if (!incoming) {
         self.session.signal({
-          type: 'otAnnotation_undo'
+          type: 'otAnnotation_undo',
+          data: JSON.stringify(removedItems)
         });
       }
 
@@ -1099,7 +1116,7 @@
         'signal:otAnnotation_undo': function (event) {
           if (event.from.connectionId !== self.session.connection.connectionId) {
             // Only clear elements drawn by the sender's (from) Id
-            undoLast(true, event.from.connectionId);
+            undoLast(true, event.from.connectionId, JSON.parse(event.data));
           }
         },
         connectionCreated: function (event) {
