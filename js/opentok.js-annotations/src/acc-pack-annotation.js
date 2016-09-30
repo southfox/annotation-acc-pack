@@ -153,9 +153,9 @@
       var el = _elements.absoluteParent || _elements.canvasContainer;
       width = el.clientWidth;
       height = width / (_aspectRatio);
-      if (el.clientHeight < (width/ _aspectRatio)) {
+      if (el.clientHeight < (width / _aspectRatio)) {
         height = el.clientHeight;
-        width  = height * _aspectRatio;
+        width = height * _aspectRatio;
       }
     }
 
@@ -186,7 +186,8 @@
 
   var _createToolbar = function (session, options, externalWindow) {
     var toolbarId = _.property('toolbarId')(options) || 'toolbar';
-    var items = _.property('toolbarItems')(options);
+    var items = _.property('toolbarItems')(options) || [];
+    var shapes = _.property('toolbarShapes')(options) || [];
     var colors = _.property('colors')(options) || _palette;
     var imageAssets = _.property('imageAssets')(options) || null;
 
@@ -200,7 +201,8 @@
       session: session,
       container: container(),
       colors: colors,
-      items: !!items && !!items.length ? options.items : null,
+      items: items.length ? items : ['*'],
+      shapes: shapes.length ? shapes : ['rectangle', 'oval', 'star', 'line'],
       externalWindow: externalWindow || null,
       imageAssets: imageAssets,
       OTKAnalytics: OTKAnalytics

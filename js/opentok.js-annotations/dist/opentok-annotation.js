@@ -161,42 +161,7 @@
       }
 
       if (item.id === 'OT_capture') {
-        self.selectedItem = item;
-
-        if (!self.overlay) {
-          self.overlay = document.createElement('div');
-          self.overlay.id = 'captureOverlay';
-          self.overlay.style.position = 'absolute';
-          self.overlay.style.top = '0px';
-          self.overlay.style.width = self.parent.clientWidth + 'px';
-          self.overlay.style.height = self.parent.clientHeight + 'px';
-          self.overlay.style.background = 'rgba(0,0,0,0.4) url("' +
-            self.imageAssets + 'annotation-camera.png") no-repeat center';
-          self.overlay.style.backgroundSize = '50px 50px';
-          self.overlay.style.cursor = 'pointer';
-          self.overlay.style.opacity = 0;
-
-          self.parent.appendChild(self.overlay);
-
-          self.parent.onmouseover = function () {
-            self.overlay.style.opacity = 1;
-            self.overlay.style.zIndex = 1010;
-          };
-
-          self.parent.onmouseout = function () {
-            self.overlay.style.opacity = 0;
-          };
-
-          self.overlay.onclick = function () {
-            self.captureScreenshot();
-            self.parent.removeChild(self.overlay);
-            self.overlay = null;
-            self.parent.onmouseover = null;
-            self.parent.onmouseout = null;
-          };
-        } else {
-          self.overlay.style = 'inline';
-        }
+        self.captureScreenshot();
       } else if (item.id.indexOf('OT_line_width') !== -1) {
         if (item.size) {
           self.changeLineWidth(item.size);
@@ -459,6 +424,10 @@
           !resizeEvent && sendUpdate(update);
         } else {
           // We have a shape or custom object
+
+          // We are currently using a constant default width for shapes
+          var shapeLineWidth = 2;
+
           if (selectedItem && selectedItem.points) {
             client.mX = x;
             client.mY = y;
@@ -476,7 +445,7 @@
                 if (client.dragging) {
                   update = {
                     color: resizeEvent ? event.userColor : self.userColor,
-                    lineWidth: resizeEvent ? event.lineWidth : self.lineWidth,
+                    lineWidth: resizeEvent ? event.lineWidth : shapeLineWidth,
                     selectedItem: selectedItem
                       // INFO The points for scaling will get added when drawing is complete
                   };
@@ -499,7 +468,7 @@
                     toX: client.mX,
                     toY: client.mY,
                     color: resizeEvent ? event.userColor : self.userColor,
-                    lineWidth: resizeEvent ? event.lineWidth : self.lineWidth,
+                    lineWidth: resizeEvent ? event.lineWidth : shapeLineWidth,
                     videoWidth: self.videoFeed.videoElement().clientWidth,
                     videoHeight: self.videoFeed.videoElement().clientHeight,
                     canvasWidth: canvas.width,
@@ -541,7 +510,7 @@
                       toX: pointX,
                       toY: pointY,
                       color: resizeEvent ? event.userColor : self.userColor,
-                      lineWidth: resizeEvent ? event.lineWidth : self.lineWidth,
+                      lineWidth: resizeEvent ? event.lineWidth : shapeLineWidth,
                       videoWidth: self.videoFeed.videoElement().clientWidth,
                       videoHeight: self.videoFeed.videoElement().clientHeight,
                       canvasWidth: canvas.width,
@@ -765,7 +734,6 @@
         var isText = !!history.selectedItem && history.selectedItem.title === 'Text' && history.text;
 
         if (isText) {
-
           ctx.font = history.font;
           ctx.fillStyle = history.color;
           ctx.fillText(history.text, history.fromX, history.fromY);
@@ -793,6 +761,7 @@
               // console.log('Points: (' + (history.fromX + history.toX) / 2 + ', ' + (history.fromY + history.toY) / 2 + ')');
               // console.log('Control Points: (' + history.fromX + ', ' + history.fromY + ')');
               ctx.quadraticCurveTo(history.fromX, history.fromY, (history.fromX + history.toX) / 2, (history.fromY + history.toY) / 2);
+
               ctx.stroke();
             }
           } else {
@@ -916,14 +885,6 @@
         x: scaleX,
         y: scaleY
       };
-    };
-
-    var drawTextUpdate = function (update) {
-
-
-
-
-
     };
 
     var drawIncoming = function (update, resizeEvent, index) {
@@ -1208,17 +1169,15 @@
     // TODO Allow 'style' objects to be passed in for buttons, menu toolbar, etc?
     this.backgroundColor = options.backgroundColor || 'rgba(102, 102, 102, 0.90)';
     this.subpanelBackgroundColor = options.subpanelBackgroundColor || '#323232';
-    // this.buttonWidth = options.buttonWidth || '60px';
-    // this.buttonHeight = options.buttonHeight || '60px';
-    // this.iconWidth = options.iconWidth || '30px';
-    // this.iconHeight = options.iconHeight || 'auto';
+
     var imageAssets = options.imageAssets || DEFAULT_ASSET_URL;
 
     var toolbarItems = [{
         id: 'OT_pen',
         title: 'Pen',
         icon: [imageAssets, 'annotation-pencil.png'].join(''),
-        selectedIcon: [imageAssets, 'annotation-pencil.png'].join('')
+        selectedIcon: [imageAssets, 'annotation-pencil.png'].join(''),
+        items: { /* Built dynamically */ }
       }, {
         id: 'OT_colors',
         title: 'Colors',
@@ -1229,22 +1188,20 @@
         title: 'Shapes',
         icon: [imageAssets, 'annotation-shapes.png'].join(''),
         items: [{
-          id: 'OT_arrow',
-          title: 'Arrow',
-          icon: [imageAssets, 'annotation-arrow.png'].join(''),
-          points: [
-            [0, 1],
-            [3, 1],
-            [3, 0],
-            [5, 2],
-            [3, 4],
-            [3, 3],
-            [0, 3],
-            [0, 1] // Reconnect point
-          ]
-        }, {
           id: 'OT_rect',
           title: 'Rectangle',
+          icon: [imageAssets, 'annotation-rectangle.png'].join(''),
+          points: [
+            [0, 0],
+            [1, 0],
+            [1, 1],
+            [0, 1],
+            [0, 0] // Reconnect point
+          ]
+        },
+        {
+          id: 'OT_rect_fill',
+          title: 'Rectangle-Fill',
           icon: [imageAssets, 'annotation-rectangle.png'].join(''),
           points: [
             [0, 0],
@@ -1271,6 +1228,23 @@
             [0.5 + 0.5 * Math.cos(5 * Math.PI / 4), 0.5 + 0.5 * Math.sin(5 * Math.PI / 4)]
           ]
         }, {
+          id: 'OT_oval_fill',
+          title: 'Oval-Fill',
+          icon: [imageAssets, 'annotation-oval-fill.png'].join(''),
+          enableSmoothing: true,
+          points: [
+            [0, 0.5],
+            [0.5 + 0.5 * Math.cos(5 * Math.PI / 4), 0.5 + 0.5 * Math.sin(5 * Math.PI / 4)],
+            [0.5, 0],
+            [0.5 + 0.5 * Math.cos(7 * Math.PI / 4), 0.5 + 0.5 * Math.sin(7 * Math.PI / 4)],
+            [1, 0.5],
+            [0.5 + 0.5 * Math.cos(Math.PI / 4), 0.5 + 0.5 * Math.sin(Math.PI / 4)],
+            [0.5, 1],
+            [0.5 + 0.5 * Math.cos(3 * Math.PI / 4), 0.5 + 0.5 * Math.sin(3 * Math.PI / 4)],
+            [0, 0.5],
+            [0.5 + 0.5 * Math.cos(5 * Math.PI / 4), 0.5 + 0.5 * Math.sin(5 * Math.PI / 4)]
+          ]
+        },{
           id: 'OT_star',
           title: 'Star',
           icon: [imageAssets, 'annotation-star.png'].join(''),
@@ -1290,6 +1264,20 @@
             /* eslint-enable max-len */
           ]
         }, {
+          id: 'OT_arrow',
+          title: 'Arrow',
+          icon: [imageAssets, 'annotation-arrow.png'].join(''),
+          points: [
+            [0, 1],
+            [3, 1],
+            [3, 0],
+            [5, 2],
+            [3, 4],
+            [3, 3],
+            [0, 3],
+            [0, 1] // Reconnect point
+          ]
+        }, {
           id: 'OT_line',
           title: 'Line',
           icon: [imageAssets, 'annotation-line.png'].join(''),
@@ -1304,11 +1292,6 @@
         title: 'Text',
         icon: [imageAssets, 'annotation-text.png'].join(''),
         selectedIcon: [imageAssets, 'annotation-text.png'].join('')
-      }, {
-        id: 'OT_line_width',
-        title: 'Line Width',
-        icon: [imageAssets, 'annotation-line_width.png'].join(''),
-        items: { /* Built dynamically */ }
       }, {
         id: 'OT_clear',
         title: 'Clear',
@@ -1333,24 +1316,33 @@
      * Otherwise, include all items.
      */
     var getItems = function () {
-      var itemNames = ['pen', 'line', 'shapes', 'text', 'colors', 'line-width', 'clear', 'capture'];
+      var itemNames = ['pen', 'colors', 'shapes', 'text', 'clear', 'undo', 'capture'];
+      var shapeNames = ['rectangle', 'rectangle-fill', 'oval', 'oval-fill', 'star', 'arrow', 'line'];
       var addItem = function (acc, item) {
         var index = itemNames.indexOf(item);
         if (index !== -1) {
-          acc.push(toolbarItems[index]);
+          var toolbarItem = toolbarItems[index];
+          if (toolbarItem.title === 'Shapes' && !!options.shapes) {
+            var shapes = options.shapes.reduce(function(shapeAcc, shape) {
+              var shapeIndex = shapeNames.indexOf(shape);
+              return shapeIndex !== -1 ? shapeAcc.concat(toolbarItem.items[shapeIndex]) : shapeAcc;
+            }, []);
+            toolbarItem.items = shapes;
+          }
+          acc.push(toolbarItem);
         }
         return acc;
       }
 
       if (!!options.items && !!options.items.length) {
-        return options.items.reduce(addItem, []);
+        var itemsToBuild = options.items[0] === '*' ? itemNames : options.items;
+        return itemsToBuild.reduce(addItem, []);
       } else {
         return toolbarItems;
       }
     }
 
     this.items = getItems();
-
 
     this.colors = options.colors || [
       '#1abc9c',
@@ -1482,11 +1474,6 @@
         panel.setAttribute('class', 'OT_panel');
         panel.style.width = '100%';
         panel.style.height = '100%';
-        // panel.style.backgroundColor = this.backgroundColor;
-        // panel.style.display = 'flex';
-        // panel.style.flexDirection = 'column';
-        // panel.style.alignItems = 'center';
-        // panel.style.paddingLeft = '15px';
         this.parent.appendChild(panel);
         this.parent.style.position = 'relative';
         this.parent.zIndex = 1000;
@@ -1503,15 +1490,7 @@
           button.classList.add('annotation-btn');
           button.classList.add(item.title.split(' ').join('-').toLowerCase());
 
-          // button.style.position = 'relative';
-          // button.style.top = '50%';
-          // button.style.transform = 'translateY(-50%)';
-
           if (item.id === 'OT_colors') {
-            // button.style.webkitTransform = 'translateY(-85%)';
-            // button.style.width = '21px';
-            // button.style.height = '21px';
-            // button.style.border = '2px solid white';
 
             var colorPicker = context.createElement('div');
             colorPicker.setAttribute('class', 'color-picker');
@@ -1533,43 +1512,13 @@
 
             var colorChoices = context.querySelectorAll('.color-choice');
             colorChoices[0].classList.add('active');
-
-            for (var j = 0; j < colorChoices.length; j++) {
-
-              // colorChoices[j].style.display = 'inline-block';
-              // colorChoices[j].style.width = '30px';
-              // colorChoices[j].style.height = '30px';
-              // colorChoices[j].style.margin = '5px';
-              // colorChoices[j].style.cursor = 'pointer';
-              // colorChoices[j].style.borderRadius = '100%';
-              // colorChoices[j].style.opacity = 0.7;
-              // colorChoices[j].onmouseover = function () {
-              //   this.style.opacity = 1;
-              // };
-              // colorChoices[j].onmouseout = function () {
-              //   this.style.opacity = 0.7;
-              // };
-            }
-
             button.setAttribute('class', 'OT_color annotation-btn colors');
-            // button.classList.add(item.title.split(' ').join('-').toLowerCase());
-            // button.style.marginLeft = '10px';
-            // button.style.marginRight = '10px';
             button.style.borderRadius = '50%';
             button.style.backgroundColor = this.colors[0];
-            // button.style.width = this.iconWidth;
-            // button.style.height = this.iconHeight;
-            // button.style.paddingTop = this.buttonHeight.replace('px', '') - this.iconHeight.replace('px', '') + 'px';
-          } else {
-            // button.style.background = 'url("' + item.icon + '") no-repeat';
-            // button.style.backgroundSize = this.iconWidth + ' ' + this.iconHeight;
-            // button.style.backgroundPosition = 'center';
-            // button.style.width = this.buttonWidth;
-            // button.style.height = this.buttonHeight;
+
           }
 
-          // If we have an object as item.items, it was never set by the user
-          if (item.title === 'Line Width' && !Array.isArray(item.items)) {
+            if (item.title === 'Pen' && !Array.isArray(item.items)) {
             // Add defaults
             item.items = [{
               id: 'OT_line_width_2',
@@ -1608,8 +1557,7 @@
           }
 
           button.setAttribute('data-col', item.title);
-          // button.style.border = 'none';
-          // button.style.cursor = 'pointer';
+
 
           toolbarItems.push(button.outerHTML);
         }
@@ -1621,27 +1569,11 @@
           var itemName = ev.target.getAttribute('data-col');
           var id = ev.target.getAttribute('id');
 
+
           // Close the submenu if we are clicking on an item and not a group button
           if (!group) {
             self.items.forEach(function (item) {
               if ((item.title !== 'Clear' || item.title !== 'Undo') && item.title === itemName) {
-                if (self.selectedItem) {
-                  var lastBtn = context.getElementById(self.selectedItem.id);
-                  if (lastBtn) {
-                    // lastBtn.style.background = 'url("' + self.selectedItem.icon + '") no-repeat';
-                    // lastBtn.style.backgroundSize = self.iconWidth + ' ' + self.iconHeight;
-                    // lastBtn.style.backgroundPosition = 'center';
-                  }
-                }
-
-                if (item.selectedIcon) {
-                  var selBtn = context.getElementById(item.id);
-                  if (selBtn) {
-                    // selBtn.style.background = 'url("' + item.selectedIcon + '") no-repeat';
-                    selBtn.style.backgroundSize = self.iconWidth + ' ' + self.iconHeight;
-                    selBtn.style.backgroundPosition = 'center';
-                  }
-                }
 
                 self.selectedItem = item;
 
@@ -1662,33 +1594,23 @@
 
                 if (item.items) {
                   subPanel.setAttribute('class', ['OT_subpanel', 'ots-hidden', item.title.toLowerCase()].join(' '));
-                  // subPanel.style.backgroundColor = self.subpanelBackgroundColor;
-                  // subPanel.style.width = '100%';
-                  // subPanel.style.height = '100%';
-                  // subPanel.style.paddingLeft = '15px';
-                  // subPanel.style.display = 'none';
+
                   self.parent.appendChild(subPanel);
 
                   if (Array.isArray(item.items)) {
                     var submenuItems = [];
 
-                    if (item.id === 'OT_line_width') {
+                    if (item.id === 'OT_pen') {
                       // We want to dynamically create icons for the list of possible line widths
                       item.items.forEach(function (subItem) {
                         // INFO Using a div here - not input to create an inner div representing the line width - better option?
                         var itemButton = context.createElement('div');
                         itemButton.setAttribute('data-col', subItem.title);
+                        itemButton.setAttribute('class', ['line-width-option', subItem.size].join(' '));
                         itemButton.setAttribute('id', subItem.id);
-                        itemButton.style.position = 'relative';
-                        itemButton.style.top = '50%';
-                        itemButton.style.transform = 'translateY(-50%)';
-                        itemButton.style['float'] = 'left';
-                        itemButton.style.width = self.buttonWidth;
-                        itemButton.style.height = self.buttonHeight;
-                        // itemButton.style.border = 'none';
-                        itemButton.style.cursor = 'pointer';
 
                         var lineIcon = context.createElement('div');
+                        lineIcon.setAttribute('class', 'line-width-icon')
                         // TODO Allow devs to change this?
                         lineIcon.style.backgroundColor = '#FFFFFF';
                         lineIcon.style.width = '80%';
@@ -1710,7 +1632,8 @@
                         itemButton.setAttribute('type', 'button');
                         itemButton.setAttribute('data-col', subItem.title);
                         itemButton.setAttribute('id', subItem.id);
-                        itemButton.style.backgroundImage = 'url("' + subItem.icon + '")';
+                        itemButton.setAttribute('class', ['annotation-btn', subItem.title.toLowerCase()].join(' '));
+                        // itemButton.style.backgroundImage = 'url("' + subItem.icon + '")';
                         // itemButton.style.position = 'relative';
                         // itemButton.style.top = '50%';
                         // itemButton.style.transform = 'translateY(-50%)';
@@ -1719,7 +1642,7 @@
                         // itemButton.style.width = self.buttonWidth;
                         // itemButton.style.height = self.buttonHeight;
                         // itemButton.style.border = 'none';
-                        itemButton.style.cursor = 'pointer';
+                        // itemButton.style.cursor = 'pointer';
 
                         submenuItems.push(itemButton.outerHTML);
                       });
@@ -1729,10 +1652,9 @@
                   }
                 }
 
-                if (id === 'OT_shapes' || id === 'OT_line_width') {
+                if (id === 'OT_shapes' || id === 'OT_pen') {
                   if (subPanel) {
                     subPanel.classList.remove('ots-hidden');
-
                   }
                   pk.close();
                 } else if (id === 'OT_colors') {
@@ -1754,7 +1676,13 @@
           var group = ev.target.getAttribute('data-type') === 'group';
           var itemName = ev.target.getAttribute('data-col');
           var id = ev.target.getAttribute('id');
-          // subPanel.style.display = 'none';
+
+
+          if (!!id && id.replace(/[^a-z]/g, '') === 'linewidth') {
+            canvases.forEach(function (canvas) {
+              canvas.selectItem(self.selectedGroup);
+            });
+          }
 
           subPanel.classList.add('ots-hidden');
 
@@ -1875,6 +1803,9 @@
       canvas.link(self.session);
       canvas.colors(self.colors);
       canvases.push(canvas);
+      canvases.forEach(function(canvas) {
+        canvas.selectedItem = canvas.selectedItem || self.items[0];
+      });
     };
 
     /**
@@ -1920,7 +1851,6 @@
   };
 
 }.call(this));
-
 /* global OT OTSolution OTKAnalytics ScreenSharingAccPack define */
 (function () {
   /** Include external dependencies */
@@ -2109,7 +2039,8 @@
 
   var _createToolbar = function (session, options, externalWindow) {
     var toolbarId = _.property('toolbarId')(options) || 'toolbar';
-    var items = _.property('toolbarItems')(options);
+    var items = _.property('toolbarItems')(options) || [];
+    var shapes = _.property('toolbarShapes')(options) || [];
     var colors = _.property('colors')(options) || _palette;
     var imageAssets = _.property('imageAssets')(options) || null;
 
@@ -2123,7 +2054,8 @@
       session: session,
       container: container(),
       colors: colors,
-      items: !!items && !!items.length ? options.items : null,
+      items: items.length ? items : ['*'],
+      shapes: shapes.length ? shapes : ['rectangle', 'oval', 'star', 'line'],
       externalWindow: externalWindow || null,
       imageAssets: imageAssets,
       OTKAnalytics: OTKAnalytics
