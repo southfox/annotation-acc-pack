@@ -969,8 +969,6 @@
 
       drawHistory.push(update);
 
-      console.log(drawHistory);
-
       draw(null);
     };
 
@@ -1050,13 +1048,11 @@
     if (self.videoFeed.session) {
       self.videoFeed.session.on({
         'signal:otAnnotation_pen': function (event) {
-          console.log('signal here', count++);
           if (event.from.connectionId !== self.session.connection.connectionId) {
             drawUpdates(JSON.parse(event.data));
           }
         },
         'signal:otAnnotation_text': function (event) {
-          console.log('signal here', count++);
           if (event.from.connectionId !== self.session.connection.connectionId) {
             drawUpdates(JSON.parse(event.data));
           }
@@ -1116,7 +1112,6 @@
           data: JSON.stringify(dataChunk)
         };
         if (toConnection) signal.to = toConnection;
-        console.log('TO?', signal);
         self.session.signal(signal, signalError);
       }
     };
