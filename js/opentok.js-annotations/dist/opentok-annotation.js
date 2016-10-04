@@ -1446,7 +1446,7 @@
         if (!color) {
           return;
         }
-        var colors = Array.from(self.getElm('color-choice', true));
+        var colors = Array.from(self.getElm('.color-choice', true));
         colors.forEach(function (el) {
           el.classList.remove('active');
         });
