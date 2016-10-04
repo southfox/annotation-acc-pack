@@ -698,6 +698,7 @@
 				TargetAttributes = {
 					A0AB57631D2C392D00F8410B = {
 						CreatedOnToolsVersion = 7.3;
+						LastSwiftMigration = 0800;
 					};
 					A0AB576C1D2C392D00F8410B = {
 						CreatedOnToolsVersion = 7.3;
@@ -708,6 +709,7 @@
 					};
 					A0DB6E471D230BC900E14C86 = {
 						CreatedOnToolsVersion = 7.3;
+						LastSwiftMigration = 0800;
 					};
 					A0E9FA9D1D403C7000460599 = {
 						CreatedOnToolsVersion = 7.3;
@@ -955,6 +957,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tokbox.OTAnnotationKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -976,6 +979,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tokbox.OTAnnotationKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
