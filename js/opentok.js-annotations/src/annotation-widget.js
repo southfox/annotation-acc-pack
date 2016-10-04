@@ -1288,19 +1288,19 @@
         icon: [imageAssets, 'annotation-text.png'].join(''),
         selectedIcon: [imageAssets, 'annotation-text.png'].join('')
       }, {
-        id: 'OT_clear',
-        title: 'Clear',
-        icon: [imageAssets, 'annotation-clear.png'].join('')
-      },
-      {
-        id: 'OT_undo',
-        title: 'Undo',
-        icon: [imageAssets, 'annotation-undo.png'].join('')
-      }, {
         id: 'OT_capture',
         title: 'Capture',
         icon: [imageAssets, 'annotation-camera.png'].join(''),
         selectedIcon: [imageAssets, 'annotation-camera.png'].join('')
+      },{
+        id: 'OT_undo',
+        title: 'Undo',
+        icon: [imageAssets, 'annotation-undo.png'].join('')
+      },
+      {
+        id: 'OT_clear',
+        title: 'Clear',
+        icon: [imageAssets, 'annotation-clear.png'].join('')
       }
     ];
 
@@ -1311,7 +1311,7 @@
      * Otherwise, include all items.
      */
     var getItems = function () {
-      var itemNames = ['pen', 'colors', 'shapes', 'text', 'clear', 'undo', 'capture'];
+      var itemNames = ['pen', 'colors', 'shapes', 'text', 'capture', 'undo', 'clear'];
       var shapeNames = ['rectangle', 'rectangle-fill', 'oval', 'oval-fill', 'star', 'arrow', 'line'];
       var addItem = function (acc, item) {
         var index = itemNames.indexOf(item);
