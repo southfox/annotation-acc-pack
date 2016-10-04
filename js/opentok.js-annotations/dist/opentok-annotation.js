@@ -1385,9 +1385,9 @@
       var self = this;
       var context = _toolbar.externalWindow ? _toolbar.externalWindow.document : document;
 
-      this.getElm = function (el) {
+      this.getElm = function (el, all) {
         if (typeof el === 'string') {
-          return context.querySelector(el);
+          return all ? context.querySelectorAll(el) : context.querySelector(el);
         }
         return el;
       };
@@ -1446,7 +1446,7 @@
         if (!color) {
           return;
         }
-        var colors = Array.from(document.getElementsByClassName('color-choice'));
+        var colors = Array.from(self.getElm('color-choice', true));
         colors.forEach(function (el) {
           el.classList.remove('active');
         });
