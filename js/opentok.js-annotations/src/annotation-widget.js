@@ -160,9 +160,9 @@
         self.overlay = null;
       }
 
-      if (item.id === 'OT_capture') {
+      if (item && item.id === 'OT_capture') {
         self.captureScreenshot();
-      } else if (item.id.indexOf('OT_line_width') !== -1) {
+      } else if (item && item.id.indexOf('OT_line_width') !== -1) {
         if (item.size) {
           self.changeLineWidth(item.size);
         }
@@ -1720,7 +1720,7 @@
           });
         };
 
-        context.getElementById('OT_clear').onclick = function () {
+        var onClear = context.getElementById('OT_clear').onclick = function () {
           canvases.forEach(function (canvas) {
             canvas.clear();
           });
@@ -1731,6 +1731,28 @@
             canvas.undo();
           });
         };
+
+        window.addEventListener('OT_clear', function() {
+          onClear();
+          self.selectedItem = null;
+          canvases.forEach(function (canvas) {
+            canvas.selectItem(self.selectedItem);
+          });
+        });
+
+        window.addEventListener('OT_pen', function(evt) {
+          var item = self.items.find(function(item) {
+            return item.id === 'OT_pen';
+          });
+
+          self.selectedItem = item;
+          attachDefaultAction(item);
+          var color = evt.detail.color;
+          canvases.forEach(function (canvas) {
+            canvas.selectItem(self.selectedItem);
+            color && canvas.changeColor(color);
+          });
+        });
       }
     };
 
