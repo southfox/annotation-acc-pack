@@ -2033,6 +2033,8 @@
   };
 
   var _createToolbar = function (session, options, externalWindow) {
+    _setupUI();
+
     var toolbarId = _.property('toolbarId')(options) || 'toolbar';
     var items = _.property('toolbarItems')(options) || [];
     var shapes = _.property('toolbarShapes')(options) || [];
@@ -2283,7 +2285,6 @@
     // init analytics logs
     _logAnalytics();
     _log(_logEventData.actionInitialize, _logEventData.variationSuccess);
-    _setupUI();
   };
 
   AnnotationAccPack.prototype = {
