@@ -28,7 +28,7 @@ Otherwise, you'll need to include the file in your html to make the constructor 
 The following `options` fields are used in the `AnnotationAccPack` constructor:<br/>
 
 | Feature        | Field  | Required |
-| ------------- | ------------- |
+| ------------- | ------------- | -----|
 | Set the OpenTok session  (object).| `session` |`true`|
 | Set the Common layer API (object). | `accPack` |`false`|
 | Set the callback to receive the image data on scree capture (function). | `onScreenCapture` |`false`|
