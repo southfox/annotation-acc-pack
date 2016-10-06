@@ -49,7 +49,7 @@ Once initialized, the following methods are available:
 @param {Boolean} [options.screensharing] - Using an external window
 @param {Array} [options.items] - Custom set of tools
 @param {Array} [options.colors] - Custom color palette
-@returns {Promise} < Resolve: undefined | {object} Reference to external annotation window >
+@returns {Promise} < Resolve: undefined | {Object} Reference to external annotation window >
 ```
 
 ### `linkCanvas`
