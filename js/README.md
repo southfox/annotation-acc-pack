@@ -44,22 +44,22 @@ Once initialized, the following methods are available:
 ### `start`
 *Creates an external window (if required) and links the annotation toolbar to the session.  An external window is ONLY required if sharing the current browser window. *
 ```javascript
-@param {object} session
-@param {object} [options]
-@param {boolean} [options.screensharing] - Using an external window
-@param {array} [options.items] - Custom set of tools
-@param {array} [options.colors] - Custom color palette
-@returns {promise} < Resolve: undefined | {object} Reference to external annotation window >
+@param {Object} session
+@param {Object} [options]
+@param {Boolean} [options.screensharing] - Using an external window
+@param {Array} [options.items] - Custom set of tools
+@param {Array} [options.colors] - Custom color palette
+@returns {Promise} < Resolve: undefined | {object} Reference to external annotation window >
 ```
 
 ### `linkCanvas`
 *Create and link a canvas to the toolbar and session.  See notes about [resizing the canvas](#resizing-canvas) below*
 ```javascript
-@param {object} pubSub - Either the publisher(sharing) or subscriber(viewing)
-@ param {object} container - The parent container for the canvas element
-@ param {object} options
-@param {object} [options.externalWindow] - Reference to the an external annotation window (publisher only)
-@param {object} [options.absoluteParent] - Reference element for resize if other than container
+@param {Object} pubSub - Either the publisher(sharing) or subscriber(viewing)
+@param {Object} container - The parent container for the canvas element
+@param {Object} options
+@param {Object} [options.externalWindow] - Reference to the an external annotation window (publisher only)
+@param {Object} [options.absoluteParent] - Reference element for resize if other than container
 ```
 
 ### `resizeCanvas`
