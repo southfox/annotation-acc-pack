@@ -2,9 +2,7 @@
 
 # OpenTok Annotations Accelerator Pack<br/>Version 1.1.0
 
-The OpenTok Annotations Accelerator Pack provides functionality you can add to your OpenTok applications that enables users to use an annotation toolbar on both mobile and browser-based devices.
-
-This document describes how to use the OpenTok Annotations Accelerator Pack. Through the exploration of this Sample, you will learn best practices for development and customization with annotations.
+The OpenTok Annotations Accelerator Pack provides functionality you can add to your OpenTok applications that enables users to have the ability to annotate on a local or remote screen.
 
 With the OpenTok Annotations Accelerator Pack, you can:
 
@@ -14,9 +12,15 @@ With the OpenTok Annotations Accelerator Pack, you can:
 
 The OpenTok Annotations Accelerator Pack does not include a standalone sample app such as [screensharing-annotation-acc-pack](https://github.com/opentok/screensharing-annotation-acc-pack), though you can easily build your own apps with it. It is also used as a component for more comprehensive Samples that offer such features as screensharing and video along with annotations.
 
-
 To get started with your development, visit the following sites:
 
 - [OpenTok Annotations Accelerator Pack for Android](./android)
 - [OpenTok Annotations Accelerator Pack for iOS](./ios)
 - [OpenTok Annotations Accelerator Pack for JavaScript](./js)
+
+# Remote annotation availability
+| from/to | Web  | iOS  | Android | 
+| ------- | ---- | ---- | ------- |
+|   Web   | [x]  |  [x] |   [x]   |
+|   iOS   | [x]  |  [x] |   [ ]   |
+| Android | [x]  |  [ ] |   [x]   |
