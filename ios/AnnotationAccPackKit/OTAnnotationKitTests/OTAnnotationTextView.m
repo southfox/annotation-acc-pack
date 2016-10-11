@@ -29,10 +29,10 @@ describe(@"Initialization of OTAnnotationTextView", ^(){
             
             OTAnnotationTextView *annotationsText = [[OTAnnotationTextView alloc] initWithText:@"" textColor:[UIColor greenColor] fontSize:0.0f];
             
-            [[theValue(annotationsText.isResizable) should] equal:theValue(YES)];
-            [[theValue(annotationsText.isDraggable) should] equal:theValue(YES)];
-            [[theValue(annotationsText.isRotatable) should] equal:theValue(YES)];
-        }); 
+            [[theValue(annotationsText.isResizable) should] equal:theValue(NO)];
+            [[theValue(annotationsText.isDraggable) should] equal:theValue(NO)];
+            [[theValue(annotationsText.isRotatable) should] equal:theValue(NO)];
+        });
     });
 });
 

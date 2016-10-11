@@ -19,7 +19,7 @@ context(@"Initialization of OTAnnotationEditTextViewController", ^(){
         });
         
         it(@"init with text should not be nil", ^{
-            [[[[OTAnnotationEditTextViewController alloc] initWithText:@"" textColor:[UIColor blackColor] fontSize:0.0f] shouldNot] beNil];
+            [[[[OTAnnotationEditTextViewController alloc] initWithText:@"" textColor:[UIColor blueColor]] shouldNot] beNil];
         });
         
     });

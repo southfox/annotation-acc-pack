@@ -26,16 +26,4 @@ describe(@"Initialization of OTAnnotationView", ^(){
     });
 });
 
-describe(@"Methods of OTAnnotationView", ^{
-    
-    OTAnnotationView *annotationView = [[OTAnnotationView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
-    
-    context(@"Method", ^{
-        
-        it(@"captureScreen result image should not be nil", ^{
-            [[[annotationView captureScreen] shouldNot] beNil];
-        });
-    });
-});
-
 SPEC_END
