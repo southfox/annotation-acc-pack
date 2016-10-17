@@ -205,7 +205,7 @@
       container: container(),
       colors: colors,
       items: items.length ? items : ['*'],
-      shapes: shapes.length ? shapes : ['rectangle', 'oval', 'star', 'line'],
+      shapes: shapes.length ? shapes : ['rectangle', 'oval', 'star', 'arrow', 'line'],
       externalWindow: externalWindow || null,
       imageAssets: imageAssets,
       backgroundColor: backgroundColor,
