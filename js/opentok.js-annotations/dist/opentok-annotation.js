@@ -360,6 +360,7 @@
                   startPoint: self.isStartPoint, // Each segment is treated as a new set of points
                   endPoint: false,
                   selectedItem: selectedItem,
+                  platform: 'web',
                   guid: event.guid
                 };
                 draw(update, true);
@@ -389,6 +390,7 @@
                 startPoint: self.isStartPoint, // Each segment is treated as a new set of points
                 endPoint: true,
                 selectedItem: selectedItem,
+                platform: 'web',
                 guid: event.guid
               };
               draw(update, true);
@@ -417,6 +419,7 @@
             canvasHeight: canvas.height,
             mirrored: mirrored,
             selectedItem: selectedItem,
+            platform: 'web',
             guid: event.guid
           };
 
@@ -477,6 +480,7 @@
                     smoothed: false,
                     startPoint: true,
                     selectedItem: selectedItem,
+                    platform: 'web',
                     guid: event.guid
                   };
 
@@ -519,6 +523,7 @@
                       smoothed: selectedItem.enableSmoothing,
                       startPoint: firstPoint,
                       endPoint: endPoint,
+                      platform: 'web',
                       guid: event.guid
 
                     };
