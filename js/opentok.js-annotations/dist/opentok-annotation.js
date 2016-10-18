@@ -1135,6 +1135,20 @@
         self.session.signal(signal, signalError);
       }
     };
+
+    var updateTimeout;
+    var sendUpdate = function (update) {
+      if (self.session) {
+        batchUpdates.push(update);
+        if (!updateTimeout) {
+          updateTimeout = setTimeout(function () {
+            batchSignal(batchUpdates);
+            batchUpdates = [];
+            updateTimeout = null;
+          }, 100);
+        }
+      }
+    };
   };
 
   //--------------------------------------
