@@ -160,13 +160,35 @@
         self.overlay = null;
       }
 
+      /**
+       * Update classes for toolbar items
+       */
+      var updateSelected = function () {
+
+        // Remove the 'selected' class from the currently selected item (or parent)
+        var current = document.getElementById(self.selectedItem.id);
+        var shapesBtn = document.getElementById('OT_shapes');
+        var currentIsShape = shapesBtn.classList.contains('selected');
+        currentIsShape ? shapesBtn.classList.remove('selected') : current.classList.remove('selected');
+
+        // If the newly selected item is a shape, update the shapes subpanel button
+        var newlySelected = document.getElementById(item.id);
+        if (newlySelected.parentElement.classList.contains('shapes')) {
+          shapesBtn.classList.add('selected');
+        } else {
+          newlySelected.classList.add('selected');
+        }
+      }
+
       if (item && item.id === 'OT_capture') {
         self.captureScreenshot();
       } else if (item && item.id.indexOf('OT_line_width') !== -1) {
         if (item.size) {
           self.changeLineWidth(item.size);
         }
-      } else {
+      // 'undo' and 'clear' are actions, not items that can be selected
+      } else if (item.id !== 'OT_undo' && item.id !== 'OT_clear') {
+        updateSelected();
         self.selectedItem = item;
       }
     };
@@ -195,11 +217,6 @@
 
     this.undo = function () {
       undoLast(false, self.session.connection.connectionId);
-      if (self.session) {
-        self.session.signal({
-          type: 'otAnnotation_undo'
-        });
-      }
     }
 
     // TODO Allow the user to choose the image type? (jpg, png) Also allow size?
@@ -523,6 +540,7 @@
                       smoothed: selectedItem.enableSmoothing,
                       startPoint: firstPoint,
                       endPoint: endPoint,
+                      selectedItem: selectedItem,
                       platform: 'web',
                       guid: event.guid
 
@@ -1580,6 +1598,26 @@
 
         panel.innerHTML = toolbarItems.join('');
 
+        /**
+         * Since the color picker button uses its background to display the
+         * current color, we need to add a pseudo-element element to the toolbar
+         * to simulate hover state on the button.  When the user hovers over the
+         * button, we add the 'colors-hover' class to 'OT_toolbar' which has a
+         * pseudo-element which makes it seem as though the color picker button
+         * background is changing.
+         * TODO: Update the color picker and color choices to display colors
+         *       using pseudo-elements, so that we can more easily apply hover
+         *       states.
+         */
+        var toggleColorsHover = function (hover) {
+          var action = hover ? 'add' : 'remove';
+          document.getElementById('OT_toolbar').classList[action]('colors-hover');
+        };
+        var colors = document.getElementById('OT_colors');
+        colors.addEventListener('mouseenter', function () { toggleColorsHover(true); });
+        colors.addEventListener('mouseleave', function () { toggleColorsHover(false); });
+        /** End color picker hover state */
+
         panel.onclick = function (ev) {
           var group = ev.target.getAttribute('data-type') === 'group';
           var itemName = ev.target.getAttribute('data-col');
@@ -1843,6 +1881,7 @@
       canvases.push(canvas);
       canvases.forEach(function (canvas) {
         canvas.selectedItem = canvas.selectedItem || self.items[0];
+        document.getElementById(canvas.selectedItem.id).classList.add('selected');
       });
     };
 
