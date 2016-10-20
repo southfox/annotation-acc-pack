@@ -263,27 +263,22 @@ receivedSignalType:(NSString*)type
     CGFloat thisCanvasWidth = CGRectGetWidth(self.annotationScrollView.annotationView.bounds);
     CGFloat thisCanvasHeight = CGRectGetHeight(self.annotationScrollView.annotationView.bounds);
     
-    CGFloat remoteCanvasAspectRatio = remoteCanvasWidth / remoteCanvasHeight;
-    CGFloat thisCanvasAspectRatio = thisCanvasWidth / thisCanvasHeight;
-    
     // apply scale factor
     // Based on this: http://www.iosres.com/index-legacy.html
     // iPhone 4&4s aspect ratio is 3:2 = 0.666
     // iPhone 5&5s&6&6s aspect ratio is 16:9 = 0.5625
     // iPad aspect ratio is 4:3 = 0.75
     
-    // we don't even need to calculate whether letter boxing is produced on horizontal or vertical level
-    // and we can calculate whether the scale should apply on horizontal or vertical level
     CGFloat scale = 1.0f;
-    if (thisCanvasAspectRatio < remoteCanvasAspectRatio) {
+    if (thisCanvasWidth < thisCanvasHeight) {
         scale = thisCanvasHeight / remoteCanvasHeight;
     }
     else {
         scale = thisCanvasWidth / remoteCanvasWidth;
     }
 
-    CGFloat canvasCenterX = remoteCanvasWidth / 2.0f * scale;
-    CGFloat canvasCenterY = remoteCanvasHeight / 2.0f * scale;
+    remoteCanvasWidth *= scale;
+    remoteCanvasHeight *= scale;
     
     // remote x and y
     CGFloat fromX = [json[@"fromX"] floatValue] * scale;
@@ -294,19 +289,19 @@ receivedSignalType:(NSString*)type
     OTAnnotationPoint *pt1;
     OTAnnotationPoint *pt2;
     
-    if (thisCanvasAspectRatio < remoteCanvasAspectRatio) {
+    if (thisCanvasWidth < thisCanvasHeight) {
         
         // letter boxing is produced on horizontal level
-        CGFloat actualDrawingFromX = fromX - (canvasCenterX - self.annotationScrollView.annotationView.center.x);
-        CGFloat actualDrawingToX = toX - (canvasCenterX - self.annotationScrollView.annotationView.center.x);
+        CGFloat actualDrawingFromX = fromX - (remoteCanvasWidth / 2 - self.annotationScrollView.annotationView.center.x);
+        CGFloat actualDrawingToX = toX - (remoteCanvasWidth / 2 - self.annotationScrollView.annotationView.center.x);
         pt1 = [OTAnnotationPoint pointWithX:actualDrawingFromX andY:fromY];
         pt2 = [OTAnnotationPoint pointWithX:actualDrawingToX andY:toY];
     }
     else {
         
         // letter boxing is produced on vertical level
-        CGFloat actualDrawingFromY = fromY - (canvasCenterY - self.annotationScrollView.annotationView.center.y);
-        CGFloat actualDrawingToY = toY - (canvasCenterY - self.annotationScrollView.annotationView.center.y);
+        CGFloat actualDrawingFromY = fromY - (remoteCanvasHeight / 2 - self.annotationScrollView.annotationView.center.y);
+        CGFloat actualDrawingToY = toY - (remoteCanvasHeight / 2 - self.annotationScrollView.annotationView.center.y);
         pt1 = [OTAnnotationPoint pointWithX:fromX andY:actualDrawingFromY];
         pt2 = [OTAnnotationPoint pointWithX:toX andY:actualDrawingToY];
     }
@@ -384,7 +379,7 @@ receivedSignalType:(NSString*)type
             signalingPoint[@"videoHeight"] = @(latestScreenShareStream.videoDimensions.height);
             signalingPoint[@"canvasWidth"] = @(canvasSize.width);
             signalingPoint[@"canvasHeight"] = @(canvasSize.height);
-            signalingPoint[@"lineWidth"] = @(2);
+            signalingPoint[@"lineWidth"] = @(3);
             signalingPoint[@"mirrored"] = @(NO);
             signalingPoint[@"smoothed"] = @(YES);    // this is to enable drawing smoothly
         }
