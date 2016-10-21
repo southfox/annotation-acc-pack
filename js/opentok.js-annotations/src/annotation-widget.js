@@ -166,13 +166,13 @@
       var updateSelected = function () {
 
         // Remove the 'selected' class from the currently selected item (or parent)
-        var current = document.getElementById(self.selectedItem.id);
-        var shapesBtn = document.getElementById('OT_shapes');
+        var current = context.getElementById(self.selectedItem.id);
+        var shapesBtn = context.getElementById('OT_shapes');
         var currentIsShape = shapesBtn.classList.contains('selected');
         currentIsShape ? shapesBtn.classList.remove('selected') : current.classList.remove('selected');
 
         // If the newly selected item is a shape, update the shapes subpanel button
-        var newlySelected = document.getElementById(item.id);
+        var newlySelected = context.getElementById(item.id);
         if (newlySelected.parentElement.classList.contains('shapes')) {
           shapesBtn.classList.add('selected');
         } else {
@@ -1613,7 +1613,7 @@
           var action = hover ? 'add' : 'remove';
           document.getElementById('OT_toolbar').classList[action]('colors-hover');
         };
-        var colors = document.getElementById('OT_colors');
+        var colors = context.getElementById('OT_colors');
         colors.addEventListener('mouseenter', function () { toggleColorsHover(true); });
         colors.addEventListener('mouseleave', function () { toggleColorsHover(false); });
         /** End color picker hover state */
