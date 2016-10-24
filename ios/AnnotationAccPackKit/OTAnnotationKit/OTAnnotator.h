@@ -39,16 +39,6 @@ typedef void (^OTAnnotationDataReceivingBlock)(NSArray *data);
 @interface OTAnnotator : NSObject
 
 /**
- *  A boolean value to indicate whether the annotationView should receive remote annotation data and then annotate. Enabling this property will not allow to anntoate locally.
- */
-@property (readonly, nonatomic, getter=isReceiveAnnotationEnabled) BOOL receiveAnnotationEnabled;
-
-/**
- *  A boolean value to indicate whether the annotationView should send annotation data.
- */
-@property (readonly, nonatomic, getter=isSendAnnotationEnabled) BOOL sendAnnotationEnabled;
-
-/**
  *  Initialize a new `OTAnnotator` instsance.
  *
  *  @return A new `OTAnnotator` instsance.
@@ -56,38 +46,21 @@ typedef void (^OTAnnotationDataReceivingBlock)(NSArray *data);
 - (instancetype)init;
 
 /**
- *  Registers to the shared session: [OTAcceleratorSession] and connect for receiving annotation data.
+ *  Registers to the shared session: [OTAcceleratorSession] and connect.
  *
  *  @param size The size of the annotationScrollView
  *
  *  @return An error to indicate whether it connects successfully, non-nil if it fails.
  */
-- (NSError *)connectForReceivingAnnotationWithSize:(CGSize)size;
+- (NSError *)connectWithSize:(CGSize)size;
 
 /**
- *  Registers to the shared session: [OTAcceleratorSession] and connect for sending annotation data.
- *
- *  @param size The size of the annotationScrollView
- *
- *  @return An error to indicate whether it connects successfully, non-nil if it fails.
- */
-- (NSError *)connectForSendingAnnotationWithSize:(CGSize)size;
-
-/**
- *  An alternative connect method for receiving annotation data with a completion block handler.
+ *  An alternative connect method with a completion block handler.
  *
  *  @param handler The completion handler to call with the change.
  */
-- (void)connectForReceivingAnnotationWithSize:(CGSize)size
-                            completionHandler:(OTAnnotationBlock)handler;
-
-/**
- *  An alternative connect method for sending annotation data with a completion block handler.
- *
- *  @param handler The completion handler to call with the change.
- */
-- (void)connectForSendingAnnotationWithSize:(CGSize)size
-                          completionHandler:(OTAnnotationBlock)handler;
+- (void)connectWithSize:(CGSize)size
+      completionHandler:(OTAnnotationBlock)handler;
 
 /**
  *  De-registers to the shared session: [OTAcceleratorSession] and stops publishing/subscriber.

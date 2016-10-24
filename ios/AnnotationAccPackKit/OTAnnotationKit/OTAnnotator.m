@@ -22,8 +22,6 @@
     OTStream *latestScreenShareStream;
     CGSize canvasSize;
 }
-@property (nonatomic) BOOL receiveAnnotationEnabled;
-@property (nonatomic) BOOL sendAnnotationEnabled;
 
 @property (nonatomic) OTAnnotationScrollView *annotationScrollView;
 @property (nonatomic) OTAcceleratorSession *session;
@@ -54,32 +52,6 @@
     
     self.handler = handler;
     [self connectWithSize:size];
-}
-
-- (NSError *)connectForReceivingAnnotationWithSize:(CGSize)size {
-    _receiveAnnotationEnabled = YES;
-    _sendAnnotationEnabled = NO;
-    return [self connectWithSize:size];
-}
-
-- (NSError *)connectForSendingAnnotationWithSize:(CGSize)size {
-    _receiveAnnotationEnabled = NO;
-    _sendAnnotationEnabled = YES;
-    return [self connectWithSize:size];
-}
-
-- (void)connectForReceivingAnnotationWithSize:(CGSize)size
-                            completionHandler:(OTAnnotationBlock)handler {
-    _receiveAnnotationEnabled = YES;
-    _sendAnnotationEnabled = NO;
-    [self connectWithSize:size completionHandler:handler];
-}
-
-- (void)connectForSendingAnnotationWithSize:(CGSize)size
-                          completionHandler:(OTAnnotationBlock)handler {
-    _receiveAnnotationEnabled = NO;
-    _sendAnnotationEnabled = YES;
-    [self connectWithSize:size completionHandler:handler];
 }
 
 - (NSError *)disconnect {
@@ -161,8 +133,7 @@ receivedSignalType:(NSString*)type
     
     if (![type isEqualToString:@"otAnnotation_pen"]) return;
 
-    if (self.receiveAnnotationEnabled &&
-        self.session.sessionConnectionStatus == OTSessionConnectionStatusConnected &&
+    if (self.session.sessionConnectionStatus == OTSessionConnectionStatusConnected &&
         ![self.session.connection.connectionId isEqualToString:connection.connectionId]) {
         
         NSArray *jsonArray = [JSON parseJSON:string];

@@ -43,7 +43,7 @@
                                      
                                      // connect for annotation
                                      self.annotator = [[OTAnnotator alloc] init];
-                                     [self.annotator connectForSendingAnnotationWithSize:self.sharer.subscriberView.frame.size completionHandler:^(OTAnnotationSignal signal, NSError *error) {
+                                     [self.annotator connectWithSize:self.sharer.subscriberView.frame.size completionHandler:^(OTAnnotationSignal signal, NSError *error) {
                                          
                                          if (signal == OTAnnotationSessionDidConnect){
                                              
