@@ -1873,15 +1873,17 @@
     /**
      * Links an annotation canvas to the toolbar so that menu actions can be handled on it.
      * @param canvas The annotation canvas to be linked to the toolbar.
+     * @param externalWindow External screen sharing window
      */
-    this.addCanvas = function (canvas) {
+    this.addCanvas = function (canvas, externalWindow) {
       var self = this;
+      var context = externalWindow ? externalWindow.document : document;
       canvas.link(self.session);
       canvas.colors(self.colors);
       canvases.push(canvas);
       canvases.forEach(function (canvas) {
         canvas.selectedItem = canvas.selectedItem || self.items[0];
-        document.getElementById(canvas.selectedItem.id).classList.add('selected');
+        context.getElementById(canvas.selectedItem.id).classList.add('selected');
       });
     };
 

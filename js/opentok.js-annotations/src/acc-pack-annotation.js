@@ -358,7 +358,7 @@
       externalWindow: _elements.externalWindow
     });
 
-    toolbar.addCanvas(_canvas);
+    toolbar.addCanvas(_canvas, _elements.externalWindow);
 
     var onScreenCapture = _this.options.onScreenCapture ? _this.options.onScreenCapture :
       function (dataUrl) {
