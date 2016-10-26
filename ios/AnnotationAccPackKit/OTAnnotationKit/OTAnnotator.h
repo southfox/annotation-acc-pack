@@ -48,19 +48,16 @@ typedef void (^OTAnnotationDataReceivingBlock)(NSArray *data);
 /**
  *  Registers to the shared session: [OTAcceleratorSession] and connect.
  *
- *  @param size The size of the annotationScrollView
- *
  *  @return An error to indicate whether it connects successfully, non-nil if it fails.
  */
-- (NSError *)connectWithSize:(CGSize)size;
+- (NSError *)connect;
 
 /**
  *  An alternative connect method with a completion block handler.
  *
  *  @param handler The completion handler to call with the change.
  */
-- (void)connectWithSize:(CGSize)size
-      completionHandler:(OTAnnotationBlock)handler;
+- (void)connectWithCompletionHandler:(OTAnnotationBlock)handler;
 
 /**
  *  De-registers to the shared session: [OTAcceleratorSession] and stops publishing/subscriber.
@@ -90,6 +87,10 @@ typedef void (^OTAnnotationDataReceivingBlock)(NSArray *data);
  *  The associated annotation scroll view.
  *
  *  @discussion This will be nil until OTAnnotationSessionDidConnect being signaled.
+ *
+ *  ******************************************************************************************
+ *  The annotationScrollView.scrollView.contentSize is the critical data for remote annotation
+ *  ******************************************************************************************
  */
 @property (readonly, nonatomic) OTAnnotationScrollView *annotationScrollView;
 

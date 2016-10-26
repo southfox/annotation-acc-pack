@@ -54,6 +54,7 @@
                                              
                                                            // configure annotation view
                                                            self.annotator.annotationScrollView.frame = self.view.bounds;
+                                                           self.annotator.annotationScrollView.scrollView.contentSize = self.sharer.subscriberView.frame.size;
                                                            [self.view addSubview:self.annotator.annotationScrollView];
                                                            
                                                            // self.sharer.subscriberView is the screen shared from a remote client.

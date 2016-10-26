@@ -49,6 +49,7 @@
                                              
                                              // configure annotation view
                                              self.annotator.annotationScrollView.frame = self.view.bounds;
+                                             self.annotator.annotationScrollView.scrollView.contentSize = self.view.bounds.size;
                                              [self.annotator.annotationScrollView addContentView:self.sharer.subscriberView];
                                              [self.view addSubview:self.annotator.annotationScrollView];
                                              

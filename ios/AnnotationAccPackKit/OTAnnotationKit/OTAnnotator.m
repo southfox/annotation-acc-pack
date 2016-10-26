@@ -20,7 +20,6 @@
     NSMutableDictionary *signalingPoint;
     NSMutableArray *signalingPoints;
     OTStream *latestScreenShareStream;
-    CGSize canvasSize;
 }
 
 @property (nonatomic) OTAnnotationScrollView *annotationScrollView;
@@ -41,24 +40,21 @@
     return self;
 }
 
-- (NSError *)connectWithSize:(CGSize)size {
+- (NSError *)connect {
     if (!self.delegate && !self.handler) return nil;
-    canvasSize = size;
     return [OTAcceleratorSession registerWithAccePack:self];
 }
 
-- (void)connectWithSize:(CGSize)size
-      completionHandler:(OTAnnotationBlock)handler {
+- (void)connectWithCcompletionHandler:(OTAnnotationBlock)handler {
     
     self.handler = handler;
-    [self connectWithSize:size];
+    [self connect];
 }
 
 - (NSError *)disconnect {
     if (self.annotationScrollView) {
         [self.annotationScrollView.annotationView removeAllAnnotatables];
     }
-    canvasSize = CGSizeZero;
     return [OTAcceleratorSession deregisterWithAccePack:self];
 }
 
@@ -76,7 +72,7 @@
 - (void) sessionDidConnect:(OTSession *)session {
     
     self.annotationScrollView = [[OTAnnotationScrollView alloc] init];
-    self.annotationScrollView.scrollView.contentSize = canvasSize;
+    self.annotationScrollView.scrollView.contentSize = self.annotationScrollView.bounds.size;
     self.annotationScrollView.annotationView.annotationViewDelegate = self;
     [self.annotationScrollView.annotationView setCurrentAnnotatable:[OTAnnotationPath pathWithStrokeColor:nil]];
     [self notifiyAllWithSignal:OTAnnotationSessionDidConnect
@@ -108,11 +104,13 @@
 }
 
 - (void)session:(OTSession *)session connectionCreated:(OTConnection *)connection {
-    
+    [self notifiyAllWithSignal:OTAnnotationConnectionCreated
+                         error:nil];
 }
 
 - (void)session:(OTSession *)session connectionDestroyed:(OTStream *)stream {
-    
+    [self notifiyAllWithSignal:OTAnnotationConnectionDestroyed
+                         error:nil];
 }
 
 - (void)sessionDidBeginReconnecting:(OTSession *)session {
@@ -135,6 +133,9 @@ receivedSignalType:(NSString*)type
 
     if (self.session.sessionConnectionStatus == OTSessionConnectionStatusConnected &&
         ![self.session.connection.connectionId isEqualToString:connection.connectionId]) {
+        
+        // make sure contentSize is up-to-date
+        self.annotationScrollView.scrollView.contentSize = self.annotationScrollView.bounds.size;
         
         NSArray *jsonArray = [JSON parseJSON:string];
         
@@ -204,8 +205,8 @@ receivedSignalType:(NSString*)type
     
     CGFloat remoteCanvasWidth = [json[@"canvasWidth"] floatValue];
     CGFloat remoteCanvasHeight = [json[@"canvasHeight"] floatValue];
-    CGFloat xScaleFactor = canvasSize.width / remoteCanvasWidth;
-    CGFloat yScaleFactor = canvasSize.height / remoteCanvasHeight;
+    CGFloat xScaleFactor = self.annotationScrollView.bounds.size.width / remoteCanvasWidth;
+    CGFloat yScaleFactor = self.annotationScrollView.bounds.size.height / remoteCanvasHeight;
     
     CGFloat fromX = [json[@"fromX"] floatValue] * xScaleFactor;
     CGFloat fromY = [json[@"fromY"] floatValue] * yScaleFactor;
@@ -348,8 +349,8 @@ receivedSignalType:(NSString*)type
             signalingPoint[@"fromY"] = @(touchPoint.y);
             signalingPoint[@"videoWidth"] = @(latestScreenShareStream.videoDimensions.width);
             signalingPoint[@"videoHeight"] = @(latestScreenShareStream.videoDimensions.height);
-            signalingPoint[@"canvasWidth"] = @(canvasSize.width);
-            signalingPoint[@"canvasHeight"] = @(canvasSize.height);
+            signalingPoint[@"canvasWidth"] = @(self.annotationScrollView.scrollView.contentSize.width);
+            signalingPoint[@"canvasHeight"] = @(self.annotationScrollView.scrollView.contentSize.height);
             signalingPoint[@"lineWidth"] = @(3);
             signalingPoint[@"mirrored"] = @(NO);
             signalingPoint[@"smoothed"] = @(YES);    // this is to enable drawing smoothly
