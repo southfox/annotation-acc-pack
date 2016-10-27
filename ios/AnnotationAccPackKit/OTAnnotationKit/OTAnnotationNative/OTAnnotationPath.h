@@ -30,7 +30,7 @@
 /**
  *  The stroke color of the path.
  */
-@property (readonly, nonatomic) UIColor *strokeColor;
+@property (nonatomic) UIColor *strokeColor;
 
 /**
  *  The start point of the path.

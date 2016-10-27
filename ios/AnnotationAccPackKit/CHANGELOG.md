@@ -4,12 +4,23 @@ The changelog for `screensharing-annotation-acc-pack` iOS.
 
 --------------------------------------
 
-1.1.4
+1.1.5
 -----
 
 ### Breaking changes
 
 - Remove `canvasSize` property from all connection methods for giving back flexibility to change it even after connecting to a session.
+
+### Fixes
+
+- Include `color` property for sending remote annotation data.
+- Make sure `color` property won't be affected by exchanging annotation data.
+
+
+1.1.4
+-----
+
+### DEPRECATED
 
 1.1.3
 -----

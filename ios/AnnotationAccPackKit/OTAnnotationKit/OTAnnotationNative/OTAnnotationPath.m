@@ -27,7 +27,6 @@
 @end
 
 @interface OTAnnotationPath()
-@property (nonatomic) UIColor *strokeColor;
 @property (nonatomic) CGPoint startPoint;
 @property (nonatomic) CGPoint endPoint;
 @property (nonatomic) NSMutableArray<OTAnnotationPoint *> *mutablePoints;

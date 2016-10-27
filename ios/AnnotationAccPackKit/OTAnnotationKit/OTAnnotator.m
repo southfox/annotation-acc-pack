@@ -13,6 +13,7 @@
 
 #import <OTAcceleratorPackUtil/OTAcceleratorPackUtil.h>
 #import "OTAnnotator.h"
+#import "OTAnnotationToolbarView_UserInterfaces.h"
 #import "UIColor+HexString.h"
 #import "JSON.h"
 
@@ -45,7 +46,7 @@
     return [OTAcceleratorSession registerWithAccePack:self];
 }
 
-- (void)connectWithCcompletionHandler:(OTAnnotationBlock)handler {
+- (void)connectWithCompletionHandler:(OTAnnotationBlock)handler {
     
     self.handler = handler;
     [self connect];
@@ -354,6 +355,18 @@ receivedSignalType:(NSString*)type
             signalingPoint[@"lineWidth"] = @(3);
             signalingPoint[@"mirrored"] = @(NO);
             signalingPoint[@"smoothed"] = @(YES);    // this is to enable drawing smoothly
+            
+            // color property
+            OTAnnotationPath *path = (OTAnnotationPath *)self.annotationScrollView.annotationView.currentAnnotatable;
+            if (self.annotationScrollView.annotationView.currentAnnotatable &&
+                [self.annotationScrollView.annotationView.currentAnnotatable isMemberOfClass:[OTAnnotationPath class]]) {
+
+                // update this to ensure color property is not affected by remote annotation data
+                if (self.annotationScrollView.toolbarView) {
+                    path.strokeColor = self.annotationScrollView.toolbarView.colorPickerView.selectedColor;
+                }
+                signalingPoint[@"color"] = [UIColor hexStringFromColor:path.strokeColor];
+            }
         }
         else {
             signalingPoint[@"toX"] = @(touchPoint.x);

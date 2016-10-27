@@ -37,7 +37,6 @@
     
     if (!_annotatable) {
         [self.annotationView setCurrentAnnotatable:nil];
-        
     }
     
     self.scrollView.scrollEnabled = !_annotatable;
