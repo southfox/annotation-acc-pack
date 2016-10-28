@@ -247,6 +247,9 @@
           height = canvas.height;
           width = width * scale;
         }
+        // If stretched to fill, we need an offset to center the image
+        offsetX = (width - canvas.width) / 2;
+        offsetY = (height - canvas.height) / 2;
 
       } else {
         if (width > height) {
@@ -258,11 +261,9 @@
           height = canvas.height;
           width = width * scale;
         }
+        offsetX = 0;
+        offsetY = 0;
       }
-
-      // If stretched to fill, we need an offset to center the image
-      offsetX = (width - canvas.width) / 2;
-      offsetY = (height - canvas.height) / 2;
 
       // Combine the video and annotation images
       var image = new Image();
@@ -272,7 +273,7 @@
           ctxCopy.translate(width, 0);
           ctxCopy.scale(-1, 1);
         }
-        ctxCopy.drawImage(image, offsetX, offsetY, width, height);
+        ctxCopy.drawImage(image, offsetX, offsetY, canvas.width, canvas.height);
 
         // We want to make sure we draw the annotations the same way, so we need to flip back
         if (mirrored) {
@@ -2348,6 +2349,15 @@
 
     _log(_logEventData.actionEnd, _logEventData.variationSuccess);
   };
+
+  var hideToolbar = function () {
+    $(toolbar.parent).hide();
+  };
+
+  var showToolbar = function () {
+    $(toolbar.parent).show();
+  };
+
   /**
    * @constructor
    * Represents an annotation component, used for annotation over video or a shared screen
@@ -2378,7 +2388,9 @@
     linkCanvas: linkCanvas,
     resizeCanvas: resizeCanvas,
     addSubscriberToExternalWindow: addSubscriberToExternalWindow,
-    end: end
+    end: end,
+    hideToolbar:hideToolbar,
+    showToolbar:showToolbar
   };
 
   if (typeof exports === 'object') {
