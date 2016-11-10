@@ -46,6 +46,7 @@
 }
 
 - (void)dealloc {
+    [self disconnect];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -62,6 +63,7 @@
 - (NSError *)disconnect {
     if (self.annotationScrollView) {
         [self.annotationScrollView.annotationView removeAllAnnotatables];
+        [self.annotationScrollView.annotationView removeAllRemoteAnnotatables];
     }
     return [OTAcceleratorSession deregisterWithAccePack:self];
 }
@@ -82,7 +84,6 @@
     self.annotationScrollView = [[OTAnnotationScrollView alloc] init];
     self.annotationScrollView.scrollView.contentSize = self.annotationScrollView.bounds.size;
     self.annotationScrollView.annotationView.annotationViewDelegate = self;
-    [self.annotationScrollView initializeToolbarView];
     [self notifiyAllWithSignal:OTAnnotationSessionDidConnect
                          error:nil];
 }
@@ -163,6 +164,12 @@ receivedSignalType:(NSString*)type
         }
         
         if ([type isEqualToString:@"otAnnotation_undo"]) {
+            
+            if (jsonArray.count == 1 && [jsonArray.firstObject isEqual:[NSNull null]]) {
+                [self.annotationScrollView.annotationView removeRemoteAnnotatableWithGUID:nil];
+                return;
+            }
+            
             for (NSString *guid in jsonArray) {
                 [self.annotationScrollView.annotationView removeRemoteAnnotatableWithGUID:guid];
             }
@@ -238,14 +245,19 @@ receivedSignalType:(NSString*)type
 
 - (void)eraseButtonPressed:(NSNotification *)notification {
     
-    if (!latestScreenShareStream) return;
+    if (!notification || !notification.object || !latestScreenShareStream) return;
 
     NSString *jsonString;
     
-    if ([notification.object isMemberOfClass:[OTAnnotationPath class]]) {
+    if ([notification.object isMemberOfClass:[OTAnnotationPath class]] ) {
         OTAnnotationPath *path = (OTAnnotationPath *)notification.object;
         jsonString = [JSON stringify:@[path.uuid]];
-        
+    }
+    else if ([notification.object isMemberOfClass:[OTAnnotationTextView class]]) {
+        jsonString = [JSON stringify:@[[NSNull null]]];
+    }
+    
+    if (jsonString) {
         NSError *error;
         [[OTAcceleratorSession getAcceleratorPackSession] signalWithType:@"otAnnotation_undo" string:jsonString connection:latestScreenShareStream.connection error:&error];
         if (error) {
