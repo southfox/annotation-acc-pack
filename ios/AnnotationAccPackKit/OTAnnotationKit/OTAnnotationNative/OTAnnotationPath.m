@@ -94,6 +94,24 @@
     [self addPoint:point];
 }
 
+- (void)drawCurveToPoint:(OTAnnotationPoint *)toPoint {
+    
+    if (self.points.count == 0 || self.points.count == 1) {
+        [self addPoint:toPoint];
+    }
+    else {
+        CGPoint lastPoint = self.points.lastObject.cgPoint;
+        CGPoint seconLastPoint = self.points[self.points.count - 2].cgPoint;
+        
+        CGPoint middlePoint = CGPointMake((lastPoint.x + seconLastPoint.x) / 2, (lastPoint.y + seconLastPoint.y) / 2);
+        CGPoint controlPoint = CGPointMake((lastPoint.x + toPoint.x) / 2, (lastPoint.y + toPoint.y) / 2);
+        
+        [self moveToPoint:middlePoint];
+        [self addQuadCurveToPoint:controlPoint controlPoint:lastPoint];
+        [self addPoint:toPoint];
+    }
+}
+
 #pragma mark - private method
 - (void)addPoint:(OTAnnotationPoint *)touchPoint {
     if (_mutablePoints.count == 0) {

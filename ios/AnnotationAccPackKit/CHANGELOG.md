@@ -4,6 +4,14 @@ The changelog for `screensharing-annotation-acc-pack` iOS.
 
 --------------------------------------
 
+1.1.10
+-----
+
+### Fixes
+
+- Fix a bug that color picker bar does not dismiss properly.
+- Fix a bug that drawing a circle results in octagons.
+
 1.1.9
 -----
 

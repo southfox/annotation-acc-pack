@@ -21,6 +21,8 @@
     NSMutableDictionary *signalingPoint;
     NSMutableArray *signalingPoints;
     OTStream *latestScreenShareStream;
+    
+    NSMutableArray *ovalPoints;
 }
 
 @property (nonatomic) OTAnnotationScrollView *annotationScrollView;
@@ -183,8 +185,8 @@ receivedSignalType:(NSString*)type
         
         if (jsonArray.count == 0) return;
         
+        // draw text
         if ([type isEqualToString:@"otAnnotation_text"] && jsonArray.count == 1) {
-            // draw text
             [self drawText:[jsonArray firstObject]];
             return;
         }
@@ -203,6 +205,25 @@ receivedSignalType:(NSString*)type
         }
         else {
             self.annotationScrollView.annotationView.currentAnnotatable = [[OTRemoteAnnotationPath alloc] initWithStrokeColor:nil];
+        }
+        
+        // draw oval
+        if ([jsonArray.lastObject isKindOfClass:[NSDictionary class]] && [jsonArray.lastObject[@"selectedItem"][@"id"] isEqualToString:@"OT_oval"]) {
+            
+            if (!ovalPoints) {
+                ovalPoints = [NSMutableArray arrayWithCapacity:10];
+            }
+            
+            [ovalPoints addObjectsFromArray:jsonArray];
+            
+            // this is a workaround because an oval data array is composed by two signals. one has seven elements and another has three elements. 
+            if (ovalPoints.count == 10) {
+                jsonArray = [NSArray arrayWithArray:ovalPoints];
+                ovalPoints = nil;
+            }
+            else {
+                return;
+            }
         }
         
         // calculate drawing position
@@ -395,13 +416,18 @@ receivedSignalType:(NSString*)type
     OTAnnotationPoint *pt1 = [OTAnnotationPoint pointWithX:fromX andY:fromY];
     OTAnnotationPoint *pt2 = [OTAnnotationPoint pointWithX:toX andY:toY];
     
-    if (path.points.count == 0) {
-        [path startAtPoint:pt1];
-        [path drawToPoint:pt2];
+    if ([json[@"smoothed"] boolValue]) {
+        [path drawCurveToPoint:pt2];
     }
     else {
-        [path drawToPoint:pt1];
-        [path drawToPoint:pt2];
+        if (path.points.count == 0) {
+            [path startAtPoint:pt1];
+            [path drawToPoint:pt2];
+        }
+        else {
+            [path drawToPoint:pt1];
+            [path drawToPoint:pt2];
+        }
     }
 }
 
@@ -456,14 +482,19 @@ receivedSignalType:(NSString*)type
         pt1 = [OTAnnotationPoint pointWithX:fromX andY:actualDrawingFromY];
         pt2 = [OTAnnotationPoint pointWithX:toX andY:actualDrawingToY];
     }
-
-    if (path.points.count == 0) {
-        [path startAtPoint:pt1];
-        [path drawToPoint:pt2];
+    
+    if ([json[@"smoothed"] boolValue]) {
+        [path drawCurveToPoint:pt2];
     }
     else {
-        [path drawToPoint:pt1];
-        [path drawToPoint:pt2];
+        if (path.points.count == 0) {
+            [path startAtPoint:pt1];
+            [path drawToPoint:pt2];
+        }
+        else {
+            [path drawToPoint:pt1];
+            [path drawToPoint:pt2];
+        }
     }
 }
 

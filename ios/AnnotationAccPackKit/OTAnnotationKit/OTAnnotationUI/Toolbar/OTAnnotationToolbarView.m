@@ -178,7 +178,7 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
                                                       usingBlock:^(NSNotification *notification) {
                                                           
                                                           self.annotationScrollView.annotatable = NO;
-                                                          [self dismissColorPickerView];
+                                                          [self dismissColorPickerViewWithAniamtion:NO];
                                                           [self.toolbar removeContentViewAtIndex:0];
                                                           [self moveSelectionShadowViewTo:nil];
                                                           [self resetToolbarButtons];
@@ -213,7 +213,7 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
         [[NSNotificationCenter defaultCenter] postNotificationName:kOTAnnotationToolbarDidAddTextAnnotation object:self.annotationScrollView.annotationView.currentAnnotatable];
     }
     self.annotationScrollView.annotatable = NO;
-    [self dismissColorPickerView];
+    [self dismissColorPickerViewWithAniamtion:YES];
     [self.toolbar removeContentViewAtIndex:0];
     [self moveSelectionShadowViewTo:nil];
     [self resetToolbarButtons];
@@ -264,7 +264,7 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
     }
     else if (sender == self.annotateButton) {
         self.annotationScrollView.annotatable = YES;
-        [self dismissColorPickerView];
+        [self dismissColorPickerViewWithAniamtion:YES];
         [self.toolbar insertContentView:self.doneButton atIndex:0];
         OTAnnotationPath *path = [[OTAnnotationPath alloc] initWithStrokeColor:self.colorPickerView.selectedColor];
         [self.annotationScrollView.annotationView setCurrentAnnotatable:path];
@@ -273,7 +273,7 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
     else if (sender == self.textButton) {
     
         self.annotationScrollView.annotatable = YES;
-        [self dismissColorPickerView];
+        [self dismissColorPickerViewWithAniamtion:NO];
         [self.toolbar insertContentView:self.doneButton atIndex:0];
         
         OTAnnotationEditTextViewController *editTextViewController;
@@ -301,7 +301,7 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
     }
     else if (sender == self.screenshotButton) {
         
-        [self dismissColorPickerView];
+        [self dismissColorPickerViewWithAniamtion:NO];
         [self moveSelectionShadowViewTo:nil];
         
         if (self.toolbarViewDataSource) {

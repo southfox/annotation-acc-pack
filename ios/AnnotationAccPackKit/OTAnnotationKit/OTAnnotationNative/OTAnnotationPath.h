@@ -75,6 +75,8 @@
  */
 - (void)drawToPoint:(OTAnnotationPoint *)point;
 
+- (void)drawCurveToPoint:(OTAnnotationPoint *)toPoint;
+
 /**
  *  Initialize a path with given existence coordinates and given strokeColor. The actual construction will not happen until you call drawWholePath.
  *
