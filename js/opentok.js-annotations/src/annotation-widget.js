@@ -256,24 +256,28 @@
           scale = canvas.width / width;
           width = canvas.width;
           height = height * scale;
+          offsetX = 0;
+          offsetY = (canvas.height - height)/2;
         } else {
           scale = canvas.height / height;
           height = canvas.height;
           width = width * scale;
+          offsetX = (canvas.width - width) / 2;
+          offsetY = 0;
         }
-        offsetX = 0;
-        offsetY = 0;
+
       }
 
       // Combine the video and annotation images
       var image = new Image();
+
       image.onload = function () {
         var ctxCopy = canvasCopy.getContext('2d');
         if (mirrored) {
           ctxCopy.translate(width, 0);
           ctxCopy.scale(-1, 1);
         }
-        ctxCopy.drawImage(image, offsetX, offsetY, canvas.width, canvas.height);
+        ctxCopy.drawImage(image, offsetX, offsetY, width,height);
 
         // We want to make sure we draw the annotations the same way, so we need to flip back
         if (mirrored) {
