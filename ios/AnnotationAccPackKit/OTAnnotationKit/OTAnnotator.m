@@ -39,10 +39,6 @@
     
     if (self = [super init]) {
         _session = [OTAcceleratorSession getAcceleratorPackSession];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eraseButtonPressed:) name:kOTAnnotationToolbarDidPressEraseButton object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cleanButtonPressed:) name:kOTAnnotationToolbarDidPressCleanButton object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidAdd:) name:kOTAnnotationToolbarDidAddTextAnnotation object:nil];
     }
     return self;
 }

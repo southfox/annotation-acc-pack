@@ -4,6 +4,12 @@ The changelog for `screensharing-annotation-acc-pack` iOS.
 
 --------------------------------------
 
+1.2.0
+-----
+
+### Enhancements
+- Re design annotation toolbar to be more natural
+
 1.1.12
 -----
 

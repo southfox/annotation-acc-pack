@@ -163,11 +163,19 @@
 
 - (void)commitCurrentAnnotatable {
     
+    if ([self.currentAnnotatable isKindOfClass:[OTAnnotationPath class]]) {
+        OTAnnotationPath *path = (OTAnnotationPath *)self.currentAnnotatable;
+        previousStrokeColor = path.strokeColor;
+    }
+    else if ([self.currentAnnotatable isKindOfClass:[OTAnnotationTextView class]]) {
+        OTAnnotationTextView *textView = (OTAnnotationTextView *)self.currentAnnotatable;
+        previousStrokeColor = textView.textColor;
+    }
+    
     if ([self.currentAnnotatable respondsToSelector:@selector(commit)]) {
         [self.currentAnnotatable commit];
     }
     _currentAnnotatable = nil;
-    previousStrokeColor = _currentDrawPath.strokeColor;
     _currentDrawPath = nil;
     _currentEditingTextView = nil;
 }
