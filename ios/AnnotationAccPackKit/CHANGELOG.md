@@ -4,6 +4,18 @@ The changelog for `screensharing-annotation-acc-pack` iOS.
 
 --------------------------------------
 
+1.1.12
+-----
+
+### Enhancements
+
+- Provide notifications for annotation toolbar actions.
+
+1.1.11
+-----
+
+### DEPRECATED 
+
 1.1.10
 -----
 

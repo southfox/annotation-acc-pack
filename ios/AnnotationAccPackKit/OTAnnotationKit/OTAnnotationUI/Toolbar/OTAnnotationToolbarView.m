@@ -8,6 +8,9 @@
 #import "UIView+Helper.h"
 #import "UIButton+AutoLayoutHelper.h"
 
+NSString * const kOTAnnotationToolbarDidPressDoneButton = @"kOTAnnotationToolbarDidPressDoneButton";
+NSString * const kOTAnnotationToolbarDidPressDrawButton = @"kOTAnnotationToolbarDidPressDrawButton";
+NSString * const kOTAnnotationToolbarDidPressTextButton = @"kOTAnnotationToolbarDidPressTextButton";
 NSString * const kOTAnnotationToolbarDidPressEraseButton = @"kOTAnnotationToolbarDidPressEraseButton";
 NSString * const kOTAnnotationToolbarDidPressCleanButton = @"kOTAnnotationToolbarDidPressCleanButton";
 NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolbarDidAddTextAnnotation";
@@ -210,13 +213,18 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
 
 - (void)done {
     if ([self.annotationScrollView.annotationView.currentAnnotatable isMemberOfClass:[OTAnnotationTextView class]]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kOTAnnotationToolbarDidAddTextAnnotation object:self.annotationScrollView.annotationView.currentAnnotatable];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kOTAnnotationToolbarDidAddTextAnnotation
+                                                            object:nil
+                                                          userInfo:@{@"self":self, @"annotation":self.annotationScrollView.annotationView.currentAnnotatable}];
     }
     self.annotationScrollView.annotatable = NO;
     [self dismissColorPickerViewWithAniamtion:YES];
     [self.toolbar removeContentViewAtIndex:0];
     [self moveSelectionShadowViewTo:nil];
     [self resetToolbarButtons];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kOTAnnotationToolbarDidPressDoneButton
+                                                        object:nil
+                                                      userInfo:@{@"self":self}];
     [[AnnLoggingWrapper sharedInstance].logger logEventAction:KLogActionDone variation:KLogVariationSuccess completion:nil];
 }
 
@@ -269,6 +277,9 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
         OTAnnotationPath *path = [[OTAnnotationPath alloc] initWithStrokeColor:self.colorPickerView.selectedColor];
         [self.annotationScrollView.annotationView setCurrentAnnotatable:path];
         [self disableButtons:@[self.annotateButton ,self.textButton, self.eraseButton, self.eraseAllButton]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kOTAnnotationToolbarDidPressDrawButton
+                                                            object:nil
+                                                          userInfo:@{@"self":self, @"annotation":path}];
     }
     else if (sender == self.textButton) {
     
@@ -287,17 +298,24 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
         UIViewController *topViewController = [UIViewController topViewControllerWithRootViewController];
         [topViewController presentViewController:editTextViewController animated:YES completion:nil];
         [self disableButtons:@[self.annotateButton, self.textButton, self.screenshotButton, self.eraseButton, self.eraseAllButton]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kOTAnnotationToolbarDidPressTextButton
+                                                            object:nil
+                                                          userInfo:@{@"self":self}];
     }
     else if (sender == self.colorButton) {
         [self showColorPickerView];
     }
     else if (sender == self.eraseButton) {
         id<OTAnnotatable> anotatableToRemove = [self.annotationScrollView.annotationView undoAnnotatable];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kOTAnnotationToolbarDidPressEraseButton object:anotatableToRemove];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kOTAnnotationToolbarDidPressEraseButton
+                                                            object:nil
+                                                          userInfo:@{@"self":self, @"annotation":anotatableToRemove}];
     }
     else if (sender == self.eraseAllButton) {
         [self.annotationScrollView.annotationView removeAllAnnotatables];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kOTAnnotationToolbarDidPressCleanButton object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kOTAnnotationToolbarDidPressCleanButton
+                                                            object:nil
+                                                          userInfo:@{@"self":self}];
     }
     else if (sender == self.screenshotButton) {
         

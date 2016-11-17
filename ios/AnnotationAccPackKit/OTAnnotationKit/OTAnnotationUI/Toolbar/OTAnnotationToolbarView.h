@@ -6,6 +6,9 @@
 
 #import <UIKit/UIKit.h>
 
+extern NSString *const kOTAnnotationToolbarDidPressDoneButton;
+extern NSString *const kOTAnnotationToolbarDidPressDrawButton;
+extern NSString *const kOTAnnotationToolbarDidPressTextButton;
 extern NSString *const kOTAnnotationToolbarDidPressEraseButton;
 extern NSString *const kOTAnnotationToolbarDidPressCleanButton;
 extern NSString *const kOTAnnotationToolbarDidAddTextAnnotation;
