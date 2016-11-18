@@ -10,7 +10,10 @@
 
 @protocol OTAnnotationTextViewDelegate <NSObject>
 
-- (void)annotationTextViewDidFinishChange:(OTAnnotationTextView *)textView;
+@optional
+- (void)annotationTextViewDidAddText:(OTAnnotationTextView *)textView;
+
+- (void)annotationTextViewDidFinishEditing:(OTAnnotationTextView *)textView;
 
 - (void)annotationTextViewDidCancel:(OTAnnotationTextView *)textView;
 
@@ -20,9 +23,6 @@
  *  The class describes a text annotation in an OTAnnotationView. The text view is draggable, resizable and rotatable.
  */
 @interface OTAnnotationTextView: UITextView <OTAnnotatable>
-
-extern NSString *const OTAnnotationTextViewDidFinishChangeNotification;
-extern NSString *const OTAnnotationTextViewDidCancelChangeNotification;
 
 /**
  *  A boolean value to indicate whether the text view is resizable by using pinch gesture on it.
