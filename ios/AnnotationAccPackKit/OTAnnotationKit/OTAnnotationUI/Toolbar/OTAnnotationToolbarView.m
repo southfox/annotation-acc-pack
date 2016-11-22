@@ -8,6 +8,10 @@
 #import "UIView+Helper.h"
 #import "UIButton+AutoLayoutHelper.h"
 
+NSString * const kOTAnnotationToolbarDidPressEraseButton = @"kOTAnnotationToolbarDidPressEraseButton";
+NSString * const kOTAnnotationToolbarDidPressCleanButton = @"kOTAnnotationToolbarDidPressCleanButton";
+NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolbarDidAddTextAnnotation";
+
 @interface OTAnnotationToolbarButton : UIButton
 @end
 
@@ -320,6 +324,9 @@
             if (self.toolbarViewDelegate && [self.toolbarViewDelegate respondsToSelector:@selector(annotationToolbarViewDidPressEraseButton:)]) {
                 [self.toolbarViewDelegate annotationToolbarViewDidPressEraseButton:self];
             }
+            [[NSNotificationCenter defaultCenter] postNotificationName:kOTAnnotationToolbarDidPressEraseButton
+                                                                object:self
+                                                              userInfo:@{@"annotation":annotatableToRemove}];
         }
     }
     else if (sender == self.eraseAllButton) {
@@ -327,6 +334,9 @@
         if (self.toolbarViewDelegate && [self.toolbarViewDelegate respondsToSelector:@selector(annotationToolbarViewDidPressCleanButton:)]) {
             [self.toolbarViewDelegate annotationToolbarViewDidPressCleanButton:self];
         }
+        [[NSNotificationCenter defaultCenter] postNotificationName:kOTAnnotationToolbarDidPressCleanButton
+                                                            object:self
+                                                          userInfo:nil];
     }
     else if (sender == self.screenshotButton) {
         
@@ -376,6 +386,9 @@
     if (self.toolbarViewDelegate && [self.toolbarViewDelegate respondsToSelector:@selector(annotationToolbarViewDidAddTextAnnotation:annotationTextView:)]) {
         [self.toolbarViewDelegate annotationToolbarViewDidAddTextAnnotation:self annotationTextView:textView];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:kOTAnnotationToolbarDidAddTextAnnotation
+                                                        object:self
+                                                      userInfo:@{@"annotation":textView}];
 }
 
 - (void)annotationTextViewDidCancel:(OTAnnotationTextView *)textView {

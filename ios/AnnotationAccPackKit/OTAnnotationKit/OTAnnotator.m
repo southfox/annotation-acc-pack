@@ -39,6 +39,10 @@
     
     if (self = [super init]) {
         _session = [OTAcceleratorSession getAcceleratorPackSession];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eraseButtonPressed:) name:kOTAnnotationToolbarDidPressEraseButton object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cleanButtonPressed:) name:kOTAnnotationToolbarDidPressCleanButton object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidAdd:) name:kOTAnnotationToolbarDidAddTextAnnotation object:nil];
     }
     return self;
 }
@@ -266,8 +270,8 @@ receivedSignalType:(NSString*)type
 
     NSString *jsonString;
     
-    if ([notification.object isMemberOfClass:[OTAnnotationPath class]] ) {
-        OTAnnotationPath *path = (OTAnnotationPath *)notification.object;
+    if ([notification.userInfo[@"annotation"] isMemberOfClass:[OTAnnotationPath class]] ) {
+        OTAnnotationPath *path = (OTAnnotationPath *)notification.userInfo[@"annotation"];
         jsonString = [JSON stringify:@[path.uuid]];
     }
     else if ([notification.object isMemberOfClass:[OTAnnotationTextView class]]) {
@@ -297,9 +301,9 @@ receivedSignalType:(NSString*)type
 - (void)textDidAdd:(NSNotification *)notification {
     
     if (!latestScreenShareStream) return;
-    if (![notification.object isMemberOfClass:[OTAnnotationTextView class]]) return;
+    if (![notification.userInfo[@"annotation"] isMemberOfClass:[OTAnnotationTextView class]]) return;
     
-    OTAnnotationTextView *textView = (OTAnnotationTextView *)notification.object;
+    OTAnnotationTextView *textView = (OTAnnotationTextView *)notification.userInfo[@"annotation"];
     NSDictionary *data = @{
                            @"id": latestScreenShareStream.connection.connectionId,
                            @"fromId": self.session.connection.connectionId,
