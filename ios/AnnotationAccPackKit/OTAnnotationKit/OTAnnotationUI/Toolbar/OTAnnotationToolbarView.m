@@ -191,7 +191,14 @@
     }
     self.annotationScrollView.annotatable = NO;
     [self dismissColorPickerViewWithAniamtion:YES];
-    [self.toolbar removeContentViewAtIndex:0];
+    
+    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+    if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
+        [self.toolbar removeContentViewAtIndex:6];
+    }
+    else {
+        [self.toolbar removeContentViewAtIndex:0];
+    }
     [self moveSelectionShadowViewTo:nil];
     [self resetToolbarButtons];
     if (self.toolbarViewDelegate && [self.toolbarViewDelegate respondsToSelector:@selector(annotationToolbarViewDidPressDoneButton:)]) {
@@ -227,12 +234,23 @@
     [_eraseAllButton setImage:[UIImage imageNamed:@"trashcan" inBundle:frameworkBundle compatibleWithTraitCollection:nil] forState:UIControlStateNormal];
     [_eraseAllButton addTarget:self action:@selector(toolbarButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
-    [_toolbar setContentView:_annotateButton atIndex:0];
-    [_toolbar setContentView:_colorButton atIndex:1];
-    [_toolbar setContentView:_textButton atIndex:2];
-    [_toolbar setContentView:_screenshotButton atIndex:3];
-    [_toolbar setContentView:_eraseButton atIndex:4];
-    [_toolbar setContentView:_eraseAllButton atIndex:5];
+    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+    if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
+        [_toolbar setContentView:_annotateButton atIndex:5];
+        [_toolbar setContentView:_colorButton atIndex:4];
+        [_toolbar setContentView:_textButton atIndex:3];
+        [_toolbar setContentView:_screenshotButton atIndex:2];
+        [_toolbar setContentView:_eraseButton atIndex:1];
+        [_toolbar setContentView:_eraseAllButton atIndex:0];
+    }
+    else {
+        [_toolbar setContentView:_annotateButton atIndex:0];
+        [_toolbar setContentView:_colorButton atIndex:1];
+        [_toolbar setContentView:_textButton atIndex:2];
+        [_toolbar setContentView:_screenshotButton atIndex:3];
+        [_toolbar setContentView:_eraseButton atIndex:4];
+        [_toolbar setContentView:_eraseAllButton atIndex:5];
+    }
     
     [_toolbar reloadToolbar];
 }
@@ -246,7 +264,13 @@
         self.annotationScrollView.annotatable = YES;
         [self dismissColorPickerViewWithAniamtion:YES];
         if (![self.toolbar containedContentView:self.doneButton]) {
-            [self.toolbar insertContentView:self.doneButton atIndex:0];
+            UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+            if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
+                [self.toolbar insertContentView:self.doneButton atIndex:6];
+            }
+            else {
+                [self.toolbar insertContentView:self.doneButton atIndex:0];
+            }
         }
         OTAnnotationPath *path = [[OTAnnotationPath alloc] initWithStrokeColor:self.colorPickerView.selectedColor];
         [self.annotationScrollView.annotationView setCurrentAnnotatable:path];
@@ -263,7 +287,13 @@
         [self moveSelectionShadowViewTo:nil];
         [self dismissColorPickerViewWithAniamtion:NO];
         if (![self.toolbar containedContentView:self.doneButton]) {
-            [self.toolbar insertContentView:self.doneButton atIndex:0];
+            UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+            if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
+                [self.toolbar insertContentView:self.doneButton atIndex:6];
+            }
+            else {
+                [self.toolbar insertContentView:self.doneButton atIndex:0];
+            }
         }
         
         OTAnnotationEditTextViewController *editTextViewController;
