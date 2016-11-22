@@ -9,6 +9,7 @@ The changelog for `screensharing-annotation-acc-pack` iOS.
 
 ### Enhancements
 - Re design annotation toolbar to be more natural
+- Re order annotation toolbar under landscape mode
 
 1.1.12
 -----
