@@ -274,7 +274,7 @@ receivedSignalType:(NSString*)type
         OTAnnotationPath *path = (OTAnnotationPath *)notification.userInfo[@"annotation"];
         jsonString = [JSON stringify:@[path.uuid]];
     }
-    else if ([notification.object isMemberOfClass:[OTAnnotationTextView class]]) {
+    else if ([notification.userInfo[@"annotation"] isMemberOfClass:[OTAnnotationTextView class]]) {
         jsonString = [JSON stringify:@[[NSNull null]]];
     }
     
