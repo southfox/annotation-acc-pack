@@ -2285,9 +2285,7 @@
   var _removeToolbar = function () {
     $(_elements.resizeSubject).off('resize', _resizeCanvas);
     toolbar.remove();
-    if (!_elements.externalWindow) {
-      $('#annotationToolbarContainer').remove();
-    }
+    $('#annotationToolbarContainer').remove();
   };
 
   /**
