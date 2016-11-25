@@ -150,13 +150,15 @@
         width = height * _aspectRatio;
       }
     } else {
-      var el = _elements.absoluteParent || _elements.canvasContainer;
-      width = el.clientWidth;
-      height = width / (_aspectRatio);
-      if (el.clientHeight < (width / _aspectRatio)) {
-        height = el.clientHeight;
-        width = height * _aspectRatio;
-      }
+      if (_elements.imageId === null) {
+        var el = _elements.absoluteParent || _elements.canvasContainer;
+        width = el.clientWidth;
+        height = width / (_aspectRatio);
+        if (el.clientHeight < (width / _aspectRatio)) {
+          height = el.clientHeight;
+          width = height * _aspectRatio;
+        }
+      }  
     }
 
     $(_elements.canvasContainer).css({
@@ -348,6 +350,7 @@
     _elements.resizeSubject = _.property('externalWindow')(options) || window;
     _elements.externalWindow = _.property('externalWindow')(options) || null;
     _elements.absoluteParent = _.property('absoluteParent')(options) || null;
+    _elements.imageId = _.property('imageId')(options) || null;
     _elements.canvasContainer = container;
 
 
