@@ -8,6 +8,8 @@
 #import "UIView+Helper.h"
 #import "UIButton+AutoLayoutHelper.h"
 
+#import <OTAcceleratorPackUtil/OTAcceleratorPackUtil.h>
+
 NSString * const kOTAnnotationToolbarDidPressEraseButton = @"kOTAnnotationToolbarDidPressEraseButton";
 NSString * const kOTAnnotationToolbarDidPressCleanButton = @"kOTAnnotationToolbarDidPressCleanButton";
 NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolbarDidAddTextAnnotation";
@@ -189,6 +191,15 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
 }
 
 - (void)done {
+    
+    if (self.toolbarViewDelegate && [self.toolbarViewDelegate respondsToSelector:@selector(annotationToolbarViewAttemptToPressDoneButton:)]) {
+        BOOL done = [self.toolbarViewDelegate respondsToSelector:@selector(annotationToolbarViewAttemptToPressDoneButton:)];
+        if (!done) {
+            return;
+        }
+        [self.toolbarViewDelegate annotationToolbarViewAttemptToPressDoneButton:self];
+    }
+    
     if ([self.annotationScrollView.annotationView.currentAnnotatable isKindOfClass:[OTAnnotationTextView class]]) {
         OTAnnotationTextView *textView = (OTAnnotationTextView *)self.annotationScrollView.annotationView.currentAnnotatable;
         [textView removeFromSuperview];

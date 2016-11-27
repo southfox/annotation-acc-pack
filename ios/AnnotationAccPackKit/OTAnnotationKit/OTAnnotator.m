@@ -39,21 +39,16 @@
     
     if (self = [super init]) {
         _session = [OTAcceleratorSession getAcceleratorPackSession];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eraseButtonPressed:) name:kOTAnnotationToolbarDidPressEraseButton object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cleanButtonPressed:) name:kOTAnnotationToolbarDidPressCleanButton object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidAdd:) name:kOTAnnotationToolbarDidAddTextAnnotation object:nil];
     }
     return self;
 }
 
-- (void)dealloc {
-    [self disconnect];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 - (NSError *)connect {
     if (!self.delegate && !self.handler) return nil;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eraseButtonPressed:) name:kOTAnnotationToolbarDidPressEraseButton object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cleanButtonPressed:) name:kOTAnnotationToolbarDidPressCleanButton object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidAdd:) name:kOTAnnotationToolbarDidAddTextAnnotation object:nil];
     return [OTAcceleratorSession registerWithAccePack:self];
 }
 
@@ -67,6 +62,7 @@
         [self.annotationScrollView.annotationView removeAllAnnotatables];
         [self.annotationScrollView.annotationView removeAllRemoteAnnotatables];
     }
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     return [OTAcceleratorSession deregisterWithAccePack:self];
 }
 
@@ -132,6 +128,10 @@
 - (void)sessionDidReconnect:(OTSession *)session {
     [self notifiyAllWithSignal:OTAnnotationSessionDidReconnect
                          error:nil];
+}
+
+- (void)clearRemoteCanvas {
+    [self cleanButtonPressed:nil];
 }
 
 // OPENTOK SIGNALING

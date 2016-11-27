@@ -23,6 +23,9 @@ extern NSString *const kOTAnnotationToolbarDidAddTextAnnotation;
 @protocol OTAnnotationToolbarViewDelegate <NSObject>
 
 @optional
+
+- (BOOL)annotationToolbarViewAttemptToPressDoneButton:(OTAnnotationToolbarView *)annotationToolbarView;
+
 - (void)annotationToolbarViewDidPressDoneButton:(OTAnnotationToolbarView *)annotationToolbarView;
 
 - (void)annotationToolbarViewDidSelectDrawButton:(OTAnnotationToolbarView *)annotationToolbarView
