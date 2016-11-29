@@ -78,7 +78,11 @@
       _logAnalytics();
     }
 
-    $ = require('jquery');
+    if (typeof module === 'object' && typeof module.exports === 'object') {
+      $ = require('jquery');
+    } else {
+      $ = this.$;
+    }  
 
     var context = options.externalWindow ? options.externalWindow.document : window.document;
 
