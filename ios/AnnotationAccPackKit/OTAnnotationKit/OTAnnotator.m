@@ -342,7 +342,7 @@ receivedSignalType:(NSString*)type
     // iPad aspect ratio is 4:3 = 0.75
     
     CGFloat scale = 1.0f;
-    if (thisCanvasWidth < thisCanvasHeight) {
+    if (thisCanvasWidth < thisCanvasHeight || remoteCanvasWidth < remoteCanvasHeight) {
         scale = thisCanvasHeight / remoteCanvasHeight;
     }
     else {
@@ -358,7 +358,7 @@ receivedSignalType:(NSString*)type
     
     OTAnnotationPoint *pt;
     
-    if (thisCanvasWidth < thisCanvasHeight) {
+    if (thisCanvasWidth < thisCanvasHeight || remoteCanvasWidth < remoteCanvasHeight) {
         
         // letter boxing is produced on horizontal level
         CGFloat actualDrawingFromX = fromX - (remoteCanvasWidth / 2 - self.annotationScrollView.annotationView.center.x);
@@ -447,7 +447,7 @@ receivedSignalType:(NSString*)type
     // iPad aspect ratio is 4:3 = 0.75
     
     CGFloat scale = 1.0f;
-    if (thisCanvasWidth < thisCanvasHeight) {
+    if (thisCanvasWidth < thisCanvasHeight || remoteCanvasWidth < remoteCanvasHeight) {
         scale = thisCanvasHeight / remoteCanvasHeight;
     }
     else {
@@ -466,7 +466,7 @@ receivedSignalType:(NSString*)type
     OTAnnotationPoint *pt1;
     OTAnnotationPoint *pt2;
     
-    if (thisCanvasWidth < thisCanvasHeight) {
+    if (thisCanvasWidth < thisCanvasHeight || remoteCanvasWidth < remoteCanvasHeight) {
         
         // letter boxing is produced on horizontal level
         CGFloat actualDrawingFromX = fromX - (remoteCanvasWidth / 2 - self.annotationScrollView.annotationView.center.x);
