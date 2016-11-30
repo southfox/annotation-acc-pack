@@ -94,6 +94,21 @@ typedef void (^OTAnnotationDataReceivingBlock)(NSArray *data);
  */
 @property (readonly, nonatomic) OTAnnotationScrollView *annotationScrollView;
 
-- (void)clearRemoteCanvas;
+- (void)cleanRemoteCanvas;
+
+#pragma mark - advanced
+/**
+ *  Manually subscribe to a stream with a specfieid name.
+ *
+ *  @return An error to indicate whether it subscribes successfully, non-nil if it fails.
+ */
+- (NSError *)subscribeToStreamWithName:(NSString *)name;
+
+/**
+ *  Manually subscribe to a stream with a specfieid stream id.
+ *
+ *  @return An error to indicate whether it subscribes successfully, non-nil if it fails.
+ */
+- (NSError *)subscribeToStreamWithStreamId:(NSString *)streamId;
 
 @end
