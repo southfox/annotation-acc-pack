@@ -193,11 +193,10 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
 - (void)done {
     
     if (self.toolbarViewDelegate && [self.toolbarViewDelegate respondsToSelector:@selector(annotationToolbarViewAttemptToPressDoneButton:)]) {
-        BOOL done = [self.toolbarViewDelegate respondsToSelector:@selector(annotationToolbarViewAttemptToPressDoneButton:)];
+        BOOL done = [self.toolbarViewDelegate annotationToolbarViewAttemptToPressDoneButton:self];
         if (!done) {
             return;
         }
-        [self.toolbarViewDelegate annotationToolbarViewAttemptToPressDoneButton:self];
     }
     
     if ([self.annotationScrollView.annotationView.currentAnnotatable isKindOfClass:[OTAnnotationTextView class]]) {
