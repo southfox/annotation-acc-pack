@@ -77,4 +77,17 @@ typedef NS_ENUM(NSUInteger, OTAnnotationToolbarViewOrientation) {
  */
 @property (nonatomic) OTAnnotationToolbarViewOrientation toolbarViewOrientation;
 
+/**
+ * Utility function to capture the screen
+ */
+
+- (void)captureScreen;
+
+
+/**
+ * Utility function to share the screen
+ */
+
+- (void)shareScreen:(void (^)())completion;
+
 @end

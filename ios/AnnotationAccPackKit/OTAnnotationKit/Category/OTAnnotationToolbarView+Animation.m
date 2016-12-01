@@ -32,28 +32,30 @@
         self.colorPickerView.frame = selfFrame;
         [self.superview insertSubview:self.colorPickerView belowSubview:self];
         
+        MAKE_WEAK(self);
         [UIView animateWithDuration:1.0 animations:^(){
+            MAKE_STRONG(self);
             
-            if (self.toolbarViewOrientation == OTAnnotationToolbarViewOrientationPortraitlBottom) {
+            if (strongself.toolbarViewOrientation == OTAnnotationToolbarViewOrientationPortraitlBottom) {
                 CGFloat newY = selfFrame.origin.y - HeightOfColorPicker;
-                self.colorPickerView.frame = CGRectMake(selfFrame.origin.x, newY, CGRectGetWidth(self.bounds), HeightOfColorPicker);
+                strongself.colorPickerView.frame = CGRectMake(selfFrame.origin.x, newY, CGRectGetWidth(strongself.bounds), HeightOfColorPicker);
             }
-            else if (self.toolbarViewOrientation == OTAnnotationToolbarViewOrientationLandscapeLeft) {
+            else if (strongself.toolbarViewOrientation == OTAnnotationToolbarViewOrientationLandscapeLeft) {
                 CGFloat newX = selfFrame.origin.x + HeightOfColorPicker;
-                self.colorPickerView.frame = CGRectMake(newX, selfFrame.origin.y, WidthOfColorPicker, CGRectGetHeight(self.bounds));
+                strongself.colorPickerView.frame = CGRectMake(newX, selfFrame.origin.y, WidthOfColorPicker, CGRectGetHeight(strongself.bounds));
             }
-            else if (self.toolbarViewOrientation == OTAnnotationToolbarViewOrientationLandscapeRight) {
+            else if (strongself.toolbarViewOrientation == OTAnnotationToolbarViewOrientationLandscapeRight) {
                 CGFloat newX = selfFrame.origin.x - HeightOfColorPicker;
-                self.colorPickerView.frame = CGRectMake(newX, selfFrame.origin.y, WidthOfColorPicker, CGRectGetHeight(self.bounds));
+                strongself.colorPickerView.frame = CGRectMake(newX, selfFrame.origin.y, WidthOfColorPicker, CGRectGetHeight(strongself.bounds));
             }
         }];
     }
     else {
-        [self dismissColorPickerViewWithAniamtion:NO];
+        [self dismissColorPickerViewWithAnimation:NO];
     }
 }
 
-- (void)dismissColorPickerViewWithAniamtion:(BOOL)animated {
+- (void)dismissColorPickerViewWithAnimation:(BOOL)animated {
 
     if (!animated) {
         [self.colorPickerView removeFromSuperview];
@@ -61,23 +63,26 @@
     }
     
     CGRect colorPickerViewFrame = self.colorPickerView.frame;
+    MAKE_WEAK(self);
     [UIView animateWithDuration:1.0 animations:^(){
-        
-        if (self.toolbarViewOrientation == OTAnnotationToolbarViewOrientationPortraitlBottom) {
+        MAKE_STRONG(self);
+       
+        if (strongself.toolbarViewOrientation == OTAnnotationToolbarViewOrientationPortraitlBottom) {
             CGFloat newY = colorPickerViewFrame.origin.y + HeightOfColorPicker;
-            self.colorPickerView.frame = CGRectMake(0, newY, CGRectGetWidth(colorPickerViewFrame), HeightOfColorPicker);
+            strongself.colorPickerView.frame = CGRectMake(0, newY, CGRectGetWidth(colorPickerViewFrame), HeightOfColorPicker);
         }
-        else if (self.toolbarViewOrientation == OTAnnotationToolbarViewOrientationLandscapeLeft) {
+        else if (strongself.toolbarViewOrientation == OTAnnotationToolbarViewOrientationLandscapeLeft) {
             CGFloat newX = colorPickerViewFrame.origin.x - WidthOfColorPicker;
-            self.colorPickerView.frame = CGRectMake(newX, 0, WidthOfColorPicker, CGRectGetHeight(colorPickerViewFrame));
+            strongself.colorPickerView.frame = CGRectMake(newX, 0, WidthOfColorPicker, CGRectGetHeight(colorPickerViewFrame));
         }
         else if (self.toolbarViewOrientation == OTAnnotationToolbarViewOrientationLandscapeRight) {
             CGFloat newX = colorPickerViewFrame.origin.x + WidthOfColorPicker;
-            self.colorPickerView.frame = CGRectMake(newX, 0, WidthOfColorPicker, CGRectGetHeight(colorPickerViewFrame));
+            strongself.colorPickerView.frame = CGRectMake(newX, 0, WidthOfColorPicker, CGRectGetHeight(colorPickerViewFrame));
         }
     } completion:^(BOOL finished){
-        
-        [self.colorPickerView removeFromSuperview];
+        MAKE_STRONG(self);
+  
+        [strongself.colorPickerView removeFromSuperview];
     }];
 }
 

@@ -10,6 +10,6 @@
 
 - (void)moveSelectionShadowViewTo:(UIButton *)sender;
 - (void)showColorPickerView;
-- (void)dismissColorPickerViewWithAniamtion:(BOOL)animated;
+- (void)dismissColorPickerViewWithAnimation:(BOOL)animated;
 
 @end

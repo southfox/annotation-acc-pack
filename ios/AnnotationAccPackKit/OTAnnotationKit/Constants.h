@@ -30,3 +30,7 @@ static NSString* const KLogActionDone = @"DONE";
 static NSString* const KLogVariationAttempt = @"Attempt";
 static NSString* const KLogVariationSuccess = @"Success";
 static NSString* const KLogVariationFailure = @"Failure";
+
+#define MAKE_WEAK(self) __weak typeof(self) weak##self = self
+#define MAKE_STRONG(self) __strong typeof(weak##self) strong##self = weak##self
+

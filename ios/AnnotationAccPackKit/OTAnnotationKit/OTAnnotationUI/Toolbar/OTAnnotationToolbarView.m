@@ -205,7 +205,7 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
         [textView removeFromSuperview];
     }
     self.annotationScrollView.annotatable = NO;
-    [self dismissColorPickerViewWithAniamtion:YES];
+    [self dismissColorPickerViewWithAnimation:YES];
     
     UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
     if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
@@ -277,7 +277,7 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
     }
     else if (sender == self.annotateButton) {
         self.annotationScrollView.annotatable = YES;
-        [self dismissColorPickerViewWithAniamtion:YES];
+        [self dismissColorPickerViewWithAnimation:YES];
         if (![self.toolbar containedContentView:self.doneButton]) {
             UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
             if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
@@ -300,7 +300,7 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
     
         self.annotationScrollView.annotatable = YES;
         [self moveSelectionShadowViewTo:nil];
-        [self dismissColorPickerViewWithAniamtion:NO];
+        [self dismissColorPickerViewWithAnimation:NO];
         if (![self.toolbar containedContentView:self.doneButton]) {
             UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
             if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
@@ -351,24 +351,34 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
     }
     else if (sender == self.screenshotButton) {
         
-        [self dismissColorPickerViewWithAniamtion:NO];
-        [self moveSelectionShadowViewTo:nil];
-        
-        if (self.toolbarViewDataSource) {
-            self.captureViewController.sharedImage = [self.annotationScrollView.annotationView captureScreenWithView:[self.toolbarViewDataSource annotationToolbarViewForRootViewForScreenShot:self]];
-        }
-        else {
-            self.captureViewController.sharedImage = [self.annotationScrollView.annotationView captureScreenWithView:_annotationScrollView];
-        }
-        UIViewController *topViewController = [UIViewController topViewControllerWithRootViewController];
-        [topViewController presentViewController:self.captureViewController animated:YES completion:nil];
+        [self captureScreen];
+        [self shareScreen:nil];
     }
 
+    MAKE_WEAK(self);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (sender != self.textButton && sender != self.screenshotButton && sender != self.eraseButton && sender != self.eraseAllButton) {
-            [self moveSelectionShadowViewTo:sender];
+        MAKE_STRONG(self);
+        if (sender != strongself.textButton && sender != strongself.screenshotButton && sender != strongself.eraseButton && sender != strongself.eraseAllButton) {
+            [strongself moveSelectionShadowViewTo:sender];
         }
     });
+}
+
+- (void)captureScreen {
+    if (self.toolbarViewDataSource) {
+        self.captureViewController.sharedImage = [self.annotationScrollView.annotationView captureScreenWithView:[self.toolbarViewDataSource annotationToolbarViewForRootViewForScreenShot:self]];
+    }
+    else {
+        self.captureViewController.sharedImage = [self.annotationScrollView.annotationView captureScreenWithView:_annotationScrollView];
+    }
+}
+
+- (void)shareScreen:(void (^)())completion {
+    [self dismissColorPickerViewWithAnimation:NO];
+    [self moveSelectionShadowViewTo:nil];
+
+    UIViewController *topViewController = [UIViewController topViewControllerWithRootViewController];
+    [topViewController presentViewController:self.captureViewController animated:YES completion:completion];
 }
 
 - (void)resetToolbarButtons {
