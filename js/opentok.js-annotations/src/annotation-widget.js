@@ -151,6 +151,24 @@
     };
 
     /**
+     * Changes the active annotation color for the canvas.
+     * @param colorIndex - the index regarding the colors array
+     */
+    this.changeColorByIndex = function (colorIndex) {
+
+      //set the user color
+      self.userColor = this.colors[colorIndex];
+
+      //activate the change on the toolbar
+      var colorChoices = context.querySelectorAll('.color-choice');
+      colorChoices[colorIndex].classList.add('active');
+      var button = context.getElementById('OT_colors');
+      button.setAttribute('class', 'OT_color annotation-btn colors');
+      button.style.borderRadius = '50%';
+      button.style.backgroundColor = this.colors[colorIndex];
+    };
+
+    /**
      * Changes the line/stroke width of the active annotation for the canvas.
      * @param size The size in pixels.
      */

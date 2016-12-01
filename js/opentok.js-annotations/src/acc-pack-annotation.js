@@ -180,6 +180,10 @@
     _triggerEvent('resizeCanvas');
   };
 
+  var _changeColorByIndex = function(colorIndex) {
+    _canvas.changeColorByIndex(colorIndex);
+  };
+
   var _listenForResize = function () {
     $(_elements.resizeSubject).on('resize', _.throttle(function () {
       _resizeCanvas();
@@ -388,6 +392,14 @@
   };
 
   /**
+   * Change the annotation color of the toolbar passing the colorIndex
+   * @param {Integer} colorIndex - The color index number
+   */
+  var changeColorByIndex = function (colorIndex) {
+    _changeColorByIndex(colorIndex);
+  };
+
+  /**
    * Adds a subscriber's video the external annotation window
    * @param {Object} stream - The subscriber stream object
    */
@@ -456,8 +468,9 @@
     resizeCanvas: resizeCanvas,
     addSubscriberToExternalWindow: addSubscriberToExternalWindow,
     end: end,
-    hideToolbar:hideToolbar,
-    showToolbar:showToolbar
+    hideToolbar: hideToolbar,
+    showToolbar: showToolbar,
+    changeColorByIndex: changeColorByIndex
   };
 
   if (typeof exports === 'object') {
