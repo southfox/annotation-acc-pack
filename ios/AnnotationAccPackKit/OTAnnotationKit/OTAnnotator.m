@@ -97,10 +97,14 @@
     if (stream.videoType == OTStreamVideoTypeScreen) {
         latestScreenShareStream = stream;
     }
+    
+    if (!latestScreenShareStream) {
+        latestScreenShareStream = stream;
+    }
 }
 
 - (void)session:(OTSession *)session streamDestroyed:(OTStream *)stream {
-    if (stream.videoType == OTStreamVideoTypeScreen) {
+    if ([latestScreenShareStream.streamId isEqualToString:stream.streamId]) {
         latestScreenShareStream = nil;
     }
 }
@@ -130,7 +134,7 @@
                          error:nil];
 }
 
-- (void)clearRemoteCanvas {
+- (void)cleanRemoteCanvas {
     [self cleanButtonPressed:nil];
 }
 
@@ -342,7 +346,7 @@ receivedSignalType:(NSString*)type
     // iPad aspect ratio is 4:3 = 0.75
     
     CGFloat scale = 1.0f;
-    if (thisCanvasWidth < thisCanvasHeight) {
+    if (thisCanvasWidth < thisCanvasHeight || remoteCanvasWidth < remoteCanvasHeight) {
         scale = thisCanvasHeight / remoteCanvasHeight;
     }
     else {
@@ -358,7 +362,7 @@ receivedSignalType:(NSString*)type
     
     OTAnnotationPoint *pt;
     
-    if (thisCanvasWidth < thisCanvasHeight) {
+    if (thisCanvasWidth < thisCanvasHeight || remoteCanvasWidth < remoteCanvasHeight) {
         
         // letter boxing is produced on horizontal level
         CGFloat actualDrawingFromX = fromX - (remoteCanvasWidth / 2 - self.annotationScrollView.annotationView.center.x);
@@ -447,7 +451,7 @@ receivedSignalType:(NSString*)type
     // iPad aspect ratio is 4:3 = 0.75
     
     CGFloat scale = 1.0f;
-    if (thisCanvasWidth < thisCanvasHeight) {
+    if (thisCanvasWidth < thisCanvasHeight || remoteCanvasWidth < remoteCanvasHeight) {
         scale = thisCanvasHeight / remoteCanvasHeight;
     }
     else {
@@ -466,7 +470,7 @@ receivedSignalType:(NSString*)type
     OTAnnotationPoint *pt1;
     OTAnnotationPoint *pt2;
     
-    if (thisCanvasWidth < thisCanvasHeight) {
+    if (thisCanvasWidth < thisCanvasHeight || remoteCanvasWidth < remoteCanvasHeight) {
         
         // letter boxing is produced on horizontal level
         CGFloat actualDrawingFromX = fromX - (remoteCanvasWidth / 2 - self.annotationScrollView.annotationView.center.x);
@@ -612,6 +616,27 @@ receivedSignalType:(NSString*)type
             signalingPoint = nil;
         }
     }
+}
+
+#pragma mark - advanced
+- (NSError *)subscribeToStreamWithName:(NSString *)name {
+    for (OTStream *stream in self.session.streams.allValues) {
+        if ([stream.name isEqualToString:name]) {
+            latestScreenShareStream = stream;
+        }
+    }
+    
+    return [NSError errorWithDomain:NSCocoaErrorDomain code:-1 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"There is no such stream with name: %@", name]}];
+}
+
+- (NSError *)subscribeToStreamWithStreamId:(NSString *)streamId {
+    for (OTStream *stream in self.session.streams.allValues) {
+        if ([stream.streamId isEqualToString:streamId]) {
+            latestScreenShareStream = stream;
+        }
+    }
+    
+    return [NSError errorWithDomain:NSCocoaErrorDomain code:-1 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"There is no such stream with streamId: %@", streamId]}];
 }
 
 @end
