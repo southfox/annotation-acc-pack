@@ -11,7 +11,7 @@
 #define MAX_EDGE_SIZE_LIMIT 1280.0f
 #define EDGE_DIMENSION_COMMON_FACTOR 16.0f
 
-#import <OTAcceleratorPackUtil/OTAcceleratorPackUtil.h>
+#import "OTAcceleratorSession.h"
 #import "OTAnnotator.h"
 #import "OTAnnotationToolbarView_UserInterfaces.h"
 #import "UIColor+HexString.h"
@@ -34,11 +34,18 @@
 @implementation OTAnnotator
 
 - (instancetype)init {
+    return nil;
+}
+
+- (instancetype)initWithDataSource:(id<OTAnnotatorDataSource>)dataSource {
     
-    if (![OTAcceleratorSession getAcceleratorPackSession]) return nil;
+    if (!dataSource) {
+        return nil;
+    }
     
     if (self = [super init]) {
-        _session = [OTAcceleratorSession getAcceleratorPackSession];
+        _dataSource = dataSource;
+        _session = [_dataSource sessionOfOTAnnotator:self];
     }
     return self;
 }
@@ -49,7 +56,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eraseButtonPressed:) name:kOTAnnotationToolbarDidPressEraseButton object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cleanButtonPressed:) name:kOTAnnotationToolbarDidPressCleanButton object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidAdd:) name:kOTAnnotationToolbarDidAddTextAnnotation object:nil];
-    return [OTAcceleratorSession registerWithAccePack:self];
+    return [self.session registerWithAccePack:self];
 }
 
 - (void)connectWithCompletionHandler:(OTAnnotationBlock)handler {
@@ -63,7 +70,7 @@
         [self.annotationScrollView.annotationView removeAllRemoteAnnotatables];
     }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    return [OTAcceleratorSession deregisterWithAccePack:self];
+    return [self.session deregisterWithAccePack:self];
 }
 
 - (void)notifiyAllWithSignal:(OTAnnotationSignal)signal error:(NSError *)error {
@@ -284,7 +291,7 @@ receivedSignalType:(NSString*)type
     
     if (jsonString) {
         NSError *error;
-        [[OTAcceleratorSession getAcceleratorPackSession] signalWithType:@"otAnnotation_undo" string:jsonString connection:latestScreenShareStream.connection error:&error];
+        [self.session signalWithType:@"otAnnotation_undo" string:jsonString connection:latestScreenShareStream.connection error:&error];
         if (error) {
             NSLog(@"remoteEraseButtonPressed: %@", error);
         }
@@ -296,7 +303,7 @@ receivedSignalType:(NSString*)type
     if (!latestScreenShareStream) return;
     
     NSError *error;
-    [[OTAcceleratorSession getAcceleratorPackSession] signalWithType:@"otAnnotation_clear" string:nil connection:latestScreenShareStream.connection error:&error];
+    [self.session signalWithType:@"otAnnotation_clear" string:nil connection:latestScreenShareStream.connection error:&error];
     if (error) {
         NSLog(@"remoteCleanButtonPressed: %@", error);
     }
@@ -326,7 +333,7 @@ receivedSignalType:(NSString*)type
     NSError *error;
     NSString *jsonString = [JSON stringify:@[data]];
     
-    [[OTAcceleratorSession getAcceleratorPackSession] signalWithType:@"otAnnotation_text" string:jsonString connection:latestScreenShareStream.connection error:&error];
+    [self.session signalWithType:@"otAnnotation_text" string:jsonString connection:latestScreenShareStream.connection error:&error];
     if (error) {
         NSLog(@"remoteCleanButtonPressed: %@", error);
     }
@@ -536,7 +543,7 @@ receivedSignalType:(NSString*)type
     if (signalingPoints.count == 5) {
         NSError *error;
         NSString *jsonString = [JSON stringify:signalingPoints];
-        [[OTAcceleratorSession getAcceleratorPackSession] signalWithType:@"otAnnotation_pen" string:jsonString connection:latestScreenShareStream.connection error:&error];
+        [self.session signalWithType:@"otAnnotation_pen" string:jsonString connection:latestScreenShareStream.connection error:&error];
         
         // notify sending data
         if (self.dataReceivingHandler) {
@@ -568,7 +575,7 @@ receivedSignalType:(NSString*)type
     
     NSError *error;
     NSString *jsonString = [JSON stringify:signalingPoints];
-    [[OTAcceleratorSession getAcceleratorPackSession] signalWithType:@"otAnnotation_pen" string:jsonString connection:latestScreenShareStream.connection error:&error];
+    [self.session signalWithType:@"otAnnotation_pen" string:jsonString connection:latestScreenShareStream.connection error:&error];
     
     // notify sending data
     if (self.dataReceivingHandler) {

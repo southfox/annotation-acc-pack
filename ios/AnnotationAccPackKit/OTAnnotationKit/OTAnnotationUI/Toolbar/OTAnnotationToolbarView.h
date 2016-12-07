@@ -5,8 +5,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <OTAnnotationKit/OTAnnotationPath.h>
-#import <OTAnnotationKit/OTAnnotationTextView.h>
+#import "OTAnnotationPath.h"
+#import "OTAnnotationTextView.h"
 
 extern NSString *const kOTAnnotationToolbarDidPressEraseButton;
 extern NSString *const kOTAnnotationToolbarDidPressCleanButton;
