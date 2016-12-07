@@ -5,7 +5,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <OTAnnotationKit/OTAnnotationScrollView.h>
+#import "OTAcceleratorSession.h"
+#import "OTAnnotationScrollView.h"
 
 typedef NS_ENUM(NSUInteger, OTAnnotationSignal) {
     OTAnnotationSessionDidConnect = 0,
@@ -24,6 +25,12 @@ typedef void (^OTAnnotationDataSendingBlock)(NSArray *data, NSError * error);
 typedef void (^OTAnnotationDataReceivingBlock)(NSArray *data);
 
 @class OTAnnotator;
+
+@protocol OTAnnotatorDataSource <NSObject>
+- (OTAcceleratorSession *)sessionOfOTAnnotator:(OTAnnotator *)annotator;
+@end
+
+
 @protocol AnnotationDelegate <NSObject>
 
 - (void)annotator:(OTAnnotator *)annotator
@@ -39,11 +46,18 @@ typedef void (^OTAnnotationDataReceivingBlock)(NSArray *data);
 @interface OTAnnotator : NSObject
 
 /**
+ *  The object that acts as the data source of the text chat.
+ *
+ *  The delegate must adopt the OTAnnotatorDataSource protocol. The delegate is not retained.
+ */
+@property (weak, nonatomic) id<OTAnnotatorDataSource> dataSource;
+
+/**
  *  Initialize a new `OTAnnotator` instsance.
  *
  *  @return A new `OTAnnotator` instsance.
  */
-- (instancetype)init;
+- (instancetype)initWithDataSource:(id<OTAnnotatorDataSource>)dataSource;
 
 /**
  *  Registers to the shared session: [OTAcceleratorSession] and connect.

@@ -5,10 +5,12 @@
 //
 
 #import "SendAnnotationFitViewController.h"
-#import <OTAnnotationKit/OTAnnotationKit.h>
-#import <OTScreenShareKit/OTScreenShareKit.h>
+#import "OTAnnotator.h"
+#import "OTScreenSharer.h"
 
-@interface SendAnnotationFitViewController () <OTAnnotationToolbarViewDataSource>
+#import "AppDelegate.h"
+
+@interface SendAnnotationFitViewController () <OTScreenShareDataSource, OTAnnotatorDataSource, OTAnnotationToolbarViewDataSource>
 @property (nonatomic) OTAnnotator *annotator;
 @property (nonatomic) OTScreenSharer *sharer;
 
@@ -29,7 +31,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    self.sharer = [OTScreenSharer sharedInstance];
+    self.sharer = [[OTScreenSharer alloc] initWithDataSource:self];
     self.sharer.subscriberVideoContentMode = OTScreenShareVideoViewFit;
     [self.sharer connectWithView:nil
                          handler:^(OTScreenShareSignal signal, NSError *error) {
@@ -46,7 +48,7 @@
                                      self.sharer.subscriberView.frame = self.view.bounds;
                                      
                                      // connect for annotation
-                                     self.annotator = [[OTAnnotator alloc] init];
+                                     self.annotator = [[OTAnnotator alloc] initWithDataSource:self];
                                      [self.annotator connectWithCompletionHandler:^(OTAnnotationSignal signal, NSError *error) {
                                          
                                          if (signal == OTAnnotationSessionDidConnect){
@@ -85,6 +87,14 @@
 
 - (UIView *)annotationToolbarViewForRootViewForScreenShot:(OTAnnotationToolbarView *)toolbarView {
     return self.shareView;
+}
+
+- (OTAcceleratorSession *)sessionOfOTAnnotator:(OTAnnotator *)annotator {
+    return [(AppDelegate*)[[UIApplication sharedApplication] delegate] getSharedAcceleratorSession];
+}
+
+- (OTAcceleratorSession *)sessionOfOTScreenSharer:(OTScreenSharer *)screenSharer {
+    return [(AppDelegate*)[[UIApplication sharedApplication] delegate] getSharedAcceleratorSession];
 }
 
 @end
