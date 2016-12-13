@@ -31,17 +31,19 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    self.sharer = [[OTScreenSharer alloc] initWithDataSource:self];
+    self.sharer = [[OTScreenSharer alloc] init];
+    self.sharer.dataSource = self;
     [self.sharer connectWithView:self.shareView
                          handler:^(OTScreenShareSignal signal, NSError *error) {
                              
                              if (!error) {
                                  
-                                 if (signal == OTScreenShareSignalSessionDidConnect) {
+                                 if (signal == OTScreenSharePublisherCreated) {
                                      self.sharer.publishAudio = NO;
                                      self.sharer.subscribeToAudio = NO;
                                      
-                                     self.annotator = [[OTAnnotator alloc] initWithDataSource:self];
+                                     self.annotator = [[OTAnnotator alloc] init];
+                                     self.annotator.dataSource = self;
                                      [self.annotator connectWithCompletionHandler:^(OTAnnotationSignal signal, NSError *error) {
                                          if (signal == OTAnnotationSessionDidConnect){
                                              self.annotator.annotationScrollView.frame = self.shareView.bounds;

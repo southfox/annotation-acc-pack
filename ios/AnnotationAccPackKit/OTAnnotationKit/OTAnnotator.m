@@ -33,21 +33,9 @@
 
 @implementation OTAnnotator
 
-- (instancetype)init {
-    return nil;
-}
-
-- (instancetype)initWithDataSource:(id<OTAnnotatorDataSource>)dataSource {
-    
-    if (!dataSource) {
-        return nil;
-    }
-    
-    if (self = [super init]) {
-        _dataSource = dataSource;
-        _session = [_dataSource sessionOfOTAnnotator:self];
-    }
-    return self;
+- (void)setDataSource:(id<OTAnnotatorDataSource>)dataSource {
+    _dataSource = dataSource;
+    _session = [_dataSource sessionOfOTAnnotator:self];
 }
 
 - (NSError *)connect {
