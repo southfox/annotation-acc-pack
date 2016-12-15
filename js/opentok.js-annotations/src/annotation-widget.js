@@ -250,7 +250,7 @@
     /**
      * Captures a screenshot of the annotations displayed on top of the active video feed.
      */
-    this.captureScreenshot = function () {
+    this.captureScreenshot = function (isAnnotationEnd) {
 
       var canvasCopy = document.createElement('canvas');
       canvasCopy.width = canvas.width;
@@ -314,7 +314,8 @@
         ctxCopy.drawImage(canvas, 0, 0);
 
         cbs.forEach(function (cb) {
-          cb.call(self, canvasCopy.toDataURL());
+          var data = {src:canvasCopy.toDataURL(),isAnnotationEnd:isAnnotationEnd};
+          cb.call(self, data);
         });
 
         // Clear and destroy the canvas copy
@@ -1152,7 +1153,8 @@
       _session.on({
         'signal:otAnnotation_pen': function (event) {
           if (event.from.connectionId !== _session.connection.connectionId) {
-            drawUpdates(JSON.parse(event.data));
+            var paths = JSON.parse(event.data);
+            drawUpdates(paths);
           }
         },
         'signal:otAnnotation_text': function (event) {

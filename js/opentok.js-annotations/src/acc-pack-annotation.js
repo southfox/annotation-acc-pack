@@ -184,6 +184,10 @@
     _canvas.changeColorByIndex(colorIndex);
   };
 
+  var _takeScreenShot = function() {
+    _canvas.captureScreenshot(true);
+  };
+
   var _listenForResize = function () {
     $(_elements.resizeSubject).on('resize', _.throttle(function () {
       _resizeCanvas();
@@ -399,6 +403,10 @@
     _changeColorByIndex(colorIndex);
   };
 
+  var takeScreenShot = function () {
+    _takeScreenShot();
+  };
+
   /**
    * Adds a subscriber's video the external annotation window
    * @param {Object} stream - The subscriber stream object
@@ -470,7 +478,8 @@
     end: end,
     hideToolbar: hideToolbar,
     showToolbar: showToolbar,
-    changeColorByIndex: changeColorByIndex
+    changeColorByIndex: changeColorByIndex,
+    takeScreenShot: takeScreenShot
   };
 
   if (typeof exports === 'object') {
