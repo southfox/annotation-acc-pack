@@ -53,13 +53,6 @@ typedef void (^OTAnnotationDataReceivingBlock)(NSArray *data);
 @property (weak, nonatomic) id<OTAnnotatorDataSource> dataSource;
 
 /**
- *  Initialize a new `OTAnnotator` instsance.
- *
- *  @return A new `OTAnnotator` instsance.
- */
-- (instancetype)initWithDataSource:(id<OTAnnotatorDataSource>)dataSource;
-
-/**
  *  Registers to the shared session: [OTAcceleratorSession] and connect.
  *
  *  @return An error to indicate whether it connects successfully, non-nil if it fails.
