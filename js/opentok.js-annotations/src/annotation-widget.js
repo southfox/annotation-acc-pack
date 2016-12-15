@@ -97,6 +97,39 @@
       canvas.style.height = window.getComputedStyle(this.parent).height;
     }
 
+    var _scale = {
+      get X() {
+        return self.videoFeed.stream.videoDimensions.width / canvas.width;
+      },
+      get Y() {
+        return self.videoFeed.stream.videoDimensions.height / canvas.height;
+      }
+    };
+
+    function VideoRelativeCoordinateSet(update) {
+      var returnedObj = {};
+
+      Object.keys(update).forEach(function(attr) {
+        returnedObj[attr] = update[attr];
+      });
+      ['X', 'Y'].forEach(function(coord) {
+        ['to', 'from', 'last', 'm', 'start', 'point'].forEach(function(verb) {
+          var attr = verb + coord;
+          returnedObj['_' + attr] = returnedObj[attr];
+          Object.defineProperty(returnedObj, attr, {
+            get: function() {
+              return returnedObj['_' + attr] / _scale[coord];
+            },
+            set: function(newVal) {
+              returnedObj['_' + attr] = newVal;// * _scale[coord];
+            }
+          });
+        });
+      });
+      return returnedObj;
+    }
+
+
     var self = this,
       ctx,
       cbs = [],
@@ -110,9 +143,9 @@
       eventHistory = [],
       isStartPoint = false,
       isVideo = self.videoFeed && self.videoFeed.element ? true : false,
-      client = {
+      client = new VideoRelativeCoordinateSet({
         dragging: false
-      };
+      });
 
 
 
@@ -337,13 +370,10 @@
     };
 
     this.onResize = function () {
-      drawHistory = [];
 
       drawUpdates(updateHistory, true);
 
-      eventHistory.forEach(function (history) {
-        updateCanvas(history, true);
-      });
+      draw(null, true);
     };
 
     /** Canvas Handling **/
@@ -366,13 +396,13 @@
         canvas.height = self.parent.getBoundingClientRect().height;
       }
 
-      var baseWidth = !!resizeEvent ? event.canvas.width : self.parent.clientWidth;
-      var baseHeight = !!resizeEvent ? event.canvas.height : self.parent.clientHeight;
       var offsetLeft = !!resizeEvent ? event.canvas.offsetLeft : canvas.offsetLeft;
       var offsetTop = !!resizeEvent ? event.canvas.offsetTop : canvas.offsetTop;
 
-      var scaleX = canvas.width / baseWidth;
-      var scaleY = canvas.height / baseHeight;
+      var videoDimensions = self.videoFeed.stream.videoDimensions;
+
+      var scaleX = videoDimensions.width / canvas.width;
+      var scaleY = videoDimensions.height / canvas.height;
 
       var offsetX = event.offsetX || event.pageX - offsetLeft ||
         (event.changedTouches && event.changedTouches[0].pageX - offsetLeft);
@@ -402,8 +432,8 @@
                 update = {
                   id: isVideo ? self.videoFeed.stream.connection.connectionId : self.session.connection.connectionId,
                   fromId: self.session.connection.connectionId,
-                  fromX: client.lastX,
-                  fromY: client.lastY,
+                  fromX: client._lastX,
+                  fromY: client._lastY,
                   toX: x,
                   toY: y,
                   color: resizeEvent ? event.userColor : self.userColor,
@@ -419,7 +449,7 @@
                   platform: 'web',
                   guid: event.guid
                 };
-                draw(update, true);
+                draw(new VideoRelativeCoordinateSet(update), true);
                 client.lastX = x;
                 client.lastY = y;
                 !resizeEvent && sendUpdate(update);
@@ -432,8 +462,8 @@
               update = {
                 id: isVideo ? self.videoFeed.stream.connection.connectionId : self.session.connection.connectionId,
                 fromId: self.session.connection.connectionId,
-                fromX: client.lastX,
-                fromY: client.lastY,
+                fromX: client._lastX,
+                fromY: client._lastY,
                 toX: x,
                 toY: y,
                 color: resizeEvent ? event.userColor : self.userColor,
@@ -449,7 +479,7 @@
                 platform: 'web',
                 guid: event.guid
               };
-              draw(update, true);
+              draw(new VideoRelativeCoordinateSet(update), true);
               client.lastX = x;
               client.lastY = y;
               !resizeEvent && sendUpdate(update);
@@ -479,7 +509,7 @@
             guid: event.guid
           };
 
-          draw(update);
+          draw(new VideoRelativeCoordinateSet(update));
           !resizeEvent && sendUpdate(update);
         } else {
           // We have a shape or custom object
@@ -509,7 +539,7 @@
                       // INFO The points for scaling will get added when drawing is complete
                   };
 
-                  draw(update, true);
+                  draw(new VideoRelativeCoordinateSet(update), true);
                 }
                 break;
               case 'mouseup':
@@ -522,10 +552,10 @@
                   update = {
                     id: isVideo ? self.videoFeed.stream.connection.connectionId : self.session.connection.connectionId,
                     fromId: self.session.connection.connectionId,
-                    fromX: client.startX,
-                    fromY: client.startY,
-                    toX: client.mX,
-                    toY: client.mY,
+                    fromX: client._startX,
+                    fromY: client._startY,
+                    toX: client._mX,
+                    toY: client._mY,
                     color: resizeEvent ? event.userColor : self.userColor,
                     lineWidth: resizeEvent ? event.lineWidth : shapeLineWidth,
                     videoWidth: isVideo ? self.videoFeed.videoElement().clientWidth : canvas.width,
@@ -540,7 +570,7 @@
                     guid: event.guid
                   };
 
-                  drawHistory.push(update);
+                  drawHistory.push(new VideoRelativeCoordinateSet(update));
 
                   !resizeEvent && sendUpdate(update);
                 } else {
@@ -551,8 +581,8 @@
                     var endPoint = false;
 
                     // Scale the points according to the difference between the start and end points
-                    var pointX = client.startX + (scale.x * points[i][0]);
-                    var pointY = client.startY + (scale.y * points[i][1]);
+                    var pointX = client._startX + (scale.x * points[i][0]);
+                    var pointY = client._startY + (scale.y * points[i][1]);
 
                     if (i === 0) {
                       client.lastX = pointX;
@@ -565,8 +595,8 @@
                     update = {
                       id: isVideo ? self.videoFeed.stream.connection.connectionId : self.session.connection.connectionId,
                       fromId: self.session.connection.connectionId,
-                      fromX: client.lastX,
-                      fromY: client.lastY,
+                      fromX: client._lastX,
+                      fromY: client._lastY,
                       toX: pointX,
                       toY: pointY,
                       color: resizeEvent ? event.userColor : self.userColor,
@@ -585,11 +615,11 @@
 
                     };
 
-                    drawHistory.push(update);
+                    drawHistory.push(new VideoRelativeCoordinateSet(update));
 
                     !resizeEvent && sendUpdate(update);
 
-                    client.lastX = pointX;
+                    client.lastX = pointX; // SCALE BACK!
                     client.lastY = pointY;
                   }
 
@@ -837,6 +867,10 @@
 
       });
 
+      if (!!resizeEvent && !update) {
+        return;
+      }
+
       var selectedItem = !!resizeEvent ? update.selectedItem : self.selectedItem;
 
       if (selectedItem && (selectedItem.title === 'Pen' || selectedItem.title === 'Text')) {
@@ -886,31 +920,33 @@
       } else {
         for (var i = 0; i < points.length; i++) {
           // Scale the points according to the difference between the start and end points
-          var pointX = client.startX + (scale.x * points[i][0]);
-          var pointY = client.startY + (scale.y * points[i][1]);
+          // Use device independent points here!
+          client.pointX = client._startX + (scale.x * points[i][0]);
+          client.pointY = client._startY + (scale.y * points[i][1]);
 
           if (self.selectedItem.enableSmoothing) {
             if (i === 0) {
               // Do nothing
             } else if (i === 1) {
-              ctx.moveTo((pointX + client.lastX) / 2, (pointY + client.lastY) / 2);
-              client.lastX = (pointX + client.lastX) / 2;
-              client.lastX = (pointY + client.lastY) / 2;
+              ctx.moveTo((client.pointX + client.lastX) / 2, (client.pointY + client.lastY) / 2);
+              client.lastX = (client._pointX + client._lastX) / 2;
+              client.lastX = (client._pointY + client._lastY) / 2;
             } else {
-              ctx.quadraticCurveTo(client.lastX, client.lastY, (pointX + client.lastX) / 2, (pointY + client.lastY) / 2);
-              client.lastX = (pointX + client.lastX) / 2;
-              client.lastY = (pointY + client.lastY) / 2;
+              ctx.quadraticCurveTo(client.lastX, client.lastY, (client.pointX + client.lastX) / 2,
+                                   (client.pointY + client.lastY) / 2);
+              client.lastX = (client._pointX + client._lastX) / 2;
+              client.lastY = (client._pointY + client._lastY) / 2;
             }
           } else {
             if (i === 0) {
-              ctx.moveTo(pointX, pointY);
+              ctx.moveTo(client.pointX, client.pointY);
             } else {
-              ctx.lineTo(pointX, pointY);
+              ctx.lineTo(client.pointX, client.pointY);
             }
           }
 
-          client.lastX = pointX;
-          client.lastY = pointY;
+          client.lastX = client._pointX; // SCALE BACK!
+          client.lastY = client._pointY;
         }
       }
 
@@ -940,8 +976,8 @@
       var dx = Math.abs(maxX - minX);
       var dy = Math.abs(maxY - minY);
 
-      var scaleX = (client.mX - client.startX) / dx;
-      var scaleY = (client.mY - client.startY) / dy;
+      var scaleX = (client._mX - client._startX) / dx;
+      var scaleY = (client._mY - client._startY) / dy;
 
       return {
         x: scaleX,
@@ -966,52 +1002,20 @@
         height: isVideo ? self.videoFeed.videoElement().clientHeight : canvas.height
       };
 
-      var scale = 1;
-
-      var canvasRatio = canvas.width / canvas.height;
-      var videoRatio = video.width / video.height;
-      var iCanvasRatio = iCanvas.width / iCanvas.height;
-      var iVideoRatio = iVideo.width / iVideo.height;
-
-      /**
-       * This assumes that if the width is the greater value, video frames
-       * can be scaled so that they have equal widths, which can be used to
-       * find the offset in the y axis. Therefore, the offset on the x axis
-       * will be 0. If the height is the greater value, the offset on the y
-       * axis will be 0.
-       */
-      if (canvasRatio < 0) {
-        scale = canvas.width / iCanvas.width;
-      } else {
-        scale = canvas.height / iCanvas.height;
-      }
-
-      var centerX = canvas.width / 2;
-      var centerY = canvas.height / 2;
-
-      var iCenterX = iCanvas.width / 2;
-      var iCenterY = iCanvas.height / 2;
-
-      update.fromX = centerX - (scale * (iCenterX - update.fromX));
-      update.fromY = centerY - (scale * (iCenterY - update.fromY));
-
-      update.toX = centerX - (scale * (iCenterX - update.toX));
-      update.toY = centerY - (scale * (iCenterY - update.toY));
-
       // INFO iOS serializes bools as 0 or 1
       update.mirrored = !!update.mirrored;
 
       // Check if the incoming signal was mirrored
       if (update.mirrored) {
-        update.fromX = canvas.width - update.fromX;
-        update.toX = canvas.width - update.toX;
+        update.fromX = video.width - update.fromX;
+        update.toX = video.width - update.toX;
       }
 
       // Check to see if the active video feed is also mirrored (double negative)
       if (mirrored) {
         // Revert (Double negative)
-        update.fromX = canvas.width - update.fromX;
-        update.toX = canvas.width - update.toX;
+        update.fromX = video.width - update.fromX;
+        update.toX = video.width - update.toX;
       }
 
 
@@ -1026,10 +1030,9 @@
         updateHistory[index] = updateForHistory;
       } else {
         updateHistory.push(updateForHistory);
+        drawHistory.push(new VideoRelativeCoordinateSet(update));
       }
       /** ********************************** */
-
-      drawHistory.push(update);
 
       draw(null);
     };
