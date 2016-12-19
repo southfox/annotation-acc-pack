@@ -536,7 +536,7 @@ receivedSignalType:(NSString*)type
     if (signalingPoints.count == 5) {
         NSError *error;
         NSString *jsonString = [JSON stringify:signalingPoints];
-        [[OTAcceleratorSession getAcceleratorPackSession] signalWithType:@"otAnnotation_pen" string:jsonString connection:latestScreenShareStream.connection error:&error];
+        [[OTAcceleratorSession getAcceleratorPackSession] signalWithType:@"otAnnotation_pen" string:jsonString connection:nil error:&error];
         
         // notify sending data
         if (self.dataReceivingHandler) {
@@ -568,7 +568,7 @@ receivedSignalType:(NSString*)type
     
     NSError *error;
     NSString *jsonString = [JSON stringify:signalingPoints];
-    [[OTAcceleratorSession getAcceleratorPackSession] signalWithType:@"otAnnotation_pen" string:jsonString connection:latestScreenShareStream.connection error:&error];
+    [[OTAcceleratorSession getAcceleratorPackSession] signalWithType:@"otAnnotation_pen" string:jsonString connection:nil error:&error];
     
     // notify sending data
     if (self.dataReceivingHandler) {
