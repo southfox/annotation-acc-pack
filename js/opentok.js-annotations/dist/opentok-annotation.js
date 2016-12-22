@@ -782,7 +782,7 @@
       var textInput = context.createElement('input');
 
       textInput.setAttribute('type', 'text');
-      textInput.style.position = ‘fixed’;
+      textInput.style.position = 'fixed';
       textInput.style.top = event.clientY + 'px';
       textInput.style.left = event.clientX + 'px';
       textInput.style.background = 'rgba(255,255,255, .5)';
