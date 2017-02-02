@@ -30,6 +30,7 @@
     if (!self.colorPickerView.superview) {
         CGRect selfFrame = self.frame;
         self.colorPickerView.frame = selfFrame;
+        // We are adding this workaround setting the separator view alpha with 0 to fix an unknown animation issue
         self.separatorView.alpha = 0;
         [self.superview insertSubview:self.colorPickerView belowSubview:self];
         
@@ -55,6 +56,7 @@
             }
         } completion:^(BOOL finished) {
             [self.superview addSubview:self.separatorView];
+            // We are adding this workaround setting the separator view alpha with 1 to fix an unknown animation issue
             self.separatorView.alpha = 1;
        }];
     }
