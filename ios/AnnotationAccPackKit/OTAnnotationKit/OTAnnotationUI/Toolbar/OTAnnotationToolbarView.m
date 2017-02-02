@@ -271,7 +271,6 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
     [_textButton addTarget:self action:@selector(toolbarButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     _screenshotButton = [[OTAnnotationToolbarButton alloc] init];
-    _screenshotButton.imageEdgeInsets = UIEdgeInsetsMake(9, 10, 9, 10);
     [_screenshotButton setImage:[UIImage imageNamed:@"screenshot" inBundle:frameworkBundle compatibleWithTraitCollection:nil] forState:UIControlStateNormal];
     _screenshotButton.imageEdgeInsets = UIEdgeInsetsMake(12, 12, 12, 12);
     [_screenshotButton addTarget:self action:@selector(toolbarButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
