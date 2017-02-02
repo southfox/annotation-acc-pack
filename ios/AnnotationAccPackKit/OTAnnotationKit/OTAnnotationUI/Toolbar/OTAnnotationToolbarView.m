@@ -14,7 +14,7 @@ NSString * const kOTAnnotationToolbarDidPressEraseButton = @"kOTAnnotationToolba
 NSString * const kOTAnnotationToolbarDidPressCleanButton = @"kOTAnnotationToolbarDidPressCleanButton";
 NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolbarDidAddTextAnnotation";
 
-#define kNumberOfButtons 5
+#define kNumberOfButtons 6
 
 @interface OTAnnotationToolbarButton : UIButton
 @end
@@ -94,6 +94,7 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
 @property (nonatomic) OTAnnotationToolbarButton *textButton;
 @property (nonatomic) OTAnnotationToolbarButton *screenshotButton;
 @property (nonatomic) OTAnnotationToolbarButton *eraseButton;
+@property (nonatomic) OTAnnotationToolbarButton *eraseAllButton;
 
 @property (nonatomic) OTAnnotationScreenCaptureViewController *captureViewController;
 @end
@@ -125,13 +126,15 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
         [_toolbar setContentView:_textButton atIndex:2];
         [_toolbar setContentView:_screenshotButton atIndex:3];
         [_toolbar setContentView:_eraseButton atIndex:4];
+        [_toolbar setContentView:_eraseAllButton atIndex:5];
     }
     else {
-        [_toolbar setContentView:_annotateButton atIndex:4];
-        [_toolbar setContentView:_colorButton atIndex:3];
-        [_toolbar setContentView:_textButton atIndex:2];
-        [_toolbar setContentView:_screenshotButton atIndex:1];
-        [_toolbar setContentView:_eraseButton atIndex:0];
+        [_toolbar setContentView:_annotateButton atIndex:5];
+        [_toolbar setContentView:_colorButton atIndex:4];
+        [_toolbar setContentView:_textButton atIndex:3];
+        [_toolbar setContentView:_screenshotButton atIndex:2];
+        [_toolbar setContentView:_eraseButton atIndex:1];
+        [_toolbar setContentView:_eraseAllButton atIndex:0];
     }
     
     [self.toolbar reloadToolbar];
@@ -280,19 +283,26 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
     [_eraseButton setImage:[UIImage imageNamed:@"erase" inBundle:frameworkBundle compatibleWithTraitCollection:nil] forState:UIControlStateNormal];
     [_eraseButton addTarget:self action:@selector(toolbarButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
+    _eraseAllButton = [[OTAnnotationToolbarButton alloc] init];
+    [_eraseAllButton setImage:[UIImage imageNamed:@"trashcan" inBundle:frameworkBundle compatibleWithTraitCollection:nil] forState:UIControlStateNormal];
+    [_eraseAllButton addTarget:self action:@selector(toolbarButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
     if (self.toolbarViewOrientation == OTAnnotationToolbarViewOrientationPortraitlBottom) {
         [_toolbar setContentView:_annotateButton atIndex:0];
         [_toolbar setContentView:_colorButton atIndex:1];
         [_toolbar setContentView:_textButton atIndex:2];
         [_toolbar setContentView:_screenshotButton atIndex:3];
         [_toolbar setContentView:_eraseButton atIndex:4];
+        [_toolbar setContentView:_eraseAllButton atIndex:5];
     }
     else {
-        [_toolbar setContentView:_annotateButton atIndex:4];
-        [_toolbar setContentView:_colorButton atIndex:3];
-        [_toolbar setContentView:_textButton atIndex:2];
-        [_toolbar setContentView:_screenshotButton atIndex:1];
-        [_toolbar setContentView:_eraseButton atIndex:0];
+        [_toolbar setContentView:_annotateButton atIndex:5];
+        [_toolbar setContentView:_colorButton atIndex:4];
+        [_toolbar setContentView:_textButton atIndex:3];
+        [_toolbar setContentView:_screenshotButton atIndex:2];
+        [_toolbar setContentView:_eraseButton atIndex:1];
+        [_toolbar setContentView:_eraseAllButton atIndex:0];
     }
     
     [_toolbar reloadToolbar];
@@ -366,6 +376,15 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
                                                               userInfo:@{@"annotation":annotatableToRemove}];
         }
     }
+    else if (sender == self.eraseAllButton) {
+        [self.annotationScrollView.annotationView removeAllAnnotatables];
+        if (self.toolbarViewDelegate && [self.toolbarViewDelegate respondsToSelector:@selector(annotationToolbarViewDidPressCleanButton:)]) {
+            [self.toolbarViewDelegate annotationToolbarViewDidPressCleanButton:self];
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:kOTAnnotationToolbarDidPressCleanButton
+                                                            object:self
+                                                          userInfo:nil];
+    }
     else if (sender == self.screenshotButton) {
         
         [self dismissColorPickerViewWithAniamtion:NO];
@@ -382,7 +401,7 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
     }
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (sender != self.textButton && sender != self.screenshotButton && sender != self.eraseButton) {
+        if (sender != self.textButton && sender != self.screenshotButton && sender != self.eraseButton && sender != self.eraseAllButton) {
             [self moveSelectionShadowViewTo:sender];
         }
     });
@@ -395,6 +414,7 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
     [self.textButton setEnabled:YES];
     [self.screenshotButton setEnabled:YES];
     [self.eraseButton setEnabled:YES];
+    [self.eraseAllButton setEnabled:YES];
 }
 
 - (void)disableButtons:(NSArray<UIButton *> *)array {

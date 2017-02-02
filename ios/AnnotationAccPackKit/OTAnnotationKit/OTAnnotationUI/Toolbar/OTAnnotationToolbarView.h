@@ -83,5 +83,6 @@ typedef NS_ENUM(NSUInteger, OTAnnotationToolbarViewOrientation) {
 @property (readonly, nonatomic) UIButton *textButton;
 @property (readonly, nonatomic) UIButton *screenshotButton;
 @property (readonly, nonatomic) UIButton *eraseButton;
+@property (readonly, nonatomic) UIButton *eraseAllButton;
 
 @end
