@@ -111,13 +111,11 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
     if (toolbarViewOrientation == OTAnnotationToolbarViewOrientationPortraitlBottom) {
         self.toolbar.orientation = LHToolbarOrientationHorizontal;
         self.colorPickerView.annotationColorPickerViewOrientation = OTAnnotationColorPickerViewOrientationPortrait;
-        self.doneButton.imageEdgeInsets = UIEdgeInsetsMake(10, 17, 10, 17);
    }
     else if (toolbarViewOrientation == OTAnnotationToolbarViewOrientationLandscapeLeft ||
              toolbarViewOrientation == OTAnnotationToolbarViewOrientationLandscapeRight) {
         self.toolbar.orientation = LHToolbarOrientationVertical;
         self.colorPickerView.annotationColorPickerViewOrientation = OTAnnotationColorPickerViewOrientationLandscape;
-        self.doneButton.imageEdgeInsets = UIEdgeInsetsMake(17, 10, 17, 10);
    }
     
     if (self.toolbarViewOrientation == OTAnnotationToolbarViewOrientationPortraitlBottom) {
@@ -284,6 +282,7 @@ NSString * const kOTAnnotationToolbarDidAddTextAnnotation = @"kOTAnnotationToolb
     [_eraseButton addTarget:self action:@selector(toolbarButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     _eraseAllButton = [[OTAnnotationToolbarButton alloc] init];
+    _eraseAllButton.imageEdgeInsets = UIEdgeInsetsMake(11, 12, 11, 12);
     [_eraseAllButton setImage:[UIImage imageNamed:@"trashcan" inBundle:frameworkBundle compatibleWithTraitCollection:nil] forState:UIControlStateNormal];
     [_eraseAllButton addTarget:self action:@selector(toolbarButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
